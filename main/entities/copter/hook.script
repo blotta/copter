@@ -1,0 +1,132 @@
+local HOOK_RANGE = 100
+local HOOK_MIN_LENGTH = 10
+local HOOK_MAX_LENGTH = HOOK_RANGE
+
+function init(self)
+	-- Add initialization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+	self.hooked = false
+	self.box_target = nil
+	self.box_attached = nil
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function update(self, dt)
+
+
+	if self.box_attached ~= nil then
+		local box_pos = go.get_position(self.box_attached)
+		local box_rot = go.get_rotation(self.box_attached)
+		local from = go.get_position()
+		local to = box_pos + vmath.rotate(box_rot, self.box_local_attach_position)
+		msg.post("@render:", "draw_line", {
+			start_point = from,
+			end_point = to,
+			color = vmath.vector4(1,1,1,1)
+		})
+	else
+		self.box_target = nil
+		local from = go.get_position()
+		local to = from + HOOK_RANGE * vmath.vector3(0, -1, 0)
+		local results = physics.raycast(from, to, {hash('box')}, {all = false})
+		if results ~= nil then
+			local result = results[1]
+			to = result.position
+			pprint(result)
+			self.box_target = result
+			print(self.box_target)
+		end
+
+		msg.post("@render:", "draw_line", {
+			start_point = from,
+			end_point = to,
+			color = vmath.vector4(1,1,1,1)
+		})
+	end
+end
+
+function late_update(self, dt)
+	-- This function is called at the end of update cycle but before render
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function fixed_update(self, dt)
+	-- This function is called if 'Fixed Update Frequency' is enabled in the Engine section of game.project
+	-- Can be coupled with fixed updates of the physics simulation if 'Use Fixed Timestep' is enabled in
+	-- Physics section of game.project
+	-- Add update code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function on_message(self, message_id, message, sender)
+	-- Add message-handling code here
+	-- Learn more: https://defold.com/manuals/message-passing/
+	-- Remove this function if not needed
+	if message_id == hash('hook_trigger') then
+		if self.box_attached ~= nil then
+			physics.destroy_joint(msg.url("#co"), "hook_joint")
+			msg.post('#copter', 'box_detached', { box_id = self.box_attached })
+			self.box_attached = nil
+			self.box_local_attach_position = nil
+		elseif self.box_target ~= nil then
+			local copter_co = msg.url("#co")
+			local box_co = msg.url(nil, self.box_target.id, "co")
+			local box_pos = go.get_position(self.box_target.id) --, "position")
+			local box_rot = go.get_rotation(self.box_target.id) --, "rotation")
+			local world_offset = self.box_target.position - box_pos
+			self.box_local_attach_position = vmath.rotate(vmath.conj(box_rot), world_offset)
+			local length = vmath.length(go.get_position() - self.box_target.position)
+			physics.create_joint(
+				physics.JOINT_TYPE_FIXED
+				, copter_co
+				, "hook_joint"
+				, vmath.vector3()
+				, box_co
+				, self.box_local_attach_position
+				, {max_length = length}
+			)
+
+			self.box_attached = self.box_target.id
+			self.box_target = nil
+
+			msg.post('#copter', 'box_attached', { box_id = self.box_attached })
+		end
+	end
+
+	if message_id == hash('add_hook_length') and self.box_attached ~= nil then
+
+		local curr_length = physics.get_joint_properties(msg.url("#co"), 'hook_joint').max_length
+		local new_length = curr_length + message.amount
+		if new_length < HOOK_MIN_LENGTH then new_length = HOOK_MIN_LENGTH end
+		if new_length > HOOK_MAX_LENGTH then new_length = HOOK_MAX_LENGTH end
+		physics.set_joint_properties(msg.url("#co"), 'hook_joint', { max_length = new_length })
+	end
+
+end
+
+function on_input(self, action_id, action)
+	-- Add input-handling code here. The game object this script is attached to
+	-- must have acquired input focus:
+	--
+	--    msg.post(".", "acquire_input_focus")
+	--
+	-- All mapped input bindings will be received. Mouse and touch input will
+	-- be received regardless of where on the screen it happened.
+	-- Learn more: https://defold.com/manuals/input/
+	-- Remove this function if not needed
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Learn more: https://defold.com/manuals/hot-reload/
+	-- Remove this function if not needed
+end
+

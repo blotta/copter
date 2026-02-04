@@ -1,0 +1,120 @@
+
+--local helice_local = vmath.vector3(0, 40, 0)
+local width = 40
+local height = 40
+
+
+local HELICE_LOCAL_OFFSET = vmath.vector3(0, height, 0)
+
+local YVECT = vmath.vector3(0, 1, 0)
+local NEG_YVECT = vmath.vector3(0, -1, 0)
+local XVECT = vmath.vector3(1, 0, 0)
+local NEG_XVECT = vmath.vector3(-1, 0, 0)
+
+-- Apply torque to a dynamic collision object component
+function apply_torque(url, worldpos, f, size)
+	local halfp = f / 2
+	local half_size = size / 2
+	msg.post(url, "apply_force", { force = NEG_XVECT * halfp, position = worldpos + NEG_YVECT * half_size })
+	msg.post(url, "apply_force", { force = XVECT * halfp, position = worldpos + YVECT * half_size })
+end
+
+function init(self)
+	self.engine_power = 7000
+	self.torque_power = 200
+
+	self.input_throttle = 0
+	self.input_pitch = 0
+	
+	self.throttle = 0
+
+	self.extra_weight = 0
+end
+
+function update(self, dt)
+end
+
+
+
+function fixed_update(self, dt)
+	local helice_pos = go.get_position() + vmath.rotate(go.get_rotation(), HELICE_LOCAL_OFFSET)
+	local up_dir = vmath.normalize(helice_pos - go.get_position())
+
+	if self.input_throttle ~= 0 then
+		self.throttle = self.throttle + self.input_throttle * dt * 0.8
+		if self.throttle > 1 then self.throttle = 1 end
+		if self.throttle < 0 then self.throttle = 0 end
+	else
+		-- PD controller
+		local mass = go.get("#co", "mass") + self.extra_weight
+		local hover_force = mass * -physics.get_gravity().y
+		self.throttle = hover_force / self.engine_power
+	end
+
+	local force_vec = up_dir * self.throttle * self.engine_power
+
+	msg.post("@render:", "draw_line", {
+		start_point = helice_pos,
+		end_point = helice_pos + (up_dir * 50),
+		color = vmath.vector4(1,1,1,1)
+	})
+	msg.post("@render:", "draw_line", {
+		start_point = helice_pos,
+		end_point = helice_pos + (up_dir * 50 * self.throttle),
+		color = vmath.vector4(0,1,0,1)
+	})
+
+	msg.post("#co", "apply_force",
+	{
+		force = force_vec,
+		position = helice_pos
+	})
+
+	local center = go.get_position() + vmath.rotate(go.get_rotation(), vmath.vector3(0, height/2, 0))
+	if self.input_pitch ~= 0 then
+		apply_torque("#co", center, self.input_pitch * self.torque_power, height)
+	else
+		local angle = go.get(".", "euler.z")
+		if math.abs(angle) < 1 then angle = 0 end
+		local angle_correction_dir = 0
+		if angle > 0 then angle_correction_dir = 1 elseif angle < 0 then angle_correction_dir = -1 end
+		apply_torque("#co", center, angle_correction_dir * 0.3 * self.torque_power, height)
+	end
+
+	--print(go.get("#co", "linear_velocity"))
+end
+
+function on_message(self, message_id, message, sender)
+	--print(message_id)
+	if message_id == hash('throttle_up') then
+		self.input_throttle = self.input_throttle + 1
+	end
+	if message_id == hash('throttle_down') then
+		self.input_throttle = self.input_throttle - 1
+	end
+	if self.input_throttle > 1 then self.input_throttle = 1 end
+	if self.input_throttle < -1 then self.input_throttle = -1 end
+	--print(self.input_throttle)
+	
+	if message_id == hash('pitch_right') then
+		self.input_pitch = self.input_pitch + 1
+	end
+	if message_id == hash('pitch_left') then
+		self.input_pitch = self.input_pitch - 1
+	end
+	if self.input_pitch > 1 then self.input_pitch = 1 end
+	if self.input_pitch < -1 then self.input_pitch = -1 end
+
+	if message_id == hash('box_attached') then
+		pprint('box attached!', message)
+		self.extra_weight = go.get(msg.url(nil, message.box_id, "co"), "mass")
+	end
+	if message_id == hash('box_detached') then
+		pprint('box detached!', message)
+		self.extra_weight = 0
+	end
+end
+
+
+function on_reload(self)
+end
