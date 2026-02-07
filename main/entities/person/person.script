@@ -1,86 +1,67 @@
-local defs = require "main.entities.person.defs.all"
+local variants = require "main.entities.person.defs._variants"
+local goal_factory = require 'main.ai.goal_factory'
 
-go.property("type", hash("normal1"))
+go.property("variant", hash("normal1"))
 
 function init(self)
-	self.def = defs[self.type]
+	self.type = hash("person")
+	self.def = variants[self.variant]
 
 	sprite.play_flipbook("#sprite", self.def.anim.idle)
 
-	self.queue = {
-		{
-			type = 'goto',
-			position = vmath.vector3(350, 0, 0)
-		},
-		{
-			type = 'goto',
-			position = vmath.vector3(-50, 0, 0)
-		}
-	}
+	self.queue = {}
+	self.current_goal = nil
 
 	self.speed = self.def.speed
 	self.velocity = vmath.vector3()
-	self.state = 'idle' -- idle, busy
+	self.facing = 1
+
+	msg.post("#", "add_goal", {
+		type = 'move',
+		position = vmath.vector3(350, 0, 0)
+	})
+
+	msg.post("#", "add_goal", {
+		type = 'move',
+		position = vmath.vector3(32 * 3.5, 0, 0)
+	})
 end
 
-local function assign_task(self, task)
-	print('assigned task', task.type)
-	if task.type == 'goto' then
-		-- init goto task
-		local diff = task.position - go.get_position()
-		local direction
-		if diff.x > 0 then direction = 1 else direction = -1 end
-		self.velocity.x = self.speed * direction
-		sprite.play_flipbook("#sprite", self.def.anim.run)
-		sprite.set_hflip("#sprite", direction == -1)
-		self.state = 'busy'
-	end
-end
-
-local function check_task(self, task)
-	if task.type == 'goto' then
-		-- check if completed
-		local diff = task.position - go.get_position()
-		--print(diff.x)
-		if math.abs(diff.x) < 10 then
-			-- task completed
-			print('completed task', task.type)
-			return true -- completed
-		end
-	end
-	return false
-end
-
-local function idle(self)
-	sprite.play_flipbook("#sprite", self.def.anim.idle)
+local function set_idle(self)
 	self.velocity.x = 0
-	self.state = 'idle'
+	sprite.play_flipbook("#sprite", self.def.anim.idle)
 end
 
-function update(self, dt)
+local function start_next_goal(self)
 	if #self.queue == 0 then
-		if self.state ~= 'idle' then
-			idle(self)
-		end
+		self.current_goal = nil
+		set_idle(self)
 		return
 	end
 
-	local task = self.queue[1]
-	print(task, self.queue[1])
-	
-	if self.state == 'idle' then
-		assign_task(self, task)
+	self.current_goal = table.remove(self.queue, 1)
+	self.current_goal:start(self)
+end
+
+function update(self, dt)
+	if not self.current_goal then
+		start_next_goal(self)
+		return
 	end
 
-	if self.state == 'busy' then
-		
-		local completed = check_task(self, task)
-		if completed then
-			table.remove(self.queue, 1)
-			idle(self)
-			pprint(#self.queue)
-			return
-		end
+	self.current_goal:update(self, dt)
+
+	if self.current_goal:is_complete(self) then
+		self.current_goal:stop(self)
+		self.current_goal = nil
+		return
+	end
+
+	if self.current_goal:is_blocked(self) then
+		-- stop and retry later
+		self.current_goal:stop(self)
+		table.insert(self.queue, 1, self.current_goal)
+		self.current_goal = nil
 	end
 end
 
@@ -91,7 +72,8 @@ function fixed_update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash('add_task') then
-		table.insert(self.queue, message.task)
+	if message_id == hash('add_goal') then
+		local goal = goal_factory.create(self.type, message)
+		table.insert(self.queue, goal)
 	end
 end

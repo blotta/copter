@@ -33,7 +33,7 @@ instances {
   component_properties {
     id: "person"
     properties {
-      id: "type"
+      id: "variant"
       value: "normal2"
       type: PROPERTY_TYPE_HASH
     }
