@@ -1,0 +1,17 @@
+function init(self)
+	self.target_go_id = go.get_id('copter')
+end
+
+function late_update(self, dt)
+	-- This function is called at the end of update cycle but before render
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+	local go_pos = go.get_position(self.target_go_id)
+	local go_lv = go.get(msg.url(nil, self.target_go_id, 'co'), 'linear_velocity')
+	local x_offset = go_lv.x * 0.5
+	local y_offset = go_lv.y * 0.3
+	local target_cam_pos = vmath.vector3(go_pos.x, go_pos.y, 10) + vmath.vector3(x_offset, y_offset, 0)
+	local cam_pos = go.get_position()
+	cam_pos = vmath.lerp(0.1, cam_pos, target_cam_pos)
+	go.set_position(cam_pos)
+end

@@ -21,16 +21,16 @@ embedded_components {
   "}\n"
   ""
   position {
-    y: 36.0
+    y: 2.0
   }
 }
 embedded_components {
   id: "co"
   type: "collisionobject"
   data: "type: COLLISION_OBJECT_TYPE_DYNAMIC\n"
-  "mass: 5.0\n"
-  "friction: 0.9\n"
-  "restitution: 0.2\n"
+  "mass: 7.0\n"
+  "friction: 1.0\n"
+  "restitution: 0.0\n"
   "group: \"copter\"\n"
   "mask: \"box\"\n"
   "mask: \"floor\"\n"

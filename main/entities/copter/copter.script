@@ -1,5 +1,5 @@
 
---local helice_local = vmath.vector3(0, 40, 0)
+
 local width = 40
 local height = 40
 
@@ -19,9 +19,10 @@ function apply_torque(url, worldpos, f, size)
 	msg.post(url, "apply_force", { force = XVECT * halfp, position = worldpos + YVECT * half_size })
 end
 
+
 function init(self)
 	self.engine_power = 7000
-	self.torque_power = 200
+	self.torque_power = 400
 
 	self.input_throttle = 0
 	self.input_pitch = 0
@@ -31,12 +32,8 @@ function init(self)
 	self.extra_weight = 0
 end
 
-function update(self, dt)
-end
-
-
-
 function fixed_update(self, dt)
+	
 	local helice_pos = go.get_position() + vmath.rotate(go.get_rotation(), HELICE_LOCAL_OFFSET)
 	local up_dir = vmath.normalize(helice_pos - go.get_position())
 
@@ -47,41 +44,43 @@ function fixed_update(self, dt)
 	else
 		-- PD controller
 		local mass = go.get("#co", "mass") + self.extra_weight
-		local hover_force = mass * -physics.get_gravity().y
+		local hover_force = mass * - physics.get_gravity().y
 		self.throttle = hover_force / self.engine_power
 	end
 
-	local force_vec = up_dir * self.throttle * self.engine_power
+	--print(self.throttle)
+	if (self.throttle > 0) then
+	
+		local force_vec = up_dir * self.throttle * self.engine_power
 
-	msg.post("@render:", "draw_line", {
-		start_point = helice_pos,
-		end_point = helice_pos + (up_dir * 50),
-		color = vmath.vector4(1,1,1,1)
-	})
-	msg.post("@render:", "draw_line", {
-		start_point = helice_pos,
-		end_point = helice_pos + (up_dir * 50 * self.throttle),
-		color = vmath.vector4(0,1,0,1)
-	})
+		-- msg.post("@render:", "draw_line", {
+		-- 	start_point = helice_pos,
+		-- 	end_point = helice_pos + (up_dir * 50),
+		-- 	color = vmath.vector4(1,1,1,1)
+		-- })
+		-- msg.post("@render:", "draw_line", {
+		-- 	start_point = helice_pos,
+		-- 	end_point = helice_pos + (up_dir * 50 * self.throttle),
+		-- 	color = vmath.vector4(0,1,0,1)
+		-- })
 
-	msg.post("#co", "apply_force",
-	{
-		force = force_vec,
-		position = helice_pos
-	})
+		msg.post("#co", "apply_force", { force = force_vec, position = helice_pos })
+	end
 
 	local center = go.get_position() + vmath.rotate(go.get_rotation(), vmath.vector3(0, height/2, 0))
 	if self.input_pitch ~= 0 then
 		apply_torque("#co", center, self.input_pitch * self.torque_power, height)
 	else
+		-- angle controller
 		local angle = go.get(".", "euler.z")
+		--print(angle)
 		if math.abs(angle) < 1 then angle = 0 end
-		local angle_correction_dir = 0
-		if angle > 0 then angle_correction_dir = 1 elseif angle < 0 then angle_correction_dir = -1 end
-		apply_torque("#co", center, angle_correction_dir * 0.3 * self.torque_power, height)
+		if angle ~= 0 then
+			local angle_correction_dir = 0
+			if angle > 0 then angle_correction_dir = 1 elseif angle < 0 then angle_correction_dir = -1 end
+			apply_torque("#co", center, angle_correction_dir * 0.3 * self.torque_power, height)
+		end
 	end
-
-	--print(go.get("#co", "linear_velocity"))
 end
 
 function on_message(self, message_id, message, sender)
@@ -113,6 +112,28 @@ function on_message(self, message_id, message, sender)
 		pprint('box detached!', message)
 		self.extra_weight = 0
 	end
+
+	if message_id == hash('tilt') then
+		local rand_vel = vmath.normalize(vmath.vector3(-1 + 2 * math.random(), -1 + 2 * math.random(), 0))
+		local rand_rot
+		if math.random() > 0.5 then rand_rot = 1 else rand_rot = -1 end
+		local center = go.get_position() + vmath.rotate(go.get_rotation(), vmath.vector3(0, height/2, 0))
+		apply_torque("#co", center, rand_rot * 50000, height)
+		msg.post("#co", "apply_force",
+		{
+			force = rand_vel * 60000,
+			position = go.get_position()
+		})
+	end
+
+	-- if message_id == hash("collision_response") then
+	-- 	-- take action
+	-- 	--print("I collided with", message.other_id)
+	-- 	print("collision_response", message.other_group, go.get_position().x)
+	-- end
+	-- if message_id == hash("contact_point_response") then
+	-- 	print("contact_point_response", message.other_group, go.get_position().x)
+	-- end
 end
 
 

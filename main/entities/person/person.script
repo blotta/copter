@@ -1,0 +1,92 @@
+local direction_name = 'idle'
+
+function init(self)
+	sprite.play_flipbook("#sprite", "run")
+
+	self.tasks = {
+		{
+			type = 'goto',
+			position = vmath.vector3(350, 0, 0)
+		},
+		{
+			type = 'goto',
+			position = vmath.vector3(-50, 0, 0)
+		}
+	}
+
+	self.speed = 100
+	self.velocity = vmath.vector3()
+	self.state = 'idle' -- idle, busy
+end
+
+local function assign_task(self, task)
+	print('assigned task', task.type)
+	if task.type == 'goto' then
+		-- init goto task
+		local diff = task.position - go.get_position()
+		local direction
+		if diff.x > 0 then direction = 1 else direction = -1 end
+		self.velocity.x = self.speed * direction
+		sprite.play_flipbook("#sprite", "run")
+		sprite.set_hflip("#sprite", direction == -1)
+		self.state = 'busy'
+	end
+end
+
+local function check_task(self, task)
+	if task.type == 'goto' then
+		-- check if completed
+		local diff = task.position - go.get_position()
+		--print(diff.x)
+		if math.abs(diff.x) < 10 then
+			-- task completed
+			print('completed task', task.type)
+			return true -- completed
+		end
+	end
+	return false
+end
+
+local function idle(self)
+	sprite.play_flipbook("#sprite", "idle")
+	self.velocity.x = 0
+	self.state = 'idle'
+end
+
+function update(self, dt)
+	if #self.tasks == 0 then
+		if self.state ~= 'idle' then
+			idle(self)
+		end
+		return
+	end
+
+	local task = self.tasks[1]
+	
+	if self.state == 'idle' then
+		assign_task(self, task)
+	end
+
+	if self.state == 'busy' then
+		
+		local completed = check_task(self, task)
+		if completed then
+			table.remove(self.tasks, 1)
+			idle(self)
+			pprint(#self.tasks)
+			return
+		end
+	end
+end
+
+function fixed_update(self, dt)
+	local pos = go.get_position()
+	pos = pos + self.velocity * dt
+	go.set_position(pos)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash('add_task') then
+		table.insert(self.tasks, message.task)
+	end
+end

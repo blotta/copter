@@ -43,11 +43,11 @@ function update(self, dt)
 			print(self.box_target)
 		end
 
-		msg.post("@render:", "draw_line", {
-			start_point = from,
-			end_point = to,
-			color = vmath.vector4(1,1,1,1)
-		})
+		-- msg.post("@render:", "draw_line", {
+		-- 	start_point = from,
+		-- 	end_point = to,
+		-- 	color = vmath.vector4(1,1,1,1)
+		-- })
 	end
 end
 
