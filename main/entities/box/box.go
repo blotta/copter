@@ -1,7 +1,3 @@
-components {
-  id: "box"
-  component: "/main/entities/box/box.script"
-}
 embedded_components {
   id: "sprite"
   type: "sprite"

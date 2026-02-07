@@ -23,6 +23,22 @@ instances {
     y: 103.0
   }
 }
+instances {
+  id: "person2"
+  prototype: "/main/entities/person/person.go"
+  position {
+    x: 906.0
+    y: 35.0
+  }
+  component_properties {
+    id: "person"
+    properties {
+      id: "type"
+      value: "normal2"
+      type: PROPERTY_TYPE_HASH
+    }
+  }
+}
 scale_along_z: 0
 embedded_instances {
   id: "camera"
