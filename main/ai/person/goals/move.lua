@@ -22,8 +22,9 @@ function PersonMoveGoal:start(person)
 	person.facing = diff.x > 0 and 1 or -1
 	person.velocity.x = person.speed * person.facing
 
-	sprite.play_flipbook("#sprite", person.def.anim.run)
-	sprite.set_hflip("#sprite", person.facing == -1)
+	--sprite.play_flipbook("#sprite", person.def.anim.run)
+	--sprite.set_hflip("#sprite", person.facing == -1)
+	msg.post("#", 'start_animation', { anim = person.def.anim.run, hflip = person.facing == -1 })
 
 	self.started = true
 end

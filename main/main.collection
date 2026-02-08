@@ -11,8 +11,8 @@ instances {
   id: "person"
   prototype: "/main/entities/person/person.go"
   position {
-    x: 174.0
-    y: 39.0
+    x: 556.0
+    y: 512.0
   }
 }
 instances {
@@ -24,20 +24,8 @@ instances {
   }
 }
 instances {
-  id: "person2"
-  prototype: "/main/entities/person/person.go"
-  position {
-    x: 906.0
-    y: 35.0
-  }
-  component_properties {
-    id: "person"
-    properties {
-      id: "variant"
-      value: "normal2"
-      type: PROPERTY_TYPE_HASH
-    }
-  }
+  id: "level"
+  prototype: "/main/areas/main/level.go"
 }
 scale_along_z: 0
 embedded_instances {
@@ -56,31 +44,4 @@ embedded_instances {
     y: 362.0
     z: 10.0
   }
-}
-embedded_instances {
-  id: "level"
-  data: "components {\n"
-  "  id: \"platforms\"\n"
-  "  component: \"/main/world.tilemap\"\n"
-  "}\n"
-  "components {\n"
-  "  id: \"box_factory\"\n"
-  "  component: \"/main/entities/box/box.factory\"\n"
-  "}\n"
-  "embedded_components {\n"
-  "  id: \"collisionobject\"\n"
-  "  type: \"collisionobject\"\n"
-  "  data: \"collision_shape: \\\"/main/world.tilemap\\\"\\n"
-  "type: COLLISION_OBJECT_TYPE_STATIC\\n"
-  "mass: 0.0\\n"
-  "friction: 0.1\\n"
-  "restitution: 0.0\\n"
-  "group: \\\"floor\\\"\\n"
-  "mask: \\\"copter\\\"\\n"
-  "mask: \\\"box\\\"\\n"
-  "mask: \\\"person\\\"\\n"
-  "locked_rotation: true\\n"
-  "\"\n"
-  "}\n"
-  ""
 }
