@@ -1,9 +1,0 @@
-animations {
-  id: "idle"
-  images {
-    image: "/assets/spritesheet-person.png"
-  }
-  playback: PLAYBACK_NONE
-  fps: 0
-}
-extrude_borders: 2

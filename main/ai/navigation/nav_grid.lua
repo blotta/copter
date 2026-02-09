@@ -22,9 +22,10 @@ local function is_solid(x, y)
 	end
 
 	-- assumes a layer named "ground"
-	print(x, y)
+
 	local tile = tilemap.get_tile(tilemap_url, "level", x, y)
-	return tile ~= 0
+	print(x, y, tile)
+	return tile > 1
 end
 
 local function tile_to_world(x, y)

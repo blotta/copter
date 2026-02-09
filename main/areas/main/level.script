@@ -1,10 +1,56 @@
 local nav_grid = require "main.ai.navigation.nav_grid"
 
 function init(self)
-	--nav_grid.build("#world")
+    nav_grid.build("#world")
+    self.clicked_tile = vmath.vector3(1, 1, 0)
 end
 
+local function draw_debug_square(self, pos)
+    local size = 10
+    local tl = pos + vmath.vector3(-1, 1, 0) * size / 2
+    local tr = pos + vmath.vector3(1, 1, 0) * size / 2
+    local bl = pos + vmath.vector3(-1, -1, 0) * size / 2
+    local br = pos + vmath.vector3(1, -1, 0) * size / 2
+
+    msg.post("@render:", "draw_line", {
+        start_point = tl,
+        end_point = tr,
+        color = vmath.vector4(1, 1, 1, 1)
+    })
+    msg.post("@render:", "draw_line", {
+        start_point = tr,
+        end_point = br,
+        color = vmath.vector4(1, 1, 1, 1)
+    })
+    msg.post("@render:", "draw_line", {
+        start_point = br,
+        end_point = bl,
+        color = vmath.vector4(1, 1, 1, 1)
+    })
+    msg.post("@render:", "draw_line", {
+        start_point = bl,
+        end_point = tl,
+        color = vmath.vector4(1, 1, 1, 1)
+    })
+end
 
 function update(self, dt)
-	--nav_grid.debug_draw()
+    local wx = (self.clicked_tile.x - 1) * 32 + 32 / 2
+    local wy = (self.clicked_tile.y - 1) * 32 + 32 / 2
+    draw_debug_square(self, vmath.vector3(wx, wy, 0))
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash('mouse_button_right') and message.pressed then
+        pprint(message)
+        local world_pos = camera.screen_xy_to_world(message.screen_x, message.screen_y)
+        local tile_x = math.floor((world_pos.x) / 32) + 1
+        local tile_y = math.floor((world_pos.y) / 32) + 1
+        local tile = tilemap.get_tile("#world", 'level', tile_x, tile_y)
+        local tile_info = tilemap.get_tile_info("#world", 'level', tile_x, tile_y)
+        self.clicked_tile.x = tile_x
+        self.clicked_tile.y = tile_y
+        print(tile, tile_x, tile_y)
+        pprint(tile_info)
+    end
 end

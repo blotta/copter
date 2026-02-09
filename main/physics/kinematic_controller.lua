@@ -68,7 +68,6 @@ end
 
 -- call from on_message when contact_point_response
 function KinematicController.on_contact(self, message)
-    pprint(message.normal)
     if message.distance > 0 then
         local proj = vmath.project(self.correction, message.normal * message.distance)
         if proj < 1 then
