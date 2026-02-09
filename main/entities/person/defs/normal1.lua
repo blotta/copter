@@ -1,5 +1,5 @@
 return {
-    speed = 100,
+    speed = 64,
     anim = {
         idle = hash('normal1_idle'),
         run = hash('normal1_run'),

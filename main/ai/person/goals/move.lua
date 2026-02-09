@@ -1,8 +1,3 @@
--- Put functions in this file to use them in several other scripts.
--- To get access to the functions, you need to put:
--- require "my_directory.my_file"
--- in any script using the functions.
-
 local PersonMoveGoal = {}
 PersonMoveGoal.__index = PersonMoveGoal
 
@@ -10,37 +5,43 @@ function PersonMoveGoal.new(data)
     local o = {}
     setmetatable(o, PersonMoveGoal)
 
-    -- o.started = false
+    o.type = 'move'
     o.target = data.position
-    o.tolerance = data.tolerance or 10
-    o.state = 'queued' -- queued, doing, completed, blocked
-    o.ray_facing = nil
+    o.tolerance_x = data.tolerance_x or 10
+    o.tolerance_y = data.tolerance_y or 32
+    o.status = 'queued' -- queued, doing, completed, blocked, cancelled
+    o.ray_eye_facing = nil
 
     return o
 end
 
 function PersonMoveGoal:start(person)
-    --sprite.play_flipbook("#sprite", person.def.anim.run)
-    --sprite.set_hflip("#sprite", person.facing == -1)
-    -- msg.post("#", 'start_animation', { anim = person.def.anim.run, hflip = person.facing == -1 })
-
-    -- self.started = true
-    self.state = 'doing'
+    self.status = 'doing'
 end
 
 function PersonMoveGoal:fixed_update(person, dt)
-    if self.state == 'doing' then
+    if self.status == 'doing' then
+        if not person.controller.is_grounded then
+            person.controller.velocity.x = 0
+            return
+        end
+
         local diff = self.target - go.get_position()
         person.facing = diff.x > 0 and 1 or -1
         person.controller.velocity.x = person.speed * person.facing
 
-        local eye = go.get_position() + vmath.vector3(0, 10, 0)
-        local eye_range_vec = vmath.vector3(person.facing * 10, 0, 0)
-        self.ray_facing = physics.raycast(eye, eye + eye_range_vec, { hash('floor') })
+        local eye = go.get_position() + vmath.vector3(0, 16, 0)
+        local eye_range_vec = vmath.vector3(person.facing * 16, 0, 0)
+        self.ray_eye_facing = physics.raycast(eye, eye + eye_range_vec, { hash('floor') })
+        msg.post("@render:", "draw_line", {
+            start_point = eye,
+            end_point = eye + eye_range_vec,
+            color = self.ray_eye_facing ~= nil and vmath.vector4(0, 1, 0, 1) or vmath.vector4(1, 1, 1, 1)
+        })
         return
     end
 
-    if self.state == 'blocked' then
+    if self.status == 'blocked' then
         person.controller.velocity.x = 0
     end
 end
@@ -52,35 +53,31 @@ function PersonMoveGoal:update(person, dt)
         color = vmath.vector4(1, 1, 1, 1)
     })
 
-    if self.state == 'doing' then
+
+    if self.status == 'doing' then
         -- check completed
         local diff = self.target - go.get_position()
-        if vmath.length_sqr(diff) < self.tolerance * self.tolerance then
-            self.state = 'completed'
+        if math.abs(diff.x) <= self.tolerance_x and math.abs(diff.y) <= self.tolerance_y then -- vmath.length_sqr(diff) < self.tolerance * self.tolerance then
+            self.status = 'completed'
             return
         end
 
         -- check blocked
-        if math.abs(diff.x) <= self.tolerance then
+        if math.abs(diff.x) <= self.tolerance_x and math.abs(diff.y) > self.tolerance_y then
             -- vertical difference
-            self.state = 'blocked'
-        elseif self.ray_facing ~= nil then
-            self.state = 'blocked'
+            self.status = 'blocked'
+        elseif self.ray_eye_facing ~= nil then
+            self.status = 'blocked'
         end
     end
 end
 
-function PersonMoveGoal:is_complete(person)
-    return self.state == 'completed'
-end
-
-function PersonMoveGoal:is_blocked(person)
-    return self.state == 'blocked'
-end
-
-function PersonMoveGoal:stop(person)
+function PersonMoveGoal:dispose(person)
     person.controller.velocity.x = 0
-    self.state = 'queued'
+end
+
+function PersonMoveGoal:cancel()
+    self.status = 'cancelled'
 end
 
 return PersonMoveGoal

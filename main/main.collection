@@ -11,8 +11,8 @@ instances {
   id: "person"
   prototype: "/main/entities/person/person.go"
   position {
-    x: 556.0
-    y: 512.0
+    x: 473.0
+    y: 690.0
   }
 }
 instances {

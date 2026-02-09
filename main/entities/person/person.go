@@ -44,3 +44,18 @@ embedded_components {
   "locked_rotation: true\n"
   ""
 }
+embedded_components {
+  id: "indicator_sprite"
+  type: "sprite"
+  data: "default_animation: \"none\"\n"
+  "material: \"/builtins/materials/sprite.material\"\n"
+  "textures {\n"
+  "  sampler: \"texture_sampler\"\n"
+  "  texture: \"/main/entities/person/indicators.tilesource\"\n"
+  "}\n"
+  ""
+  position {
+    x: 11.0
+    y: 23.0
+  }
+}

@@ -11,11 +11,12 @@ function KinematicController.new(config)
         -- Collision resolution
         correction = vmath.vector3(),
         is_grounded = false,
+        is_on_slope = false,
 
         contacts = {},
 
         -- Slope handling
-        max_slope_cos = math.cos(math.rad(config.max_slope_angle or 45)),
+        max_slope_cos = math.cos(math.rad((config.max_slope_angle or 45) + 1)), -- +1 to deal with floating point madness
     }
     setmetatable(o, KinematicController)
 
@@ -27,25 +28,29 @@ function KinematicController.fixed_update_start(self, dt)
     local pos = go.get_position()
 
     -- check grounded
-    local ray_start_left = pos + vmath.vector3(-6, 1, 0)
-    local ray_start_right = pos + vmath.vector3(6, 1, 0)
-    local ray_end_offset = vmath.vector3(0, -11, 0)
+    local skin_width = 2
+    local ray_start_left = pos + vmath.vector3(-6, skin_width, 0)
+    local ray_start_right = pos + vmath.vector3(6, skin_width, 0)
+    local ray_end_offset = vmath.vector3(0, -(skin_width + 14), 0)
 
     local ray_left = physics.raycast(ray_start_left, ray_start_left + ray_end_offset, { hash('floor') })
     local ray_right = physics.raycast(ray_start_right, ray_start_right + ray_end_offset, { hash('floor') })
 
-    -- msg.post("@render:", "draw_line", {
-    --     start_point = ray_start_left,
-    --     end_point = ray_start_left + ray_end_offset,
-    --     color = ray_left ~= nil and vmath.vector4(0, 1, 0, 1) or vmath.vector4(1, 1, 1, 1)
-    -- })
-    -- msg.post("@render:", "draw_line", {
-    --     start_point = ray_start_right,
-    --     end_point = ray_start_right + ray_end_offset,
-    --     color = ray_right ~= nil and vmath.vector4(0, 1, 0, 1) or vmath.vector4(1, 1, 1, 1)
-    -- })
+    msg.post("@render:", "draw_line", {
+        start_point = ray_start_left,
+        end_point = ray_start_left + ray_end_offset,
+        color = ray_left ~= nil and vmath.vector4(0, 1, 0, 1) or vmath.vector4(1, 1, 1, 1)
+    })
+    msg.post("@render:", "draw_line", {
+        start_point = ray_start_right,
+        end_point = ray_start_right + ray_end_offset,
+        color = ray_right ~= nil and vmath.vector4(0, 1, 0, 1) or vmath.vector4(1, 1, 1, 1)
+    })
 
-    self.is_grounded = (ray_left ~= nil or ray_right ~= nil)
+    local has_ray_left = ray_left ~= nil
+    local has_ray_right = ray_right ~= nil
+
+    self.is_grounded = (has_ray_left or has_ray_right)
 
     -- apply gravity
     self.velocity.y = self.velocity.y + self.gravity * dt
@@ -62,7 +67,6 @@ function KinematicController.fixed_update_end(self, dt)
 end
 
 function KinematicController.late_update(self, dt)
-    -- self.is_grounded = false
     self.correction = vmath.vector3()
 end
 
@@ -77,23 +81,6 @@ function KinematicController.on_contact(self, message)
         end
     end
 
-    -- ceiling
-    -- if message.normal.y < 0 then
-    --     self.velocity.y = 0
-    -- end
-
-    -- --- FLOOR DETECTION ---
-    -- if message.normal.y > self.max_slope_cos then
-    --     self.is_grounded = true
-    -- end
-
-    -- --- VELOCITY SLIDING ---
-    -- local vn = vmath.dot(self.velocity, normal)
-    -- if vn < 0 then
-    --     -- Remove velocity into surface
-    --     self.velocity = self.velocity - normal * vn
-    -- end
-    -- if math.abs(message.normal.x) > self.max_slope_cos then self.velocity.x = 0 end
     if math.abs(message.normal.y) > self.max_slope_cos then self.velocity.y = 0 end
 end
 
