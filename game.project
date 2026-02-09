@@ -8,6 +8,8 @@ shared_state = 1
 width = 1280
 height = 720
 high_dpi = 1
+vsync = 1
+update_frequency = 60
 
 [android]
 input_method = HiddenInputField
@@ -16,6 +18,7 @@ input_method = HiddenInputField
 gravity_y = -392.0
 scale = 0.03125
 use_fixed_timestep = 1
+debug = 0
 
 [html5]
 scale_mode = stretch

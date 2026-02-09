@@ -1,10 +1,10 @@
 local nav_grid = require "main.ai.navigation.nav_grid"
 
 function init(self)
-	nav_grid.build("#world")
+	--nav_grid.build("#world")
 end
 
 
 function update(self, dt)
-	nav_grid.debug_draw()
+	--nav_grid.debug_draw()
 end

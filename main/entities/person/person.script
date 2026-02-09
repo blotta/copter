@@ -1,199 +1,177 @@
 local variants = require "main.entities.person.defs._variants"
 local goal_factory = require 'main.ai.goal_factory'
+local kinematic_controller = require 'main.physics.kinematic_controller'
 
 go.property("variant", hash("normal1"))
 
 local function play_animation(self, anim, hflip)
-	if self.animation ~= anim then
-		sprite.play_flipbook("#sprite", anim)
-		self.animation = anim
-	end
+    if self.animation ~= anim then
+        sprite.play_flipbook("#sprite", anim)
+        self.animation = anim
+    end
 
-	if hflip ~= nil then
-		sprite.set_hflip("#sprite", hflip)
-	end
+    if hflip ~= nil then
+        sprite.set_hflip("#sprite", hflip)
+    end
 end
 
-local function set_idle(self)
-	if self.state ~= hash('idle') then
-		self.velocity.x = 0
-		play_animation(self, self.def.anim.idle)
-		self.state = hash('idle')
-	end
+local function animate(self)
+    if self.controller.is_grounded then
+        if self.controller.velocity.x == 0 then
+            play_animation(self, self.def.anim.idle)
+        else
+            play_animation(self, self.def.anim.run, self.facing == -1)
+        end
+    else
+        play_animation(self, self.def.anim.fall)
+    end
 end
 
-local function set_fall(self)
-	if self.state ~= hash('fall') then
-		--self.velocity.x = 0
-		play_animation(self, self.def.anim.fall)
-		self.state = hash('fall')
-	end
-end
+-- local function set_idle(self)
+--     if self.state ~= hash('idle') then
+--         self.controller.velocity.x = 0
+--         play_animation(self, self.def.anim.idle)
+--         self.state = hash('idle')
+--     end
+-- end
 
+-- local function set_fall(self)
+--     if self.state ~= hash('fall') then
+--         --self.velocity.x = 0
+--         play_animation(self, self.def.anim.fall)
+--         self.state = hash('fall')
+--     end
+-- end
 
+local function print_debug(self)
+    local pos = vmath.vector3(10, 720 - 30, 0)
+    local line_diff = vmath.vector3(0, -20, 0)
 
-local function check_grounded(self)
-	local pos = go.get_position()
-	local from = pos + vmath.vector3(0, 1, 0)
-	local to = pos + vmath.vector3(0, -10, 0)
+    local lines = {
+        '-- person --',
+        'state: ' .. self.state,
+        'animation: ' .. self.animation,
+        'has goal: ' .. tostring(self.current_goal ~= nil),
+        '-- controller --',
+        'velocity: ' .. self.controller.velocity.x .. ',' .. self.controller.velocity.y,
+        'grounded: ' .. tostring(self.controller.is_grounded),
+        'correction:' .. self.controller.correction.x .. ',' .. self.controller.correction.y,
+    }
 
-	local result = physics.raycast(from, to, { hash("floor") })
-
-	if result == nil then
-		local left_result = physics.raycast(from + vmath.vector3(-6, 0, 0), to + vmath.vector3(-6, 0, 0), { hash("floor") })
-		local right_result = physics.raycast(from + vmath.vector3(6, 0, 0), to + vmath.vector3(6, 0, 0), { hash("floor") })
-		if left_result ~= nil or right_result ~= nil then
-			result = left_result or right_result
-		end
-	end
-	
-	local c = result ~= nil and vmath.vector4(0,1,0,1) or vmath.vector4(1,1,1,1)
-	msg.post("@render:", "draw_line", {
-		start_point = from,
-		end_point = to,
-		color = c
-	})
-	msg.post("@render:", "draw_line", {
-		start_point = from + vmath.vector3(-6, 0, 0),
-		end_point = to + vmath.vector3(-6, 0, 0),
-		color = c
-	})
-	msg.post("@render:", "draw_line", {
-		start_point = from + vmath.vector3(6, 0, 0),
-		end_point = to + vmath.vector3(6, 0, 0),
-		color = c
-	})
-	--print('raycast result:', result)
-
-	return result ~= nil
+    for i, str in ipairs(lines) do
+        msg.post("@render:", "draw_text", {
+            text = str,
+            position = pos + (i - 1) * line_diff,
+            color = vmath.vector4(1, 1, 1, 1)
+        })
+    end
 end
 
 local function start_next_goal(self)
-	if #self.queue == 0 then
-		self.current_goal = nil
-		set_idle(self)
-		return
-	end
+    if #self.queue == 0 then
+        self.current_goal = nil
+        --set_idle(self)
+        self.state = hash('idle')
+        return
+    end
 
-	self.current_goal = table.remove(self.queue, 1)
-	self.current_goal:start(self)
-	self.state = hash('goal')
+    self.current_goal = table.remove(self.queue, 1)
+    self.current_goal:start(self)
+    self.state = hash('goal')
 end
 
 local function pause_current_goal(self)
-	if self.current_goal ~= nil then
-		self.current_goal:stop(self)
-		table.insert(self.queue, 1, self.current_goal)
-		self.current_goal = nil
-		self.velocity.x = 0
-	end
+    if self.current_goal ~= nil then
+        self.current_goal:stop(self)
+        table.insert(self.queue, 1, self.current_goal)
+        self.current_goal = nil
+    end
 end
 
 function init(self)
-	self.type = hash("person")
-	self.def = variants[self.variant]
+    self.type = hash("person")
+    self.def = variants[self.variant]
 
-	play_animation(self, self.def.anim.idle)
-	
-	self.queue = {}
-	self.current_goal = nil
+    -- play_animation(self, self.def.anim.idle)
+    self.animation = self.def.anim.idle
 
-	self.speed = self.def.speed
-	self.velocity = vmath.vector3()
-	self.facing = 1
-	--self.prev_grounded = false
-	self.grounded = false
-	self.correction = vmath.vector3()
-	self.state = hash('goal') -- goal, fall, idle?
+    self.queue = {}
+    self.current_goal = nil
 
-	msg.post("#", "add_goal", {
-		type = 'move',
-		position = vmath.vector3(650, 0, 0)
-	})
+    self.controller = kinematic_controller.new({})
+    self.speed = self.def.speed
+    self.state = hash('idle') -- goal, fall, idle?
 
-	msg.post("#", "add_goal", {
-		type = 'move',
-		position = vmath.vector3(32 * 3.5, 0, 0)
-	})
-	msg.post("#", "add_goal", {
-		type = 'move',
-		position = vmath.vector3(550, 0, 0)
-	})
+    msg.post("#", "add_goal", {
+        type = 'move',
+        position = vmath.vector3(650, 0, 0)
+    })
+
+    msg.post("#", "add_goal", {
+        type = 'move',
+        position = vmath.vector3(32 * 3.5, 0, 0)
+    })
+    msg.post("#", "add_goal", {
+        type = 'move',
+        position = vmath.vector3(550, 0, 0)
+    })
 end
 
 function fixed_update(self, dt)
-	go.set_position(go.get_position() + self.correction)
-	--self.velocity = self.velocity - c
-	if self.correction.y > 0 and self.velocity.y < 0 then self.velocity.y = 0 end
+    self.controller:fixed_update_start(dt)
 
-	self.correction = vmath.vector3()
-	--self.prev_grounded = self.grounded
-	self.grounded = check_grounded(self)
+    if self.current_goal ~= nil then
+        self.current_goal:update(self, dt)
+    end
 
-	self.velocity.y = self.velocity.y + physics.get_gravity().y * dt
-	if self.velocity.y < -300 then self.velocity.y = -300 end
-
-	local pos = go.get_position()
-	pos = pos + self.velocity * dt
-	go.set_position(pos)
+    self.controller:fixed_update_end(dt)
 end
 
 function update(self, dt)
-	
-	
-	if not self.grounded then
-		set_fall(self)
-		pause_current_goal(self)
-		return
-	end
-	
-	if not self.current_goal then
-		start_next_goal(self)
-		return
-	end
+    print_debug(self)
 
-	self.current_goal:update(self, dt)
+    if not self.controller.is_grounded then
+        --set_fall(self)
+        self.state = hash('fall')
+        pause_current_goal(self)
+        return
+    end
 
-	if self.current_goal:is_complete(self) then
-		self.current_goal:stop(self)
-		self.current_goal = nil
-		return
-	end
+    if not self.current_goal then
+        start_next_goal(self)
+        return
+    end
 
-	if self.current_goal:is_blocked(self) then
-		-- stop and retry later
-		pause_current_goal(self)
-	end
+    -- self.current_goal:update(self, dt)
+
+    if self.current_goal:is_complete(self) then
+        self.current_goal:stop(self)
+        self.current_goal = nil
+        return
+    end
+
+    if self.current_goal:is_blocked(self) then
+        -- stop and retry later
+        pause_current_goal(self)
+    end
+end
+
+function late_update(self, dt)
+    animate(self)
+    self.controller:late_update(dt)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash('add_goal') then
-		local goal = goal_factory.create(self.type, message)
-		table.insert(self.queue, goal)
-	end
+    if message_id == hash('add_goal') then
+        local goal = goal_factory.create(self.type, message)
+        table.insert(self.queue, goal)
+    end
 
-	if message_id == hash('contact_point_response')
-	and message.other_group == hash('floor') then
-		-- only does position correction
-		--print(go.get_id(), 'floor contact')
-		if message.distance > 0 then
-			-- First, project the accumulated correction onto
-			-- the penetration vector
-			local proj = vmath.project(self.correction, message.normal * message.distance)
-			if proj < 1 then
-				-- Only care for projections that does not overshoot.
-				local comp = (message.distance - message.distance * proj) * message.normal
-				-- Apply compensation
-				--go.set_position(go.get_position() + comp)
-				-- Accumulate correction done
-				self.correction = self.correction + comp
-				--self.velocity.y = 0
-			end
-			
-		end
-	end
+    if message_id == hash('contact_point_response') and message.other_group == hash('floor') then
+        self.controller:on_contact(message)
+    end
 
-	if message_id == hash('start_animation') then
-		play_animation(self, message.anim, message.hflip)
-	end
+    if message_id == hash('start_animation') then
+        play_animation(self, message.anim, message.hflip)
+    end
 end
