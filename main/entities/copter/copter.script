@@ -67,7 +67,7 @@ function fixed_update(self, dt)
         apply_torque("#co", center, self.input_pitch * self.torque_power, height)
     else
         -- angle controller
-        local angle = go.get(".", "euler.z")
+        local angle = go.get(".", "euler.z") --[[@as number]]
         --print(angle)
         if math.abs(angle) < 1 then angle = 0 end
         if angle ~= 0 then
@@ -119,6 +119,10 @@ function on_message(self, message_id, message, sender)
                 force = rand_vel * 60000,
                 position = go.get_position()
             })
+    end
+
+    if message_id == hash('contact_point_response') and message.other_group == hash('floor') then
+        return true
     end
 
     -- if message_id == hash("collision_response") then

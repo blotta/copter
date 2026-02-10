@@ -1,4 +1,16 @@
+local LOOK_AHEAD_MULT = vmath.vector3(0.4, 0.25, 0)
+
 function init(self)
+    self.target_go_id = go.get_id('copter')
+    self.dead_zone = {
+        left = -100,
+        right = 100,
+        bottom = -70,
+        top = 70
+    }
+    ---@type vector3
+    self.smoothed_lv = vmath.vector3()
+
     local color = vmath.vector4(0.42, 0.60, 0.78, 1);
     local dim = 0.65;
     color.x = color.x * dim
@@ -6,25 +18,53 @@ function init(self)
     color.z = color.z * dim
     pprint(color)
     msg.post("@render:", "clear_color", {
-        -- color = vmath.vector4(0.45, 0.68, 0.85, 1),
         color = color
     })
-    self.target_go_id = go.get_id('copter')
-    self.tolerance = 64
 end
 
 function late_update(self, dt)
-    -- This function is called at the end of update cycle but before render
-    -- Learn more: https://defold.com/manuals/script/
-    -- Remove this function if not needed
-    local go_pos = go.get_position(self.target_go_id)
-    local go_lv = go.get(msg.url(nil, self.target_go_id, 'co'), 'linear_velocity')
-    local x_offset = go_lv.x * 0.5
-    local y_offset = go_lv.y * 0.3
-    local target_cam_pos = vmath.vector3(go_pos.x, go_pos.y, 10) + vmath.vector3(x_offset, y_offset, 0)
     local cam_pos = go.get_position()
-    cam_pos = vmath.lerp(0.1, cam_pos, target_cam_pos)
-    -- if vmath.length_sqr(target_cam_pos - cam_pos) > self.tolerance * self.tolerance then
-    -- end
+    local copter_pos = go.get_position(self.target_go_id)
+
+    -- position follow
+    local dx = copter_pos.x - cam_pos.x
+    local dy = copter_pos.y - cam_pos.y
+
+    local move_x = 0
+    local move_y = 0
+
+    if dx < self.dead_zone.left then
+        move_x = dx - self.dead_zone.left
+    elseif dx > self.dead_zone.right then
+        move_x = dx - self.dead_zone.right
+    end
+
+    if dy < self.dead_zone.bottom then
+        move_y = dy - self.dead_zone.bottom
+    elseif dy > self.dead_zone.top then
+        move_y = dy - self.dead_zone.top
+    end
+
+    local target = cam_pos + vmath.vector3(move_x, move_y, 0)
+
+    -- velocity follow
+    local go_lv = go.get(msg.url(nil, self.target_go_id, 'co'), 'linear_velocity') --[[@as vector3]]
+    self.smoothed_lv = vmath.lerp(
+        0.15
+        , self.smoothed_lv --[[@as vector3]]
+        , go_lv)
+    local look_ahead = vmath.vector3(
+        self.smoothed_lv.x * LOOK_AHEAD_MULT.x,
+        self.smoothed_lv.y * LOOK_AHEAD_MULT.y,
+        0)
+    target = target + look_ahead
+
+    -- round
+    target.x = math.floor(target.x)
+    target.y = math.floor(target.y)
+    target.z = math.floor(target.z)
+
+    -- Smooth follow
+    cam_pos = vmath.lerp(0.12, cam_pos, target)
     go.set_position(cam_pos)
 end
