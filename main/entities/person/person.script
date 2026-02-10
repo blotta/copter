@@ -41,6 +41,7 @@ local function print_debug(self)
         'current_goal: ' .. (self.brain.current_goal.type) .. " status:" .. (self.brain.current_goal.status),
         'goals left: ' .. #self.brain.goals,
         '-- controller --',
+        'position' .. go.get_position(),
         'velocity: ' .. self.controller.velocity.x .. ',' .. self.controller.velocity.y,
         'grounded: ' .. tostring(self.controller.is_grounded),
         'correction:' .. self.controller.correction.x .. ',' .. self.controller.correction.y,
