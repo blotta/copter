@@ -30,9 +30,9 @@ function PersonMoveGoal:fixed_update(person, dt)
         person.facing = diff.x > 0 and 1 or -1
         person.controller.velocity.x = person.speed * person.facing
 
-        local eye = go.get_position() + vmath.vector3(0, 16, 0)
+        local eye = go.get_position() + vmath.vector3(0, 13, 0)
         local eye_range_vec = vmath.vector3(person.facing * 16, 0, 0)
-        self.ray_eye_facing = physics.raycast(eye, eye + eye_range_vec, { hash('floor') })
+        self.ray_eye_facing = physics.raycast(eye, eye + eye_range_vec, { hash('floor'), hash('helipad') })
         msg.post("@render:", "draw_line", {
             start_point = eye,
             end_point = eye + eye_range_vec,

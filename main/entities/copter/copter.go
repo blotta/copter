@@ -34,6 +34,8 @@ embedded_components {
   "group: \"copter\"\n"
   "mask: \"box\"\n"
   "mask: \"floor\"\n"
+  "mask: \"building\"\n"
+  "mask: \"helipad\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
   "    shape_type: TYPE_BOX\n"

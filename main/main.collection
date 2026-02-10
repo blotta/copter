@@ -27,6 +27,22 @@ instances {
   id: "level"
   prototype: "/main/areas/main/level.go"
 }
+instances {
+  id: "taxi_building"
+  prototype: "/main/entities/buildings/taxi/taxi_building.go"
+  position {
+    x: 1914.0
+    y: 32.0
+  }
+}
+instances {
+  id: "helipad_building"
+  prototype: "/main/entities/buildings/helipad/helipad_building.go"
+  position {
+    x: 2063.0
+    y: 32.0
+  }
+}
 scale_along_z: 0
 embedded_instances {
   id: "camera"

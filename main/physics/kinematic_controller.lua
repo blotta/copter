@@ -9,6 +9,8 @@ function KinematicController.new(config)
         max_fall_speed = config.max_fall_speed or -300,
 
         -- Collision resolution
+        collision_groups = config.collision_groups,
+        collision_groups_hash = {},
         correction = vmath.vector3(),
         is_grounded = false,
         is_on_slope = false,
@@ -18,6 +20,11 @@ function KinematicController.new(config)
         -- Slope handling
         max_slope_cos = math.cos(math.rad((config.max_slope_angle or 45) + 1)), -- +1 to deal with floating point madness
     }
+
+    for _, g in ipairs(config.collision_groups) do
+        o.collision_groups_hash[g] = true
+    end
+
     setmetatable(o, KinematicController)
 
     return o
@@ -33,8 +40,8 @@ function KinematicController.fixed_update_start(self, dt)
     local ray_start_right = pos + vmath.vector3(6, skin_width, 0)
     local ray_end_offset = vmath.vector3(0, -(skin_width + 14), 0)
 
-    local ray_left = physics.raycast(ray_start_left, ray_start_left + ray_end_offset, { hash('floor') })
-    local ray_right = physics.raycast(ray_start_right, ray_start_right + ray_end_offset, { hash('floor') })
+    local ray_left = physics.raycast(ray_start_left, ray_start_left + ray_end_offset, self.collision_groups)
+    local ray_right = physics.raycast(ray_start_right, ray_start_right + ray_end_offset, self.collision_groups)
 
     msg.post("@render:", "draw_line", {
         start_point = ray_start_left,
@@ -72,16 +79,18 @@ end
 
 -- call from on_message when contact_point_response
 function KinematicController.on_contact(self, message)
-    if message.distance > 0 then
-        local proj = vmath.project(self.correction, message.normal * message.distance)
-        if proj < 1 then
-            local comp = (message.distance - message.distance * proj) * message.normal
-            go.set_position(go.get_position() + comp)
-            self.correction = self.correction + comp
+    if self.collision_groups_hash[message.other_group] then
+        if message.distance > 0 then
+            local proj = vmath.project(self.correction, message.normal * message.distance)
+            if proj < 1 then
+                local comp = (message.distance - message.distance * proj) * message.normal
+                go.set_position(go.get_position() + comp)
+                self.correction = self.correction + comp
+            end
         end
-    end
 
-    if math.abs(message.normal.y) > self.max_slope_cos then self.velocity.y = 0 end
+        if math.abs(message.normal.y) > self.max_slope_cos then self.velocity.y = 0 end
+    end
 end
 
 return KinematicController

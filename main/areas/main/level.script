@@ -1,7 +1,7 @@
 local nav_grid = require "main.ai.navigation.nav_grid"
 
 function init(self)
-    nav_grid.build("#world")
+    --nav_grid.build("#world")
     self.clicked_tile = vmath.vector3(1, 1, 0)
 end
 

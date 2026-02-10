@@ -70,7 +70,9 @@ function init(self)
 
     self.animation = self.def.anim.idle
 
-    self.controller = kinematic_controller.new({})
+    self.controller = kinematic_controller.new({
+        collision_groups = { hash('floor'), hash('helipad') }
+    })
     self.brain = brain.new(self, on_goal_blocked)
 
     self.speed = self.def.speed
@@ -113,7 +115,7 @@ function on_message(self, message_id, message, sender)
         self.brain:add_goal(message)
     end
 
-    if message_id == hash('contact_point_response') and message.other_group == hash('floor') then
+    if message_id == hash('contact_point_response') then -- and message.other_group == hash('floor') then
         self.controller:on_contact(message)
     end
 
