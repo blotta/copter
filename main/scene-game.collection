@@ -19,21 +19,8 @@ collection_instances {
   id: "world"
   collection: "/main/areas/world/world.collection"
 }
-scale_along_z: 0
-embedded_instances {
+collection_instances {
   id: "camera"
-  data: "components {\n"
-  "  id: \"main\"\n"
-  "  component: \"/main/camera/main.camera\"\n"
-  "}\n"
-  "components {\n"
-  "  id: \"targetting-camera\"\n"
-  "  component: \"/main/camera/targetting-camera.script\"\n"
-  "}\n"
-  ""
-  position {
-    x: 642.0
-    y: 362.0
-    z: 10.0
-  }
+  collection: "/main/camera/camera.collection"
 }
+scale_along_z: 0

@@ -1,0 +1,132 @@
+local LOOK_AHEAD_MULT = vmath.vector3(0.3, 0.2, 0)
+local DISPLAY_WIDTH = sys.get_config_int("display.width")
+local DISPLAY_HEIGHT = sys.get_config_int("display.height")
+
+go.property('bounds_left', 0)
+go.property('bounds_right', 1024)
+go.property('bounds_bottom', 0)
+go.property('bounds_top', 576)
+
+function init(self)
+    self.target_go_id = go.get_id('/copter')
+
+    local tx, ty, tw, th = tilemap.get_bounds(msg.url(nil, "/world/map", "tiles"))
+    local tile_size = 32
+
+    self.bounds_left = (tx - 1) * tile_size
+    self.bounds_right = (tw + tx - 1) * tile_size
+    self.bounds_bottom = (ty - 1) * tile_size
+    self.bounds_top = (th + ty - 2) * tile_size -- -2 to to hide topmost tile
+    print('cam y bounds: ', self.bounds_top, self.bounds_bottom)
+
+    self.dead_zone = {
+        left = -100,
+        right = 100,
+        bottom = -70,
+        top = 70
+    }
+    ---@type vector3
+    self.smoothed_lv = vmath.vector3()
+end
+
+function show_debug_lines(self, target)
+    local pos = go.get_position()
+    pos.z = -1
+    local tl = vmath.vector3(self.dead_zone.left, self.dead_zone.top, 0)
+    local tr = vmath.vector3(self.dead_zone.right, self.dead_zone.top, 0)
+    local bl = vmath.vector3(self.dead_zone.left, self.dead_zone.bottom, 0)
+    local br = vmath.vector3(self.dead_zone.right, self.dead_zone.bottom, 0)
+
+    msg.post("@render:", "draw_line", {
+        start_point = pos + tl,
+        end_point = pos + tr,
+        color = vmath.vector4(1, 1, 1, 1)
+    })
+    msg.post("@render:", "draw_line", {
+        start_point = pos + tr,
+        end_point = pos + br,
+        color = vmath.vector4(1, 1, 1, 1)
+    })
+    msg.post("@render:", "draw_line", {
+        start_point = pos + br,
+        end_point = pos + bl,
+        color = vmath.vector4(1, 1, 1, 1)
+    })
+    msg.post("@render:", "draw_line", {
+        start_point = pos + bl,
+        end_point = pos + tl,
+        color = vmath.vector4(1, 1, 1, 1)
+    })
+
+    local t = vmath.vector3(target.x, target.y, -1)
+
+    msg.post("@render:", "draw_line", {
+        start_point = t + vmath.vector3(-10, -10, 0),
+        end_point = t + vmath.vector3(10, 10, 0),
+        color = vmath.vector4(1, 0.8, 0.8, 1)
+    })
+    msg.post("@render:", "draw_line", {
+        start_point = t + vmath.vector3(-10, 10, 0),
+        end_point = t + vmath.vector3(10, -10, 0),
+        color = vmath.vector4(1, 0.8, 0.8, 1)
+    })
+end
+
+function late_update(self, dt)
+    local cam_pos = go.get_position()
+    local copter_pos = go.get_position(self.target_go_id)
+    copter_pos.z = cam_pos.z
+
+    -- position follow
+    local dx = copter_pos.x - cam_pos.x
+    local dy = copter_pos.y - cam_pos.y
+
+    local move_x = 0
+    local move_y = 0
+
+    if dx < self.dead_zone.left then
+        move_x = dx - self.dead_zone.left
+    elseif dx > self.dead_zone.right then
+        move_x = dx - self.dead_zone.right
+    end
+
+    if dy < self.dead_zone.bottom then
+        move_y = dy - self.dead_zone.bottom
+    elseif dy > self.dead_zone.top then
+        move_y = dy - self.dead_zone.top
+    end
+
+    local target = cam_pos + vmath.vector3(move_x, move_y, 0)
+
+    -- velocity follow
+    local go_lv = go.get(msg.url(nil, self.target_go_id, 'co'), 'linear_velocity') --[[@as vector3]]
+    self.smoothed_lv = vmath.lerp(
+        0.15
+        , self.smoothed_lv --[[@as vector3]]
+        , go_lv)
+    local look_ahead = vmath.vector3(
+        self.smoothed_lv.x * LOOK_AHEAD_MULT.x,
+        self.smoothed_lv.y * LOOK_AHEAD_MULT.y,
+        0)
+    target = target + look_ahead
+
+    -- round
+    target.x = math.floor(target.x)
+    target.y = math.floor(target.y)
+
+    -- Smooth follow
+    cam_pos = vmath.lerp(0.12, cam_pos, target)
+
+    -- clamp to bounds
+    local half_w = DISPLAY_WIDTH / 2
+    local half_h = DISPLAY_HEIGHT / 2
+    if cam_pos.x - half_w < self.bounds_left then cam_pos.x = self.bounds_left + half_w end
+    if cam_pos.x + half_w > self.bounds_right then cam_pos.x = self.bounds_right - half_w end
+    if cam_pos.y - half_h < self.bounds_bottom then cam_pos.y = self.bounds_bottom + half_h end
+    if cam_pos.y + half_h > self.bounds_top then cam_pos.y = self.bounds_top - half_h end
+
+    -- apply
+    go.set_position(cam_pos)
+
+    -- show_debug_lines(self, target)
+end

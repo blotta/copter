@@ -1,0 +1,31 @@
+-- sky_mover.script
+-- expects a sprite (#sprite) with size of 1px width and height larger than the height of the camera
+
+local DISPLAY_WIDTH = sys.get_config_int("display.width")
+local DISPLAY_HEIGHT = sys.get_config_int("display.height")
+
+function init(self)
+    go.set('#sprite', 'scale.y', 1)
+    go.set('#sprite', 'scale.x', DISPLAY_WIDTH)
+
+    pprint(DISPLAY_HEIGHT)
+
+    self.cam = go.get_parent()
+    local cam_bounds_top = go.get(msg.url(nil, self.cam, "camera_targeting"), 'bounds_top')
+    self.total_sky_height = cam_bounds_top - DISPLAY_HEIGHT / 2
+
+    self.total_offset = go.get('#sprite', 'size.y') - DISPLAY_HEIGHT
+end
+
+function late_update(self, dt)
+    local cam_y = go.get(self.cam, 'position.y')
+    local height_perc = cam_y / self.total_sky_height
+    if height_perc < 0 then height_perc = 0 end
+    if height_perc > 1 then height_perc = 1 end
+    -- print('cam height perc: ', height_perc)
+
+    local offset = 0.5 * self.total_offset - height_perc * self.total_offset
+    -- print(offset)
+
+    go.set(".", "position.y", offset)
+end
