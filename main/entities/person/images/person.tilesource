@@ -2,13 +2,6 @@ image: "/assets/spritesheet-person.png"
 tile_width: 32
 tile_height: 32
 animations {
-  id: "normal1_confused"
-  start_tile: 6
-  end_tile: 7
-  playback: PLAYBACK_LOOP_FORWARD
-  fps: 3
-}
-animations {
   id: "normal1_fall"
   start_tile: 5
   end_tile: 5
@@ -26,12 +19,6 @@ animations {
   end_tile: 4
   playback: PLAYBACK_LOOP_PINGPONG
   fps: 6
-}
-animations {
-  id: "normal2_confused"
-  start_tile: 13
-  end_tile: 14
-  fps: 3
 }
 animations {
   id: "normal2_fall"
