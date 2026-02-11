@@ -8,39 +8,23 @@ instances {
   }
 }
 instances {
-  id: "person"
-  prototype: "/main/entities/person/person.go"
-  position {
-    x: 473.0
-    y: 690.0
-  }
-}
-instances {
-  id: "platform"
-  prototype: "/main/entities/platform/platform.go"
-  position {
-    x: 183.0
-    y: 103.0
-  }
-}
-instances {
   id: "level"
   prototype: "/main/areas/main/level.go"
 }
-instances {
+collection_instances {
   id: "taxi_building"
-  prototype: "/main/entities/buildings/taxi/taxi_building.go"
+  collection: "/main/entities/buildings/taxi/taxi_building.collection"
   position {
-    x: 1914.0
+    x: 1840.0
     y: 32.0
   }
 }
-instances {
-  id: "helipad_building"
-  prototype: "/main/entities/buildings/helipad/helipad_building.go"
+collection_instances {
+  id: "person"
+  collection: "/main/entities/person/person.collection"
   position {
-    x: 2131.0
-    y: 32.0
+    x: 566.0
+    y: 523.0
   }
 }
 scale_along_z: 0

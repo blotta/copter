@@ -1,65 +1,63 @@
 function init(self)
-	msg.post(".", "acquire_input_focus")
+    msg.post(".", "acquire_input_focus")
 end
 
-
 function on_input(self, action_id, action)
-	if action_id == hash('up') then
-		if action.pressed then
-			msg.post("#copter", "throttle_up")
-		elseif action.released then
-			msg.post("#copter", "throttle_down")
-		end
-	end
-	if action_id == hash('down') then
-		if action.pressed then
-			msg.post("#copter", "throttle_down")
-		elseif action.released then
-			msg.post("#copter", "throttle_up")
-		end
-	end
+    if action_id == hash('up') then
+        if action.pressed then
+            msg.post("#copter", "throttle_up")
+        elseif action.released then
+            msg.post("#copter", "throttle_down")
+        end
+    end
+    if action_id == hash('down') then
+        if action.pressed then
+            msg.post("#copter", "throttle_down")
+        elseif action.released then
+            msg.post("#copter", "throttle_up")
+        end
+    end
 
-	if action_id == hash('right') then
-		if action.pressed then
-			msg.post("#copter", "pitch_right")
-		elseif action.released then
-			msg.post("#copter", "pitch_left")
-		end
-	end
+    if action_id == hash('right') then
+        if action.pressed then
+            msg.post("#copter", "pitch_right")
+        elseif action.released then
+            msg.post("#copter", "pitch_left")
+        end
+    end
 
-	if action_id == hash('left') then
-		if action.pressed then
-			msg.post("#copter", "pitch_left")
-		elseif action.released then
-			msg.post("#copter", "pitch_right")
-		end
-	end
+    if action_id == hash('left') then
+        if action.pressed then
+            msg.post("#copter", "pitch_left")
+        elseif action.released then
+            msg.post("#copter", "pitch_right")
+        end
+    end
 
-	if action_id == hash('tilt') and action.pressed then
-		msg.post("#copter", "tilt")
-	end
+    if action_id == hash('tilt') and action.pressed then
+        msg.post("#copter", "tilt")
+    end
 
-	if action_id == hash('action') and action.pressed then
-		msg.post("#hook", 'hook_trigger')
-		
-	end
+    if action_id == hash('action') and action.pressed then
+        msg.post("#hook", 'hook_trigger')
+    end
 
-	if action_id == hash('touch') and action.pressed then
-		factory.create('/level#box_factory', vmath.vector3(200, 200, 0))
-	end
+    if action_id == hash('touch') and action.pressed then
+        factory.create('/level#box_factory', vmath.vector3(200, 200, 0))
+    end
 
-	if action_id == hash('arrow_down') then
-		msg.post('#hook', 'add_hook_length', { amount = 1 })
-	end
-	if action_id == hash('arrow_up') then
-		msg.post('#hook', 'add_hook_length', { amount = -1 })
-	end
+    if action_id == hash('arrow_down') then
+        msg.post('#hook', 'add_hook_length', { amount = 1 })
+    end
+    if action_id == hash('arrow_up') then
+        msg.post('#hook', 'add_hook_length', { amount = -1 })
+    end
 
-	if action_id == hash('mouse_button_right') and action.pressed then
-		msg.post('/level#level', 'mouse_button_right', action)
-		local world_pos = camera.screen_xy_to_world(action.screen_x, action.screen_y)
-		msg.post('/person#person', 'add_goal', {type = "move", position = world_pos})
-	end
+    if action_id == hash('mouse_button_right') and action.pressed then
+        msg.post('/level#level', 'mouse_button_right', action)
+        local world_pos = camera.screen_xy_to_world(action.screen_x, action.screen_y)
+        msg.post('/person/person#person', 'add_goal', { type = "move", position = world_pos })
+    end
 
-	return true
+    return true
 end

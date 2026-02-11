@@ -1,0 +1,28 @@
+name: "taxi_building"
+instances {
+  id: "helipad"
+  prototype: "/main/entities/buildings/helipad/helipad.go"
+  position {
+    x: 202.0
+  }
+}
+scale_along_z: 0
+embedded_instances {
+  id: "building"
+  children: "helipad"
+  data: "embedded_components {\n"
+  "  id: \"sprite\"\n"
+  "  type: \"sprite\"\n"
+  "  data: \"default_animation: \\\"building-taxi\\\"\\n"
+  "material: \\\"/builtins/materials/sprite.material\\\"\\n"
+  "textures {\\n"
+  "  sampler: \\\"texture_sampler\\\"\\n"
+  "  texture: \\\"/main/entities/buildings/taxi/taxi_building.atlas\\\"\\n"
+  "}\\n"
+  "\"\n"
+  "  position {\n"
+  "    z: -0.1\n"
+  "  }\n"
+  "}\n"
+  ""
+}

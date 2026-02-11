@@ -1,0 +1,66 @@
+name: "person"
+instances {
+  id: "indicator"
+  prototype: "/main/common/indicator/indicator.go"
+  position {
+    x: 11.0
+    y: 23.0
+  }
+}
+scale_along_z: 0
+embedded_instances {
+  id: "person"
+  children: "indicator"
+  data: "components {\n"
+  "  id: \"person\"\n"
+  "  component: \"/main/entities/person/person.script\"\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"sprite\"\n"
+  "  type: \"sprite\"\n"
+  "  data: \"default_animation: \\\"normal1_idle\\\"\\n"
+  "material: \\\"/builtins/materials/sprite.material\\\"\\n"
+  "textures {\\n"
+  "  sampler: \\\"texture_sampler\\\"\\n"
+  "  texture: \\\"/main/entities/person/images/person.tilesource\\\"\\n"
+  "}\\n"
+  "\"\n"
+  "  position {\n"
+  "    y: 12.0\n"
+  "  }\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"collisionobject\"\n"
+  "  type: \"collisionobject\"\n"
+  "  data: \"type: COLLISION_OBJECT_TYPE_KINEMATIC\\n"
+  "mass: 0.0\\n"
+  "friction: 1.0\\n"
+  "restitution: 0.0\\n"
+  "group: \\\"person\\\"\\n"
+  "mask: \\\"floor\\\"\\n"
+  "mask: \\\"helipad\\\"\\n"
+  "embedded_collision_shape {\\n"
+  "  shapes {\\n"
+  "    shape_type: TYPE_BOX\\n"
+  "    position {\\n"
+  "      y: 11.0\\n"
+  "    }\\n"
+  "    rotation {\\n"
+  "    }\\n"
+  "    index: 0\\n"
+  "    count: 3\\n"
+  "    id: \\\"shape\\\"\\n"
+  "  }\\n"
+  "  data: 6.0\\n"
+  "  data: 11.0\\n"
+  "  data: 10.0\\n"
+  "}\\n"
+  "linear_damping: 5.0\\n"
+  "locked_rotation: true\\n"
+  "\"\n"
+  "}\n"
+  ""
+  position {
+    z: 0.1
+  }
+}

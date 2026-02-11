@@ -30,8 +30,10 @@ local function animate(self)
 end
 
 local function print_debug(self)
-    local pos = vmath.vector3(10, 720 - 30, 0)
+    local _, h = window.get_size()
+    local pos = vmath.vector3(10, h, 0)
     local line_diff = vmath.vector3(0, -20, 0)
+    local p_pos = go.get_position()
 
     local lines = {
         '-- person --',
@@ -41,7 +43,7 @@ local function print_debug(self)
         'current_goal: ' .. (self.brain.current_goal.type) .. " status:" .. (self.brain.current_goal.status),
         'goals left: ' .. #self.brain.goals,
         '-- controller --',
-        'position' .. go.get_position(),
+        'position: ' .. p_pos.x .. ', ' .. p_pos.y,
         'velocity: ' .. self.controller.velocity.x .. ',' .. self.controller.velocity.y,
         'grounded: ' .. tostring(self.controller.is_grounded),
         'correction:' .. self.controller.correction.x .. ',' .. self.controller.correction.y,
@@ -58,10 +60,11 @@ local function print_debug(self)
 end
 
 function on_goal_blocked(self, goal)
-    sprite.play_flipbook('#indicator_sprite', 'question')
+    -- sprite.play_flipbook('#indicator_sprite', 'question')
+    msg.post('indicator#indicator', 'flash', { animation = 'question', duration = 3 })
     timer.delay(3, false, function(obj)
         self.brain:cancel_current_goal()
-        sprite.play_flipbook('#indicator_sprite', 'none')
+        -- sprite.play_flipbook('#indicator_sprite', 'none')
     end)
 end
 

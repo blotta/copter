@@ -5,7 +5,7 @@ embedded_components {
   "material: \"/builtins/materials/sprite.material\"\n"
   "textures {\n"
   "  sampler: \"texture_sampler\"\n"
-  "  texture: \"/main/entities/buildings/helipad/helipad_building.atlas\"\n"
+  "  texture: \"/main/entities/buildings/helipad/helipad.atlas\"\n"
   "}\n"
   ""
 }
