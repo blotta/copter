@@ -23,12 +23,12 @@ scale_along_z: 0
 embedded_instances {
   id: "camera"
   data: "components {\n"
-  "  id: \"level\"\n"
-  "  component: \"/main/level.camera\"\n"
+  "  id: \"main\"\n"
+  "  component: \"/main/camera/main.camera\"\n"
   "}\n"
   "components {\n"
-  "  id: \"level-camera\"\n"
-  "  component: \"/main/level-camera.script\"\n"
+  "  id: \"targetting-camera\"\n"
+  "  component: \"/main/camera/targetting-camera.script\"\n"
   "}\n"
   ""
   position {
