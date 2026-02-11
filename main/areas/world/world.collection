@@ -1,0 +1,37 @@
+name: "world"
+collection_instances {
+  id: "taxi_building"
+  collection: "/main/entities/buildings/taxi/taxi_building.collection"
+  position {
+    x: 1728.0
+    y: 32.0
+  }
+}
+scale_along_z: 0
+embedded_instances {
+  id: "map"
+  data: "components {\n"
+  "  id: \"tiles\"\n"
+  "  component: \"/main/areas/world/tiles.tilemap\"\n"
+  "}\n"
+  "components {\n"
+  "  id: \"map\"\n"
+  "  component: \"/main/areas/world/map.script\"\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"collisionobject\"\n"
+  "  type: \"collisionobject\"\n"
+  "  data: \"collision_shape: \\\"/main/areas/world/tiles.tilemap\\\"\\n"
+  "type: COLLISION_OBJECT_TYPE_STATIC\\n"
+  "mass: 0.0\\n"
+  "friction: 0.1\\n"
+  "restitution: 0.0\\n"
+  "group: \\\"floor\\\"\\n"
+  "mask: \\\"copter\\\"\\n"
+  "mask: \\\"box\\\"\\n"
+  "mask: \\\"person\\\"\\n"
+  "locked_rotation: true\\n"
+  "\"\n"
+  "}\n"
+  ""
+}

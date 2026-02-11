@@ -1,4 +1,4 @@
-tile_set: "/main/areas/main/tilemap.tilesource"
+tile_set: "/main/areas/world/tilemap.tilesource"
 layers {
   id: "background"
   z: -1.0
@@ -1074,7 +1074,7 @@ layers {
   }
 }
 layers {
-  id: "level"
+  id: "ground"
   z: 0.0
   cell {
     x: 0

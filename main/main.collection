@@ -7,18 +7,6 @@ instances {
     y: 120.0
   }
 }
-instances {
-  id: "level"
-  prototype: "/main/areas/main/level.go"
-}
-collection_instances {
-  id: "taxi_building"
-  collection: "/main/entities/buildings/taxi/taxi_building.collection"
-  position {
-    x: 1840.0
-    y: 32.0
-  }
-}
 collection_instances {
   id: "person"
   collection: "/main/entities/person/person.collection"
@@ -26,6 +14,10 @@ collection_instances {
     x: 566.0
     y: 523.0
   }
+}
+collection_instances {
+  id: "world"
+  collection: "/main/areas/world/world.collection"
 }
 scale_along_z: 0
 embedded_instances {

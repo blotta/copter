@@ -46,8 +46,8 @@ function on_message(self, message_id, message, sender)
         local world_pos = camera.screen_xy_to_world(message.screen_x, message.screen_y)
         local tile_x = math.floor((world_pos.x) / 32) + 1
         local tile_y = math.floor((world_pos.y) / 32) + 1
-        local tile = tilemap.get_tile("#world", 'level', tile_x, tile_y)
-        local tile_info = tilemap.get_tile_info("#world", 'level', tile_x, tile_y)
+        local tile = tilemap.get_tile("#tiles", 'ground', tile_x, tile_y)
+        local tile_info = tilemap.get_tile_info("#tiles", 'ground', tile_x, tile_y)
         self.clicked_tile.x = tile_x
         self.clicked_tile.y = tile_y
         -- print(tile, tile_x, tile_y)

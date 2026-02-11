@@ -30,7 +30,7 @@ function KinematicController.new(config)
     return o
 end
 
--- call in update (move step)
+-- call in the beginning of fixed_update
 function KinematicController.fixed_update_start(self, dt)
     local pos = go.get_position()
 
@@ -66,6 +66,7 @@ function KinematicController.fixed_update_start(self, dt)
     end
 end
 
+-- call in the end of fixed_update
 function KinematicController.fixed_update_end(self, dt)
     -- apply velocity
     local pos = go.get_position()
@@ -73,6 +74,7 @@ function KinematicController.fixed_update_end(self, dt)
     go.set_position(pos)
 end
 
+-- call on late_update
 function KinematicController.late_update(self, dt)
     self.correction = vmath.vector3()
 end
