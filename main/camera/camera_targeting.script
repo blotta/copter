@@ -1,3 +1,4 @@
+local debug_draw = require 'helpers.debug_draw'
 local LOOK_AHEAD_MULT = vmath.vector3(0.3, 0.2, 0)
 local DISPLAY_WIDTH = sys.get_config_int("display.width")
 local DISPLAY_HEIGHT = sys.get_config_int("display.height")
@@ -32,44 +33,18 @@ end
 function show_debug_lines(self, target)
     local pos = go.get_position()
     pos.z = -1
-    local tl = vmath.vector3(self.dead_zone.left, self.dead_zone.top, 0)
-    local tr = vmath.vector3(self.dead_zone.right, self.dead_zone.top, 0)
-    local bl = vmath.vector3(self.dead_zone.left, self.dead_zone.bottom, 0)
-    local br = vmath.vector3(self.dead_zone.right, self.dead_zone.bottom, 0)
 
-    msg.post("@render:", "draw_line", {
-        start_point = pos + tl,
-        end_point = pos + tr,
-        color = vmath.vector4(1, 1, 1, 1)
-    })
-    msg.post("@render:", "draw_line", {
-        start_point = pos + tr,
-        end_point = pos + br,
-        color = vmath.vector4(1, 1, 1, 1)
-    })
-    msg.post("@render:", "draw_line", {
-        start_point = pos + br,
-        end_point = pos + bl,
-        color = vmath.vector4(1, 1, 1, 1)
-    })
-    msg.post("@render:", "draw_line", {
-        start_point = pos + bl,
-        end_point = pos + tl,
-        color = vmath.vector4(1, 1, 1, 1)
-    })
+    debug_draw.draw_rect(
+        pos.x + self.dead_zone.left,
+        pos.y + self.dead_zone.bottom,
+        self.dead_zone.right - self.dead_zone.left,
+        self.dead_zone.top - self.dead_zone.bottom,
+        {
+            z = -1
+        }
+    )
 
-    local t = vmath.vector3(target.x, target.y, -1)
-
-    msg.post("@render:", "draw_line", {
-        start_point = t + vmath.vector3(-10, -10, 0),
-        end_point = t + vmath.vector3(10, 10, 0),
-        color = vmath.vector4(1, 0.8, 0.8, 1)
-    })
-    msg.post("@render:", "draw_line", {
-        start_point = t + vmath.vector3(-10, 10, 0),
-        end_point = t + vmath.vector3(10, -10, 0),
-        color = vmath.vector4(1, 0.8, 0.8, 1)
-    })
+    debug_draw.draw_cross(target, 10, { z = -1 })
 end
 
 function late_update(self, dt)
@@ -111,8 +86,8 @@ function late_update(self, dt)
     target = target + look_ahead
 
     -- round
-    target.x = math.floor(target.x)
-    target.y = math.floor(target.y)
+    -- target.x = math.floor(target.x)
+    -- target.y = math.floor(target.y)
 
     -- Smooth follow
     cam_pos = vmath.lerp(0.12, cam_pos, target)
@@ -128,5 +103,5 @@ function late_update(self, dt)
     -- apply
     go.set_position(cam_pos)
 
-    -- show_debug_lines(self, target)
+    show_debug_lines(self, target)
 end
