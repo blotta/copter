@@ -1,0 +1,5 @@
+images {
+  image: "/assets/building-house.png"
+  pivot_y: 1.0
+}
+extrude_borders: 2

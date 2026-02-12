@@ -1,4 +1,12 @@
 name: "world"
+instances {
+  id: "house"
+  prototype: "/main/entities/buildings/house/house.go"
+  position {
+    x: 3250.0
+    y: 32.0
+  }
+}
 collection_instances {
   id: "taxi_building"
   collection: "/main/entities/buildings/taxi/taxi_building.collection"
