@@ -1,8 +1,9 @@
 local M = {}
 
 function M.draw_rect(x, y, w, h, options)
-    local z = options.z or 0
-    local color = options.color or vmath.vector4(1, 1, 1, 1)
+    local opts = options or {}
+    local z = opts.z or 0
+    local color = opts.color or vmath.vector4(1, 1, 1, 1)
 
     local bl = vmath.vector3(x, y, z)
     local br = vmath.vector3(x + w, y, z)
@@ -32,8 +33,9 @@ function M.draw_rect(x, y, w, h, options)
 end
 
 function M.draw_rect_points(bl, br, tl, tr, options)
-    local z = options.z or bl.z
-    local color = options.color or vmath.vector4(1, 1, 1, 1)
+    local opts = options or {}
+    local z = opts.z or bl.z
+    local color = opts.color or vmath.vector4(1, 1, 1, 1)
 
     local _bl = vmath.vector3(bl.x, bl.y, z)
     local _br = vmath.vector3(br.x, br.y, z)
@@ -63,8 +65,9 @@ function M.draw_rect_points(bl, br, tl, tr, options)
 end
 
 function M.draw_cross(p, size, options)
-    local z = options.z or p.z
-    local color = options.color or vmath.vector4(1, 1, 1, 1)
+    local opts = options or {}
+    local z = opts.z or p.z
+    local color = opts.color or vmath.vector4(1, 1, 1, 1)
 
     local hs = size / 2
 
@@ -76,6 +79,21 @@ function M.draw_cross(p, size, options)
     msg.post("@render:", "draw_line", {
         start_point = p + vmath.vector3(-hs, hs, z),
         end_point = p + vmath.vector3(hs, -hs, z),
+        color = color
+    })
+end
+
+function M.draw_line(from, to, options)
+    local opts = options or {}
+    local z = opts.z or from.z
+    local color = opts.color or vmath.vector4(1, 1, 1, 1)
+
+    local f = vmath.vector3(from.x, from.y, z)
+    local t = vmath.vector3(to.x, to.y, z)
+
+    msg.post("@render:", "draw_line", {
+        start_point = f,
+        end_point = t,
         color = color
     })
 end

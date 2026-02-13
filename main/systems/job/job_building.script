@@ -1,0 +1,37 @@
+local dd = require 'helpers.debug_draw'
+local job_factory = require 'main.systems.job.job_factory'
+
+go.property("job_type", hash(""))
+
+function init(self)
+    if self.job_type == hash("") then
+        error("No job type provided")
+    end
+
+    -- self.current_job = nil
+
+    -- msg.post('/job_manager', 'on_building_waiting_new_job', {
+    --     job_type = self.job_type
+    -- })
+end
+
+function update(self, dt)
+    -- if self.current_job then
+    --     dd.draw_line(self.current_job.pickup_position, self.current_job.deliver_position)
+    --     dd.draw_cross(self.current_job.deliver_position, 10)
+
+    --     -- self.current_job:update(dt)
+    -- end
+end
+
+function late_update(self, dt)
+end
+
+function on_message(self, message_id, message, sender)
+    -- if message_id == hash("on_job_assignment") then
+    --     local job = job_factory.create(self.job_type, message)
+    --     self.current_job = job
+    --     pprint(tostring(go.get_id()) .. ' got job assigned: ', message)
+    --     self.current_job:start()
+    -- end
+end

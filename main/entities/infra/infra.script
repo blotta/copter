@@ -1,0 +1,17 @@
+go.property('type', hash(""))
+
+function init(self)
+    print(go.get_parent())
+    msg.post(
+        go.get_parent() --[[@as url]]
+        , 'add-infra', {
+            go_id = go.get_id(),
+            infra_type = self.type
+        })
+end
+
+function final(self)
+end
+
+function on_message(self, message_id, message, sender)
+end

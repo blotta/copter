@@ -7,6 +7,10 @@ instances {
     y: 120.0
   }
 }
+instances {
+  id: "event_manager"
+  prototype: "/main/systems/event/event_manager.go"
+}
 collection_instances {
   id: "person"
   collection: "/main/entities/person/person.collection"
@@ -24,3 +28,8 @@ collection_instances {
   collection: "/main/camera/camera.collection"
 }
 scale_along_z: 0
+embedded_instances {
+  id: "systems"
+  children: "event_manager"
+  data: ""
+}

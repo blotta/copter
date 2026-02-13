@@ -1,0 +1,11 @@
+name: "house_building"
+instances {
+  id: "house"
+  prototype: "/main/entities/infra/house/house.go"
+}
+scale_along_z: 0
+embedded_instances {
+  id: "building_set"
+  children: "house"
+  data: ""
+}

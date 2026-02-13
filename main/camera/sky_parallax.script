@@ -8,8 +8,6 @@ function init(self)
     go.set('#sprite', 'scale.y', 1)
     go.set('#sprite', 'scale.x', DISPLAY_WIDTH)
 
-    pprint(DISPLAY_HEIGHT)
-
     self.cam = go.get_parent()
     local cam_bounds_top = go.get(msg.url(nil, self.cam, "camera_targeting"), 'bounds_top')
     self.total_sky_height = cam_bounds_top - DISPLAY_HEIGHT / 2

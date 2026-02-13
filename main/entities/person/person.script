@@ -97,7 +97,7 @@ function fixed_update(self, dt)
 end
 
 function update(self, dt)
-    print_debug(self)
+    -- print_debug(self)
 
     if not self.controller.is_grounded then
         self.state = hash('fall')

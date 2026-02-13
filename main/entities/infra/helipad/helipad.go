@@ -1,3 +1,12 @@
+components {
+  id: "infra"
+  component: "/main/entities/infra/infra.script"
+  properties {
+    id: "type"
+    value: "helipad"
+    type: PROPERTY_TYPE_HASH
+  }
+}
 embedded_components {
   id: "sprite"
   type: "sprite"
@@ -5,7 +14,7 @@ embedded_components {
   "material: \"/builtins/materials/sprite.material\"\n"
   "textures {\n"
   "  sampler: \"texture_sampler\"\n"
-  "  texture: \"/main/entities/buildings/helipad/helipad.atlas\"\n"
+  "  texture: \"/main/entities/infra/helipad/helipad.atlas\"\n"
   "}\n"
   ""
 }
