@@ -1,18 +1,20 @@
+-- example: subscribe
+-- msg.post("/systems#event_manager", "subscribe", {
+--     event_key = "job-available"
+-- })
+--
+-- example: trigger
+-- msg.post("/systems#event_manager", "trigger-event", {
+--     event_key = 'job-available',
+--     job = new_job,
+-- })
+
 function init(self)
-    self.events =
-    {
-    }
+    self.events = {}
     -- self.events.on_building_registered.subscribers[msg.url()] = true -- or nil
     self.trigger_queue = {}
 end
 
-local function table_key_count(t)
-    local count = 0
-    for _ in pairs(t) do
-        count = count + 1
-    end
-    return count
-end
 local function print_events(self)
     print('EVENTS')
     for event_key, event_value in pairs(self.events) do
@@ -35,6 +37,9 @@ local function has_event(self, event_key)
 end
 
 local function ensure_event_registered(self, event_key)
+    if event_key == nil then
+        error('event_manager.ensure_event_registered: nil event_key')
+    end
     if not has_event(self, event_key) then
         self.events[event_key] = {
             subscribers = {}
@@ -45,8 +50,6 @@ end
 local function subscribe(self, event_key, subscriber)
     ensure_event_registered(self, event_key)
     self.events[event_key].subscribers[url_key(subscriber)] = subscriber
-    -- pprint(tostring(subscriber) .. " subscribed to '" .. tostring(event_key) .. "' event")
-    -- print_events(self)
 end
 
 local function unsubscribe(self, event_key, subscriber)
@@ -54,26 +57,21 @@ local function unsubscribe(self, event_key, subscriber)
         return
     end
     self.events[event_key].subscribers[url_key(subscriber)] = nil
-    -- pprint(url_key(subscriber) .. " unsubscribed from '" .. tostring(event_key) .. "' event")
-    -- print_events(self)
 end
 
 local function trigger(self, event_key, data)
     ensure_event_registered(self, event_key)
     for _, subscriber_url in pairs(self.events[event_key].subscribers) do
         if subscriber_url ~= nil then
-            -- print('triggering for subscriber ' .. url_key(subscriber_url))
             msg.post(subscriber_url, event_key, data)
         end
     end
-    -- print_events(self)
-    -- pprint("event '" .. tostring(event_key) .. "' triggered! data:", data)
 end
 
 function late_update(self, dt)
     if #self.trigger_queue > 0 then
-        for _, event in self.trigger_queue do
-            trigger(self, event.event_type, event)
+        for _, message in ipairs(self.trigger_queue) do
+            trigger(self, message.event_key, message)
         end
         self.trigger_queue = {}
     end
@@ -81,18 +79,14 @@ end
 
 function on_message(self, message_id, message, sender)
     if message_id == hash('subscribe') then
-        -- print("SUBSCRIBE")
         subscribe(self, message.event_key, sender)
     end
 
     if message_id == hash('unsubscribe') then
-        -- print("UNSUBSCRIBE")
         unsubscribe(self, message.event_key, sender)
     end
 
     if message_id == hash('trigger-event') then
-        -- print("TRIGGER")
         table.insert(self.trigger_queue, message)
-        -- trigger(self, message.event_key, message)
     end
 end

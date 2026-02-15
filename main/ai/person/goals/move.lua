@@ -39,9 +39,7 @@ function PersonMoveGoal:fixed_update(person, dt)
             color = self.ray_eye_facing ~= nil and vmath.vector4(0, 1, 0, 1) or vmath.vector4(1, 1, 1, 1)
         })
         return
-    end
-
-    if self.status == 'blocked' then
+    else
         person.controller.velocity.x = 0
     end
 end

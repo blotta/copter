@@ -1,8 +1,13 @@
+function init(self)
+end
+
 function on_message(self, message_id, message, sender)
     if message_id == hash('flash') then
         sprite.play_flipbook("#sprite", message.animation)
-        timer.delay(message.duration or 3, false, function(obj)
-            sprite.play_flipbook('#sprite', 'none')
-        end)
+        if message.duration ~= nil then
+            timer.delay(message.duration or 3, false, function(obj)
+                sprite.play_flipbook('#sprite', 'none')
+            end)
+        end
     end
 end

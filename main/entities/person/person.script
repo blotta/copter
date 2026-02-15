@@ -59,16 +59,27 @@ local function print_debug(self)
     end
 end
 
+function spawn_indicator(self, data)
+    local ind = factory.create("/systems#indicator-factory", vmath.vector3(11, 23, 0), nil)
+    go.set_parent(ind, go.get_id(), false)
+    msg.post(ind, 'flash', data)
+end
+
 function on_goal_blocked(self, goal)
-    -- sprite.play_flipbook('#indicator_sprite', 'question')
-    msg.post('indicator#indicator', 'flash', { animation = 'question', duration = 3 })
+    spawn_indicator(self, { animation = 'question', duration = 3 })
     timer.delay(3, false, function(obj)
         self.brain:cancel_current_goal()
-        -- sprite.play_flipbook('#indicator_sprite', 'none')
     end)
 end
 
 function init(self)
+    print('person created!',  go.get_id())
+    -- adjust z
+    local world_pos = go.get_world_position()
+    local local_pos = go.get_position()
+    local_pos.z = local_pos.z - world_pos.z
+    go.set_position(local_pos)
+
     self.type = hash("person")
     self.def = variants[self.variant]
 
@@ -82,10 +93,6 @@ function init(self)
     self.speed = self.def.speed
     self.state = hash('goal') -- goal, fall, confused
 
-    msg.post("#", "add_goal", {
-        type = 'move',
-        position = tilemap_helper.tile_to_world_position(21, 14)
-    })
 end
 
 function fixed_update(self, dt)
@@ -97,7 +104,6 @@ function fixed_update(self, dt)
 end
 
 function update(self, dt)
-    -- print_debug(self)
 
     if not self.controller.is_grounded then
         self.state = hash('fall')
@@ -117,6 +123,10 @@ end
 function on_message(self, message_id, message, sender)
     if message_id == hash('add_goal') then
         self.brain:add_goal(message)
+    end
+
+    if message_id == hash('cancel_current_goal') then
+        self.brain:cancel_current_goal()
     end
 
     if message_id == hash('contact_point_response') then -- and message.other_group == hash('floor') then

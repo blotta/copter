@@ -7,5 +7,18 @@ scale_along_z: 0
 embedded_instances {
   id: "building_set"
   children: "house"
-  data: ""
+  data: "components {\n"
+  "  id: \"building_set\"\n"
+  "  component: \"/main/entities/buildings/building_set.script\"\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"indicator_factory\"\n"
+  "  type: \"factory\"\n"
+  "  data: \"prototype: \\\"/main/common/indicator/indicator.go\\\"\\n"
+  "\"\n"
+  "}\n"
+  ""
+  position {
+    z: -0.1
+  }
 }

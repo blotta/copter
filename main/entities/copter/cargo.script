@@ -1,0 +1,28 @@
+function init(self)
+	self.passenger = nil -- hash("normal1")
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash('request_person_board') then
+		if self.passenger == nil then
+			local passenger_variant = go.get(msg.url(nil, message.person_id, 'person'), "variant")
+			self.passenger = passenger_variant
+			go.delete(message.person_id)
+		end
+	end
+
+	if message_id == hash('request_person_unboard') then
+		print('request_person_unboard')
+		if self.passenger ~= nil then
+			local person = factory.create('/systems#person-factory', go.get_position(), nil,
+				{ variant = self.passenger })
+			pprint('spawned person', person)
+			if message.goal then
+				msg.post(person, 'add_goal', message.goal)
+			end
+			pprint('goal', message.goal)
+			self.passenger = nil
+			msg.post(sender, 'unboarded_person', { person_id = person })
+		end
+	end
+end

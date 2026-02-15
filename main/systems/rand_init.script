@@ -1,0 +1,6 @@
+function init(self)
+    math.randomseed(os.time())
+    for i = 0, math.random(1, 50) do
+        math.random()
+    end
+end

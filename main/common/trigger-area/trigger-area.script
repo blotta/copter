@@ -1,0 +1,7 @@
+go.property("owner_url", msg.url())
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("trigger_response") then
+		msg.post(self.owner_url, message_id, message)
+	end
+end

@@ -1,5 +1,3 @@
--- local Traits = require 'main.systems.buildings.traits'
--- local InfraDefs = require 'main.systems.buildings.infra_defs'
 local Building = require 'main.systems.buildings.building'
 local BuildingRegistry = {}
 

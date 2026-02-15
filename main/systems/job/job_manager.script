@@ -1,34 +1,87 @@
 local building_registry = require 'main.systems.buildings.registry'
 local job_factory = require 'main.systems.job.job_factory'
 
-local function check_buildings(self)
-    print('checking buildings')
+local function try_create_job(self)
     local buildings = building_registry.get_with_trait("job")
-    pprint(buildings)
+
+    for _, b in ipairs(buildings) do
+        if self.buildings_with_active_jobs[b.id] == nil then
+            local new_job = job_factory.create(b)
+            self.buildings_with_active_jobs[b.id] = new_job
+            new_job:start()
+            msg.post("/systems#event_manager", "trigger-event", {
+                event_key = 'job-available',
+                job = new_job,
+            })
+        end
+    end
+end
+
+local function show_debug_jobs(self)
+    local _, h = window.get_size()
+    local pos = vmath.vector3(10, h, 0)
+    local line_diff = vmath.vector3(0, -20, 0)
+    local p_pos = go.get_position()
+
+    local lines = {
+        '--- jobs ---'
+    }
+    for b, job in pairs(self.buildings_with_active_jobs) do
+        table.insert(lines, string.format("%d: %s %s (%s)", b, tostring(job.job_type), job.status, job.inner_status))
+    end
+
+    for i, str in ipairs(lines) do
+        msg.post("@render:", "draw_text", {
+            text = str,
+            position = pos + (i - 1) * line_diff,
+            color = vmath.vector4(1, 1, 1, 1)
+        })
+    end
 end
 
 function init(self)
-    self.jobs = {}
-    self.check_timer = timer.delay(1, true, check_buildings)
+    self.buildings_with_active_jobs = {} -- { ["<bid>"] = job }
+    self.job_create_time = 5             -- seconds
+    self.job_create_timer = 0
+end
+
+function update(self, dt)
+    self.job_create_timer = self.job_create_timer + dt
+
+    if self.job_create_timer > self.job_create_time then
+        self.job_create_timer = 0
+        try_create_job(self)
+    end
+
+    for b, job in pairs(self.buildings_with_active_jobs) do
+        local prev_status = job.status
+        job:update(dt)
+
+        if job.status == 'in-progress' and job.status ~= prev_status then
+            msg.post("/systems#event_manager", "trigger-event", {
+                event_key = "job-in-progress",
+                job = job
+            })
+        end
+
+        if job.status == 'completed' and job.status ~= prev_status then
+            msg.post("/systems#event_manager", "trigger-event", {
+                event_key = "job-completed",
+                job = job
+            })
+            -- todo: reward player
+            self.buildings_with_active_jobs[b] = nil
+        end
+    end
+
+    show_debug_jobs(self)
 end
 
 function final(self)
-    timer.cancel(self.check_timer)
-end
-
-local function assign_job(self, building_url, job_type, opts)
-    local job = job_factory.create(job_type, opts)
-    msg.post(building_url, 'on_job_assignment', job)
-    self.jobs[job.job_id] = job
-    -- job_provider runs job:start()
 end
 
 function on_message(self, message_id, message, sender)
-    -- if message_id == hash('on_building_waiting_new_job') then
-    --     assign_job(self, sender, message.job_type, message)
-    -- end
-
-    -- if message_id == hash('on_building_job_assigned') then
-    --     assign_job(self, sender, message.job_type, message)
-    -- end
+    for b, job in pairs(self.buildings_with_active_jobs) do
+        job:on_message(message_id, message, sender)
+    end
 end

@@ -40,13 +40,13 @@ function Building:reapply_traits()
         for k, v in pairs(infra_def.traits) do
             local trait_str = type(k) == "string" and k or v
             local args = type(k) == "string" and v or {}
+            args.infra = infra
 
             local trait_processor = Traits[trait_str]
             if trait_processor.apply ~= nil then
                 trait_processor.apply(self, args)
             end
             new_traits[trait_str] = args
-            new_traits[trait_str].infra = infra
         end
     end
 

@@ -1,7 +1,6 @@
 go.property('type', hash(""))
 
 function init(self)
-    print(go.get_parent())
     msg.post(
         go.get_parent() --[[@as url]]
         , 'add-infra', {

@@ -10,6 +10,10 @@ components {
   id: "hook"
   component: "/main/entities/copter/hook.script"
 }
+components {
+  id: "cargo"
+  component: "/main/entities/copter/cargo.script"
+}
 embedded_components {
   id: "sprite"
   type: "sprite"
@@ -36,6 +40,7 @@ embedded_components {
   "mask: \"floor\"\n"
   "mask: \"building\"\n"
   "mask: \"helipad\"\n"
+  "mask: \"trigger-area\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
   "    shape_type: TYPE_BOX\n"

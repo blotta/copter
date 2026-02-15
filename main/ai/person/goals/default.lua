@@ -29,7 +29,7 @@ function PersonDefaultGoal:dispose(person)
 end
 
 function PersonDefaultGoal:cancel(person)
-    error('attempted to cancel a default goal')
+    -- error('attempted to cancel a default goal')
 end
 
 return PersonDefaultGoal

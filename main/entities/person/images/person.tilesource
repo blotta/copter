@@ -28,14 +28,14 @@ animations {
 }
 animations {
   id: "normal2_idle"
-  start_tile: 5
-  end_tile: 5
+  start_tile: 6
+  end_tile: 6
   playback: PLAYBACK_NONE
 }
 animations {
   id: "normal2_run"
-  start_tile: 6
-  end_tile: 8
+  start_tile: 7
+  end_tile: 9
   playback: PLAYBACK_LOOP_PINGPONG
   fps: 6
 }

@@ -1,0 +1,46 @@
+local INDICATOR_OFFSET = vmath.vector3(0, 32 * 4, 0)
+
+function init(self)
+	timer.delay(0.1, false, function()
+		msg.post("/systems#event_manager", "subscribe", {
+			event_key = "job-available"
+		})
+		msg.post("/systems#event_manager", "subscribe", {
+			event_key = "job-in-progress"
+		})
+		msg.post("/systems#event_manager", "subscribe", {
+			event_key = "job-completed"
+		})
+	end)
+
+	self.jobs = {} -- {["job_id"] = {job = job, indicator_id = "ind_id" }}
+end
+
+function on_message(self, message_id, message, sender)
+	pprint(message_id)
+	if message_id == hash("job-available") then
+		if (self.jobs[message.job.job_id] == nil) then
+			local data = { job = message.job }
+			data.indicator_id = factory.create("/systems#indicator-factory",
+				message.job.pickup_position + INDICATOR_OFFSET)
+			msg.post(data.indicator_id, "flash", {
+				animation = "exclamation"
+			})
+			self.jobs[message.job.job_id] = data
+		end
+	end
+
+	if message_id == hash("job-in-progress") then
+		if (self.jobs[message.job.job_id] ~= nil) then
+			local new_pos = self.jobs[message.job.job_id].job.deliver_position + INDICATOR_OFFSET
+			go.set_position(new_pos, self.jobs[message.job.job_id].indicator_id)
+		end
+	end
+
+	if message_id == hash("job-completed") then
+		if (self.jobs[message.job.job_id] ~= nil) then
+			go.delete(self.jobs[message.job.job_id].indicator_id)
+			self.jobs[message.job.job_id] = nil
+		end
+	end
+end

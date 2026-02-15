@@ -19,7 +19,7 @@ infra_defs[hash('taxi')] = {
     traits = {
         'commercial',
         ['job'] = {
-            job_type = 'taxi'
+            job_type = hash('taxi')
         }
     },
 }

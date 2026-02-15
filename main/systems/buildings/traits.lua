@@ -2,7 +2,8 @@ local traits = {}
 
 traits["landing-spot"] = {
     apply = function(b, args)
-        b.landing_point_offset = args.landing_point_offset
+        local infra_pos_offset = go.get_position(args.infra.go_id)
+        b.landing_point_offset = infra_pos_offset + args.landing_point_offset
     end
 }
 
