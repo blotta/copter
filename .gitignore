@@ -11,3 +11,14 @@ Thumbs.db
 builtins
 /exports
 bob.jar
+
+manifest.private.der
+manifest.public.der
+
+/debugger
+
+/scripts
+/bit32.lua
+/luv.lua
+/socket.lua
+/hxmain.lua
