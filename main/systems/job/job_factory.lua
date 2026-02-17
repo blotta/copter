@@ -1,12 +1,12 @@
-local TaxiJob = require 'main.systems.job.processors.taxi'
+local TaxiJobClass = require 'main.systems.job.processors.taxi'
 
-local M = {}
+local JobFactory = {}
 
-M[hash('taxi')] = TaxiJob
+JobFactory[JOB_TYPE.taxi] = TaxiJobClass
 
-function M.create(building)
-    local job = M[building.traits.job.job_type].new(building)
+function JobFactory.create(building)
+    local job = JobFactory[building.traits.job.args.job_type].new(building)
     return job
 end
 
-return M
+return JobFactory

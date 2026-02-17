@@ -2,7 +2,7 @@ components {
   id: "infra"
   component: "/main/entities/infra/infra.script"
   properties {
-    id: "type"
+    id: "infra_type"
     value: "helipad"
     type: PROPERTY_TYPE_HASH
   }

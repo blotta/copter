@@ -10,7 +10,9 @@ end
 
 function on_message(self, message_id, message, sender)
     if message_id == hash("add-infra") then
-        building_registry.add_infra(self.building_id, message)
+        ---@type Infra
+        local infra = message
+        building_registry.add_infra(self.building_id, infra)
     end
 
 	if message_id == hash('request_person_enter') then

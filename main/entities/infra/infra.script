@@ -1,11 +1,14 @@
-go.property('type', hash(""))
+go.property('infra_type', hash(""))
 
 function init(self)
+    if self.type == hash("") then
+        error('no infra type specified')
+    end
     msg.post(
         go.get_parent() --[[@as url]]
         , 'add-infra', {
             go_id = go.get_id(),
-            infra_type = self.type
+            infra_type = self.infra_type
         })
 end
 

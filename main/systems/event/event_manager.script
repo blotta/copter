@@ -1,41 +1,54 @@
--- example: subscribe
--- msg.post("/systems#event_manager", "subscribe", {
---     event_key = "job-available"
--- })
---
--- example: trigger
--- msg.post("/systems#event_manager", "trigger-event", {
---     event_key = 'job-available',
---     job = new_job,
--- })
+--[[
 
+example: subscribe
+msg.post("/systems#event_manager", "subscribe", {
+    event_key = "job-available"
+})
+
+example: trigger
+msg.post("/systems#event_manager", "trigger-event", {
+    event_key = 'job-available',
+    job = new_job,
+})
+
+--]]
+
+---@class event_manager
+---@field events table<string, {subscribers: table<string, url>}>
+---@field trigger_queue {event_key: string}[]
+
+
+---@param self event_manager
 function init(self)
     self.events = {}
-    -- self.events.on_building_registered.subscribers[msg.url()] = true -- or nil
     self.trigger_queue = {}
 end
 
-local function print_events(self)
-    print('EVENTS')
-    for event_key, event_value in pairs(self.events) do
-        print("-----------------------")
-        print('event_key:', event_key)
-        print('subscribers:', table_key_count(event_value.subscribers))
-        for subscriber, subscribed in pairs(event_value.subscribers) do
-            print('  subscriber:', subscriber, subscribed)
-        end
-        print("-----------------------")
-    end
-end
+-- local function print_events(self)
+--     print('EVENTS')
+--     for event_key, event_value in pairs(self.events) do
+--         print("-----------------------")
+--         print('event_key:', event_key)
+--         print('subscribers:', table_key_count(event_value.subscribers))
+--         for subscriber, subscribed in pairs(event_value.subscribers) do
+--             print('  subscriber:', subscriber, subscribed)
+--         end
+--         print("-----------------------")
+--     end
+-- end
 
 local function url_key(url)
     return tostring(url)
 end
 
+---@param self event_manager
+---@param event_key string
 local function has_event(self, event_key)
     return self.events[event_key] ~= nil
 end
 
+---@param self event_manager
+---@param event_key string
 local function ensure_event_registered(self, event_key)
     if event_key == nil then
         error('event_manager.ensure_event_registered: nil event_key')
@@ -47,11 +60,17 @@ local function ensure_event_registered(self, event_key)
     end
 end
 
+---@param self event_manager
+---@param event_key string
+---@param subscriber url
 local function subscribe(self, event_key, subscriber)
     ensure_event_registered(self, event_key)
     self.events[event_key].subscribers[url_key(subscriber)] = subscriber
 end
 
+---@param self event_manager
+---@param event_key string
+---@param subscriber url
 local function unsubscribe(self, event_key, subscriber)
     if not has_event(self, event_key) then
         return
@@ -59,6 +78,9 @@ local function unsubscribe(self, event_key, subscriber)
     self.events[event_key].subscribers[url_key(subscriber)] = nil
 end
 
+---@param self event_manager
+---@param event_key string
+---@param data any
 local function trigger(self, event_key, data)
     ensure_event_registered(self, event_key)
     for _, subscriber_url in pairs(self.events[event_key].subscribers) do
@@ -68,6 +90,7 @@ local function trigger(self, event_key, data)
     end
 end
 
+---@param self event_manager
 function late_update(self, dt)
     if #self.trigger_queue > 0 then
         for _, message in ipairs(self.trigger_queue) do
@@ -77,6 +100,10 @@ function late_update(self, dt)
     end
 end
 
+---@param self event_manager
+---@param message_id hash
+---@param message {event_key: string}
+---@param sender url
 function on_message(self, message_id, message, sender)
     if message_id == hash('subscribe') then
         subscribe(self, message.event_key, sender)

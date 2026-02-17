@@ -1,12 +1,12 @@
-local building_registry = require 'main.systems.buildings.registry'
-local job_factory = require 'main.systems.job.job_factory'
+local BuildingRegistry = require 'main.systems.buildings.registry'
+local JobFactory = require 'main.systems.job.job_factory'
 
 local function try_create_job(self)
-    local buildings = building_registry.get_with_trait("job")
+    local buildings = BuildingRegistry.get_with_trait("job")
 
     for _, b in ipairs(buildings) do
         if self.buildings_with_active_jobs[b.id] == nil then
-            local new_job = job_factory.create(b)
+            local new_job = JobFactory.create(b)
             self.buildings_with_active_jobs[b.id] = new_job
             new_job:start()
             msg.post("/systems#event_manager", "trigger-event", {
@@ -21,7 +21,6 @@ local function show_debug_jobs(self)
     local _, h = window.get_size()
     local pos = vmath.vector3(10, h, 0)
     local line_diff = vmath.vector3(0, -20, 0)
-    local p_pos = go.get_position()
 
     local lines = {
         '--- jobs ---'
@@ -40,6 +39,7 @@ local function show_debug_jobs(self)
 end
 
 function init(self)
+    ---@type table<number,Job>
     self.buildings_with_active_jobs = {} -- { ["<bid>"] = job }
     self.job_create_time = 5             -- seconds
     self.job_create_timer = 0
