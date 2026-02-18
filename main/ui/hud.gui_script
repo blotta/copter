@@ -1,0 +1,67 @@
+local druid = require('druid.druid')
+
+local METER_SIZE = 32
+
+function init(self)
+	self.druid = druid.new(self)
+
+    local _, ty, _, th = tilemap.get_bounds(msg.url(nil, "/world/map", "tiles"))
+	self.total_sky_height = (th + ty - 2) * METER_SIZE
+
+	self.throttle_dial = gui.get_node("throttle-dial-instrument/dial")
+	self.velocity_dial = gui.get_node("velocity-dial-instrument/dial")
+	self.velocity_number_label = gui.get_node("velocity-number")
+	self.altitude_dial = gui.get_node("altitude-dial-instrument/dial")
+	self.altitude_number_label = gui.get_node("altitude-number")
+
+	msg.post("/systems#event_manager", "subscribe", {
+		event_key = "copter_stats"
+	})
+
+	self.copter_throttle = 0
+	self.copter_velocity = vmath.vector3()
+	self.copter_position = vmath.vector3()
+
+end
+
+function final(self)
+	self.druid:final()
+end
+
+local dir = 1
+function update(self, dt)
+
+	-- throttle dial
+	local throttle_angle = -270 * self.copter_throttle
+	gui.set_euler(self.throttle_dial, vmath.vector3(0, 0, throttle_angle))
+
+	-- velocity dial
+	local speed_ms = vmath.length(self.copter_velocity) / METER_SIZE
+	local speed_kmh = speed_ms * 3.6
+	gui.set_text(self.velocity_number_label, string.format("%d km/h", math.floor(speed_kmh)))
+	local velocity_angle = math.rad(270)
+	if speed_ms > 0.1 then
+		velocity_angle = math.atan2(self.copter_velocity.y, self.copter_velocity.x)
+	end
+
+	gui.set_rotation(self.velocity_dial,
+		vmath.slerp(5 * dt, gui.get_rotation(self.velocity_dial), vmath.quat_rotation_z(velocity_angle)))
+	
+	-- altitude dial
+	local heigth_perc = self.copter_position.y / self.total_sky_height
+	if self.copter_position.y < 0 then heigth_perc = 0 end
+	local alt_angle = -270 * heigth_perc
+	gui.set_euler(self.altitude_dial, vmath.vector3(0, 0, alt_angle))
+	gui.set_text(self.altitude_number_label, string.format("%d m", math.floor(self.copter_position.y / METER_SIZE)))
+
+	self.druid:update(dt)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash('copter_stats') then
+		self.copter_throttle = message.throttle
+		self.copter_velocity = message.velocity
+		self.copter_position = message.position
+	end
+	self.druid:on_message(message_id, message, sender)
+end

@@ -1,0 +1,15 @@
+image: "/assets/dial-instrument.png"
+tile_width: 39
+tile_height: 39
+animations {
+  id: "dial"
+  start_tile: 2
+  end_tile: 2
+}
+animations {
+  id: "panel"
+  start_tile: 1
+  end_tile: 1
+  playback: PLAYBACK_NONE
+}
+extrude_borders: 2

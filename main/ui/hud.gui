@@ -1,0 +1,618 @@
+script: "/main/ui/hud.gui_script"
+fonts {
+  name: "ui-font"
+  font: "/main/ui/ui-font.font"
+}
+textures {
+  name: "metal-panel"
+  texture: "/main/ui/images/metal-panel.atlas"
+}
+textures {
+  name: "cockpit"
+  texture: "/main/ui/images/cockpit.atlas"
+}
+nodes {
+  position {
+    x: 1280.0
+    y: 720.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  id: "root"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 299.0
+    y: 308.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  id: "NE_Anchor"
+  parent: "root"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 117.0
+    y: 274.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  id: "panel"
+  parent: "NE_Anchor"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  id: "border"
+  parent: "panel"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  type: TYPE_BOX
+  texture: "cockpit/copter-cockpit"
+  id: "cockpit"
+  parent: "NE_Anchor"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  id: "throttle"
+  parent: "cockpit"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: -95.0
+    y: 10.833333
+  }
+  type: TYPE_TEMPLATE
+  id: "throttle-dial-instrument"
+  parent: "throttle"
+  inherit_alpha: true
+  template: "/main/ui/widgets/dial-instrument.gui"
+}
+nodes {
+  type: TYPE_BOX
+  id: "throttle-dial-instrument/root"
+  parent: "throttle-dial-instrument"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "throttle-dial-instrument/panel"
+  parent: "throttle-dial-instrument/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "throttle-dial-instrument/box"
+  parent: "throttle-dial-instrument/panel"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "throttle-dial-instrument/dial"
+  parent: "throttle-dial-instrument/box"
+  template_node_child: true
+}
+nodes {
+  position {
+    x: -95.0
+    y: -17.0
+  }
+  scale {
+    x: 0.5
+    y: 0.5
+  }
+  size {
+    x: 64.0
+    y: 32.0
+  }
+  type: TYPE_TEXT
+  text: "THR"
+  font: "ui-font"
+  id: "throttle-label"
+  parent: "throttle"
+  inherit_alpha: true
+}
+nodes {
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  id: "velocity"
+  parent: "cockpit"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: -52.0
+    y: 25.0
+  }
+  type: TYPE_TEMPLATE
+  id: "velocity-dial-instrument"
+  parent: "velocity"
+  inherit_alpha: true
+  template: "/main/ui/widgets/dial-instrument.gui"
+}
+nodes {
+  type: TYPE_BOX
+  id: "velocity-dial-instrument/root"
+  parent: "velocity-dial-instrument"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "velocity-dial-instrument/panel"
+  parent: "velocity-dial-instrument/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "velocity-dial-instrument/box"
+  parent: "velocity-dial-instrument/panel"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "velocity-dial-instrument/dial"
+  parent: "velocity-dial-instrument/box"
+  template_node_child: true
+}
+nodes {
+  position {
+    x: -52.0
+    y: -3.0
+  }
+  scale {
+    x: 0.5
+    y: 0.5
+  }
+  size {
+    x: 64.0
+    y: 32.0
+  }
+  type: TYPE_TEXT
+  text: "VEL"
+  font: "ui-font"
+  id: "velocity-dial-label"
+  parent: "velocity"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: -32.5
+    y: -17.833332
+  }
+  scale {
+    x: 0.5
+    y: 0.5
+  }
+  size {
+    x: 78.0
+    y: 32.0
+  }
+  type: TYPE_TEXT
+  text: "10 m/s"
+  font: "ui-font"
+  id: "velocity-number"
+  pivot: PIVOT_E
+  parent: "velocity"
+  inherit_alpha: true
+}
+nodes {
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  id: "altitude"
+  parent: "cockpit"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "altitude-dial-instrument"
+  parent: "altitude"
+  inherit_alpha: true
+  template: "/main/ui/widgets/dial-instrument.gui"
+}
+nodes {
+  type: TYPE_BOX
+  id: "altitude-dial-instrument/root"
+  parent: "altitude-dial-instrument"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "altitude-dial-instrument/panel"
+  parent: "altitude-dial-instrument/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "altitude-dial-instrument/box"
+  parent: "altitude-dial-instrument/panel"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "altitude-dial-instrument/dial"
+  parent: "altitude-dial-instrument/box"
+  template_node_child: true
+}
+nodes {
+  position {
+    y: -41.0
+  }
+  scale {
+    x: 0.5
+    y: 0.5
+  }
+  size {
+    x: 64.0
+    y: 32.0
+  }
+  type: TYPE_TEXT
+  text: "VEL"
+  font: "ui-font"
+  id: "altitude-dial-label"
+  parent: "altitude"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 21.0
+    y: -27.0
+  }
+  scale {
+    x: 0.4
+    y: 0.4
+  }
+  size {
+    x: 78.0
+    y: 32.0
+  }
+  type: TYPE_TEXT
+  text: "888 km/h"
+  font: "ui-font"
+  id: "altitude-number"
+  pivot: PIVOT_E
+  parent: "altitude"
+  inherit_alpha: true
+}
+material: "/builtins/materials/gui.material"
+layouts {
+  name: "Landscape"
+  nodes {
+    position {
+      x: 640.0
+      y: 360.0
+    }
+    size {
+      x: 1280.0
+      y: 720.0
+    }
+    type: TYPE_BOX
+    id: "root"
+    adjust_mode: ADJUST_MODE_STRETCH
+    overridden_fields: 1
+    overridden_fields: 4
+    overridden_fields: 17
+    overridden_fields: 46
+    visible: false
+  }
+  nodes {
+    position {
+      x: 640.0
+      y: 360.0
+    }
+    size {
+      x: 10.0
+      y: 10.0
+    }
+    type: TYPE_BOX
+    id: "NE_Anchor"
+    adjust_mode: ADJUST_MODE_STRETCH
+    parent: "root"
+    overridden_fields: 1
+    overridden_fields: 4
+    overridden_fields: 17
+    overridden_fields: 46
+    visible: false
+  }
+  nodes {
+    position {
+      x: -58.0
+      y: 110.0
+    }
+    size {
+      x: 200.0
+      y: 160.0
+    }
+    type: TYPE_BOX
+    texture: "metal-panel/metal-panel-bg"
+    id: "panel"
+    parent: "NE_Anchor"
+    overridden_fields: 1
+    overridden_fields: 4
+    overridden_fields: 9
+    overridden_fields: 22
+    overridden_fields: 38
+    overridden_fields: 46
+  }
+  nodes {
+    size {
+      x: 200.0
+      y: 170.0
+    }
+    type: TYPE_BOX
+    texture: "metal-panel/metal-panel-border"
+    id: "border"
+    parent: "panel"
+    slice9 {
+      x: 32.0
+      y: 32.0
+      z: 32.0
+      w: 32.0
+    }
+    overridden_fields: 4
+    overridden_fields: 9
+    overridden_fields: 22
+    overridden_fields: 38
+  }
+  nodes {
+    position {
+      x: -640.0
+      y: -662.0
+    }
+    scale {
+      x: 1.2
+      y: 1.2
+    }
+    size {
+      x: 300.0
+      y: 200.0
+    }
+    type: TYPE_BOX
+    texture: "cockpit/copter-cockpit"
+    id: "cockpit"
+    parent: "NE_Anchor"
+    slice9 {
+      x: 74.0
+      y: 116.0
+      z: 74.0
+      w: 76.0
+    }
+    overridden_fields: 1
+    overridden_fields: 3
+    overridden_fields: 4
+    overridden_fields: 9
+    overridden_fields: 22
+    overridden_fields: 38
+  }
+  nodes {
+    position {
+      x: -95.0
+      y: 11.0
+    }
+    size {
+      x: 39.0
+      y: 50.0
+    }
+    type: TYPE_BOX
+    id: "throttle"
+    parent: "cockpit"
+    overridden_fields: 1
+    overridden_fields: 4
+    overridden_fields: 46
+    visible: false
+  }
+  nodes {
+    type: TYPE_TEMPLATE
+    id: "throttle-dial-instrument"
+    parent: "throttle"
+    overridden_fields: 1
+  }
+  nodes {
+    position {
+      y: -27.0
+    }
+    scale {
+      x: 0.5
+      y: 0.5
+    }
+    size {
+      x: 64.0
+      y: 32.0
+    }
+    type: TYPE_TEXT
+    text: "THR"
+    font: "ui-font"
+    id: "throttle-label"
+    parent: "throttle"
+    overridden_fields: 1
+    overridden_fields: 3
+    overridden_fields: 4
+    overridden_fields: 8
+    overridden_fields: 10
+  }
+  nodes {
+    position {
+      x: -52.0
+      y: 25.0
+    }
+    size {
+      x: 42.0
+      y: 100.0
+    }
+    type: TYPE_BOX
+    id: "velocity"
+    parent: "cockpit"
+    overridden_fields: 1
+    overridden_fields: 4
+    overridden_fields: 46
+    visible: false
+  }
+  nodes {
+    type: TYPE_TEMPLATE
+    id: "velocity-dial-instrument"
+    parent: "velocity"
+    overridden_fields: 1
+  }
+  nodes {
+    type: TYPE_BOX
+    id: "velocity-dial-instrument/box"
+    parent: "velocity-dial-instrument/panel"
+    overridden_fields: 2
+    template_node_child: true
+  }
+  nodes {
+    position {
+      y: -41.0
+    }
+    scale {
+      x: 0.5
+      y: 0.5
+    }
+    size {
+      x: 64.0
+      y: 32.0
+    }
+    type: TYPE_TEXT
+    text: "VEL"
+    font: "ui-font"
+    id: "velocity-dial-label"
+    parent: "velocity"
+    overridden_fields: 1
+    overridden_fields: 3
+    overridden_fields: 4
+    overridden_fields: 8
+    overridden_fields: 10
+  }
+  nodes {
+    position {
+      x: 21.0
+      y: -27.0
+    }
+    scale {
+      x: 0.4
+      y: 0.4
+    }
+    size {
+      x: 78.0
+      y: 32.0
+    }
+    type: TYPE_TEXT
+    text: "888 km/h"
+    font: "ui-font"
+    id: "velocity-number"
+    pivot: PIVOT_E
+    parent: "velocity"
+    overridden_fields: 1
+    overridden_fields: 3
+    overridden_fields: 4
+    overridden_fields: 7
+    overridden_fields: 8
+    overridden_fields: 10
+    overridden_fields: 14
+    overridden_fields: 37
+  }
+  nodes {
+    position {
+      x: -5.0
+      y: 25.0
+    }
+    size {
+      x: 39.0
+      y: 50.0
+    }
+    type: TYPE_BOX
+    id: "altitude"
+    parent: "cockpit"
+    overridden_fields: 1
+    overridden_fields: 4
+    overridden_fields: 46
+    visible: false
+  }
+  nodes {
+    position {
+      y: -41.0
+    }
+    scale {
+      x: 0.5
+      y: 0.5
+    }
+    size {
+      x: 64.0
+      y: 32.0
+    }
+    type: TYPE_TEXT
+    text: "ALT"
+    font: "ui-font"
+    id: "altitude-dial-label"
+    parent: "altitude"
+    overridden_fields: 1
+    overridden_fields: 3
+    overridden_fields: 4
+    overridden_fields: 8
+    overridden_fields: 10
+  }
+  nodes {
+    position {
+      x: 17.0
+      y: -27.0
+    }
+    scale {
+      x: 0.4
+      y: 0.4
+    }
+    size {
+      x: 78.0
+      y: 32.0
+    }
+    type: TYPE_TEXT
+    text: "888 m"
+    font: "ui-font"
+    id: "altitude-number"
+    pivot: PIVOT_E
+    parent: "altitude"
+    overridden_fields: 1
+    overridden_fields: 3
+    overridden_fields: 4
+    overridden_fields: 7
+    overridden_fields: 8
+    overridden_fields: 10
+    overridden_fields: 14
+    overridden_fields: 37
+  }
+}
+adjust_reference: ADJUST_REFERENCE_PARENT

@@ -1,0 +1,60 @@
+script: "/main/ui/widgets/thrust-bar.gui_script"
+textures {
+  name: "metal-panel"
+  texture: "/main/ui/images/metal-panel.atlas"
+}
+nodes {
+  size {
+    x: 36.0
+    y: 116.0
+  }
+  type: TYPE_BOX
+  id: "root"
+  inherit_alpha: true
+  visible: false
+}
+nodes {
+  size {
+    x: 20.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  texture: "metal-panel/metal-panel-bg"
+  id: "bg"
+  parent: "root"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: -50.0
+  }
+  size {
+    x: 20.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  texture: "metal-panel/metal-panel-fill"
+  id: "fill"
+  pivot: PIVOT_S
+  parent: "bg"
+  inherit_alpha: true
+}
+nodes {
+  size {
+    x: 28.0
+    y: 108.0
+  }
+  type: TYPE_BOX
+  texture: "metal-panel/metal-panel-border-thin"
+  id: "border"
+  parent: "root"
+  inherit_alpha: true
+  slice9 {
+    x: 4.0
+    y: 4.0
+    z: 4.0
+    w: 4.0
+  }
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

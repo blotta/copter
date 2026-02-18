@@ -1,6 +1,13 @@
 local width = 40
 local height = 40
 
+---@class copter.script
+---@field engine_power number
+---@field torque_power number
+---@field input_throttle number
+---@field input_pitch number
+---@field throttle number
+---@field extra_weight number
 
 local HELICE_LOCAL_OFFSET = vmath.vector3(0, height, 0)
 
@@ -33,15 +40,32 @@ function fixed_update(self, dt)
     local helice_pos = go.get_position() + vmath.rotate(go.get_rotation(), HELICE_LOCAL_OFFSET)
     local up_dir = vmath.normalize(helice_pos - go.get_position())
 
+    local throttle_target = 0
+    local pd_controlled = false
     if self.input_throttle ~= 0 then
-        self.throttle = self.throttle + self.input_throttle * dt * 0.8
-        if self.throttle > 1 then self.throttle = 1 end
-        if self.throttle < 0 then self.throttle = 0 end
+        throttle_target = self.input_throttle > 0 and 1 or 0
     else
         -- PD controller
+        pd_controlled = true
         local mass = go.get("#co", "mass") + self.extra_weight
         local hover_force = mass * -physics.get_gravity().y
-        self.throttle = hover_force / self.engine_power
+        throttle_target = hover_force / self.engine_power
+    end
+
+    if throttle_target > 1 then throttle_target = 1 end
+    if throttle_target < 0 then throttle_target = 0 end
+
+    local throttle_diff = math.abs(throttle_target - self.throttle)
+    if throttle_diff < 0.01 then
+        self.throttle = throttle_target
+    else
+        local throttle_dir = throttle_target > self.throttle and 1 or -1
+        local multiplier = pd_controlled and 2 or 0.8
+        local throttle_step = dt * multiplier
+        if throttle_diff < throttle_step then
+            throttle_step = throttle_diff
+        end
+        self.throttle = self.throttle + throttle_dir * throttle_step
     end
 
     --print(self.throttle)
@@ -76,6 +100,18 @@ function fixed_update(self, dt)
             apply_torque("#co", center, angle_correction_dir * 0.3 * self.torque_power, height)
         end
     end
+end
+
+---@param self copter.script
+---@param dt number
+function update(self, dt)
+    msg.post("/systems#event_manager", "trigger-event", {
+        event_key = "copter_stats",
+        position = go.get_world_position(),
+        throttle = self.throttle,
+        pitch = go.get_rotation(),
+        velocity = go.get("#co", "linear_velocity")
+    })
 end
 
 function on_message(self, message_id, message, sender)

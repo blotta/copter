@@ -25,6 +25,8 @@ scale_mode = stretch
 
 [project]
 title = def-copter
+dependencies#0 = https://github.com/Insality/druid/archive/refs/tags/1.1.7.zip
+dependencies#1 = https://github.com/Insality/defold-event/archive/refs/tags/14.zip
 
 [graphics]
 default_texture_min_filter = nearest

@@ -1,0 +1,16 @@
+images {
+  image: "/assets/metal-panel-border.png"
+}
+images {
+  image: "/assets/metal-panel-bg.png"
+}
+images {
+  image: "/assets/metal-panel-fill.png"
+}
+images {
+  image: "/assets/metal-panel2-border.png"
+}
+images {
+  image: "/assets/metal-panel-border-thin.png"
+}
+extrude_borders: 2
