@@ -41,55 +41,58 @@ nodes {
   size_mode: SIZE_MODE_AUTO
 }
 nodes {
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  id: "S_Anchor"
+  parent: "root"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
   position {
-    x: 117.0
-    y: 274.0
+    x: -640.0
+    y: -662.0
+  }
+  scale {
+    x: 1.2
+    y: 1.2
   }
   size {
-    x: 200.0
-    y: 100.0
+    x: 300.0
+    y: 200.0
   }
-  type: TYPE_BOX
-  id: "panel"
-  parent: "NE_Anchor"
-  inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-}
-nodes {
-  size {
-    x: 200.0
-    y: 100.0
-  }
-  type: TYPE_BOX
-  id: "border"
-  parent: "panel"
-  inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-}
-nodes {
   type: TYPE_BOX
   texture: "cockpit/copter-cockpit"
   id: "cockpit"
-  parent: "NE_Anchor"
+  parent: "S_Anchor"
   inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
+  slice9 {
+    x: 74.0
+    y: 116.0
+    z: 74.0
+    w: 76.0
+  }
 }
 nodes {
+  position {
+    x: -95.0
+    y: 11.0
+  }
   size {
-    x: 200.0
-    y: 100.0
+    x: 39.0
+    y: 50.0
   }
   type: TYPE_BOX
   id: "throttle"
   parent: "cockpit"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
+  visible: false
 }
 nodes {
-  position {
-    x: -95.0
-    y: 10.833333
-  }
   type: TYPE_TEMPLATE
   id: "throttle-dial-instrument"
   parent: "throttle"
@@ -122,8 +125,7 @@ nodes {
 }
 nodes {
   position {
-    x: -95.0
-    y: -17.0
+    y: -27.0
   }
   scale {
     x: 0.5
@@ -141,8 +143,12 @@ nodes {
   inherit_alpha: true
 }
 nodes {
+  position {
+    x: -52.0
+    y: 25.0
+  }
   size {
-    x: 200.0
+    x: 42.0
     y: 100.0
   }
   type: TYPE_BOX
@@ -150,12 +156,9 @@ nodes {
   parent: "cockpit"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
+  visible: false
 }
 nodes {
-  position {
-    x: -52.0
-    y: 25.0
-  }
   type: TYPE_TEMPLATE
   id: "velocity-dial-instrument"
   parent: "velocity"
@@ -188,8 +191,7 @@ nodes {
 }
 nodes {
   position {
-    x: -52.0
-    y: -3.0
+    y: -41.0
   }
   scale {
     x: 0.5
@@ -208,19 +210,19 @@ nodes {
 }
 nodes {
   position {
-    x: -32.5
-    y: -17.833332
+    x: 21.0
+    y: -27.0
   }
   scale {
-    x: 0.5
-    y: 0.5
+    x: 0.4
+    y: 0.4
   }
   size {
     x: 78.0
     y: 32.0
   }
   type: TYPE_TEXT
-  text: "10 m/s"
+  text: "888 km/h"
   font: "ui-font"
   id: "velocity-number"
   pivot: PIVOT_E
@@ -228,15 +230,20 @@ nodes {
   inherit_alpha: true
 }
 nodes {
+  position {
+    x: -5.0
+    y: 25.0
+  }
   size {
-    x: 200.0
-    y: 100.0
+    x: 39.0
+    y: 50.0
   }
   type: TYPE_BOX
   id: "altitude"
   parent: "cockpit"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
+  visible: false
 }
 nodes {
   type: TYPE_TEMPLATE
@@ -282,7 +289,7 @@ nodes {
     y: 32.0
   }
   type: TYPE_TEXT
-  text: "VEL"
+  text: "ALT"
   font: "ui-font"
   id: "altitude-dial-label"
   parent: "altitude"
@@ -290,7 +297,7 @@ nodes {
 }
 nodes {
   position {
-    x: 21.0
+    x: 17.0
     y: -27.0
   }
   scale {
@@ -302,7 +309,7 @@ nodes {
     y: 32.0
   }
   type: TYPE_TEXT
-  text: "888 km/h"
+  text: "888 m"
   font: "ui-font"
   id: "altitude-number"
   pivot: PIVOT_E
@@ -351,48 +358,27 @@ layouts {
   }
   nodes {
     position {
-      x: -58.0
-      y: 110.0
+      y: -360.0
     }
     size {
-      x: 200.0
-      y: 160.0
+      x: 1.0
+      y: 1.0
     }
     type: TYPE_BOX
-    texture: "metal-panel/metal-panel-bg"
-    id: "panel"
-    parent: "NE_Anchor"
+    id: "S_Anchor"
+    adjust_mode: ADJUST_MODE_STRETCH
+    parent: "root"
     overridden_fields: 1
     overridden_fields: 4
-    overridden_fields: 9
-    overridden_fields: 22
-    overridden_fields: 38
+    overridden_fields: 13
+    overridden_fields: 14
+    overridden_fields: 17
     overridden_fields: 46
-  }
-  nodes {
-    size {
-      x: 200.0
-      y: 170.0
-    }
-    type: TYPE_BOX
-    texture: "metal-panel/metal-panel-border"
-    id: "border"
-    parent: "panel"
-    slice9 {
-      x: 32.0
-      y: 32.0
-      z: 32.0
-      w: 32.0
-    }
-    overridden_fields: 4
-    overridden_fields: 9
-    overridden_fields: 22
-    overridden_fields: 38
+    visible: false
   }
   nodes {
     position {
-      x: -640.0
-      y: -662.0
+      y: 55.0
     }
     scale {
       x: 1.2
@@ -405,7 +391,7 @@ layouts {
     type: TYPE_BOX
     texture: "cockpit/copter-cockpit"
     id: "cockpit"
-    parent: "NE_Anchor"
+    parent: "S_Anchor"
     slice9 {
       x: 74.0
       y: 116.0
@@ -489,6 +475,9 @@ layouts {
     overridden_fields: 1
   }
   nodes {
+    rotation {
+      z: 225.0
+    }
     type: TYPE_BOX
     id: "velocity-dial-instrument/box"
     parent: "velocity-dial-instrument/panel"

@@ -1,0 +1,6 @@
+mesh: "/builtins/assets/meshes/quad.dae"
+name: "quad"
+materials {
+  name: "default"
+  material: "/main/camera/minimap_output.material"
+}

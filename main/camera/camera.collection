@@ -47,3 +47,20 @@ embedded_instances {
     z: -10.0
   }
 }
+embedded_instances {
+  id: "minimap"
+  data: "components {\n"
+  "  id: \"minimap\"\n"
+  "  component: \"/main/camera/minimap.camera\"\n"
+  "}\n"
+  "components {\n"
+  "  id: \"minimap_camera\"\n"
+  "  component: \"/main/camera/minimap_camera.script\"\n"
+  "}\n"
+  ""
+  position {
+    x: 512.0
+    y: 288.0
+    z: 10.0
+  }
+}

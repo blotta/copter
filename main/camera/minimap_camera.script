@@ -1,0 +1,41 @@
+function init(self)
+	local view_mat = go.get("#minimap", "view") --[[@as matrix4]]
+	local zoom = camera.get_orthographic_zoom("#minimap")
+	self.logical_width = math.abs(view_mat.m03) * 2 / zoom
+	self.logical_height = math.abs(view_mat.m13) * 2 / zoom
+	self.target_go_id = go.get_id('/copter')
+
+	local tx, ty, tw, th = tilemap.get_bounds(msg.url(nil, "/world/map", "tiles"))
+	local tile_size = 32
+
+	self.bounds_left = (tx - 1) * tile_size
+	self.bounds_right = (tw + tx - 1) * tile_size
+	self.bounds_bottom = (ty - 1) * tile_size
+	self.bounds_top = (th + ty - 2) * tile_size -- -2 to to hide topmost tile
+
+	self.dead_zone = {
+		left = 0,
+		right = 0,
+		bottom = 0,
+		top = 0
+	}
+end
+
+function late_update(self, dt)
+	local cam_pos = go.get_position()
+	local copter_pos = go.get_position(self.target_go_id)
+	copter_pos.z = cam_pos.z
+
+	cam_pos = copter_pos
+
+	-- clamp to bounds
+	local half_w = self.logical_width / 2
+	local half_h = self.logical_height / 2
+	if cam_pos.x - half_w < self.bounds_left then cam_pos.x = self.bounds_left + half_w end
+	if cam_pos.x + half_w > self.bounds_right then cam_pos.x = self.bounds_right - half_w end
+	if cam_pos.y - half_h < self.bounds_bottom then cam_pos.y = self.bounds_bottom + half_h end
+	if cam_pos.y + half_h > self.bounds_top then cam_pos.y = self.bounds_top - half_h end
+
+	-- apply
+	go.set_position(cam_pos)
+end

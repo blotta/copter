@@ -1,0 +1,161 @@
+textures {
+  name: "metal-panel"
+  texture: "/main/ui/images/metal-panel.atlas"
+}
+nodes {
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  id: "root"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    x: 1280.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  id: "SE_Anchor"
+  parent: "root"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    x: 1111.0
+    y: 98.0
+  }
+  size {
+    x: 320.0
+    y: 180.0
+  }
+  type: TYPE_BOX
+  id: "minimap"
+  parent: "SE_Anchor"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  material: "minimap"
+}
+nodes {
+  position {
+    x: -171.0
+    y: 168.0
+  }
+  size {
+    x: 340.0
+    y: 64.0
+  }
+  type: TYPE_BOX
+  texture: "metal-panel/metal-panel-border"
+  id: "border"
+  parent: "minimap"
+  inherit_alpha: true
+  slice9 {
+    x: 10.0
+    y: 10.0
+    z: 10.0
+    w: 10.0
+  }
+}
+material: "/builtins/materials/gui.material"
+layouts {
+  name: "Landscape"
+  nodes {
+    position {
+      x: 640.0
+      y: 360.0
+    }
+    size {
+      x: 1280.0
+      y: 720.0
+    }
+    type: TYPE_BOX
+    id: "root"
+    adjust_mode: ADJUST_MODE_STRETCH
+    overridden_fields: 1
+    overridden_fields: 4
+    overridden_fields: 17
+    overridden_fields: 46
+    visible: false
+  }
+  nodes {
+    position {
+      x: 640.0
+      y: -360.0
+    }
+    size {
+      x: 1.0
+      y: 1.0
+    }
+    type: TYPE_BOX
+    id: "SE_Anchor"
+    adjust_mode: ADJUST_MODE_STRETCH
+    parent: "root"
+    overridden_fields: 1
+    overridden_fields: 4
+    overridden_fields: 17
+    overridden_fields: 46
+    visible: false
+  }
+  nodes {
+    position {
+      x: -8.0
+      y: 8.0
+    }
+    size {
+      x: 320.0
+      y: 180.0
+    }
+    color {
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    }
+    type: TYPE_BOX
+    id: "minimap"
+    pivot: PIVOT_SE
+    parent: "SE_Anchor"
+    overridden_fields: 1
+    overridden_fields: 4
+    overridden_fields: 5
+    overridden_fields: 14
+  }
+  nodes {
+    position {
+      x: -160.0
+      y: 90.0
+    }
+    size {
+      x: 336.0
+      y: 196.0
+    }
+    type: TYPE_BOX
+    texture: "metal-panel/metal-panel-border"
+    id: "border"
+    parent: "minimap"
+    slice9 {
+      x: 10.0
+      y: 10.0
+      z: 10.0
+      w: 10.0
+    }
+    overridden_fields: 1
+    overridden_fields: 4
+    overridden_fields: 9
+    overridden_fields: 22
+    overridden_fields: 38
+  }
+}
+adjust_reference: ADJUST_REFERENCE_PARENT
+materials {
+  name: "minimap"
+  material: "/main/camera/minimap_output.material"
+}

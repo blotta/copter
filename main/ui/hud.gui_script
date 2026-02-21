@@ -9,6 +9,8 @@ function init(self)
 	self.total_sky_height = (th + ty - 2) * METER_SIZE
 
 	self.throttle_dial = gui.get_node("throttle-dial-instrument/dial")
+	-- manually set rotation of dial parent because editor doesn't save template change properly
+	gui.set_rotation(gui.get_node("velocity-dial-instrument/box"), vmath.quat_rotation_z(0))
 	self.velocity_dial = gui.get_node("velocity-dial-instrument/dial")
 	self.velocity_number_label = gui.get_node("velocity-number")
 	self.altitude_dial = gui.get_node("altitude-dial-instrument/dial")
@@ -28,7 +30,6 @@ function final(self)
 	self.druid:final()
 end
 
-local dir = 1
 function update(self, dt)
 
 	-- throttle dial

@@ -11,7 +11,7 @@ embedded_components {
   id: "sprite"
   type: "sprite"
   data: "default_animation: \"building-helipad\"\n"
-  "material: \"/builtins/materials/sprite.material\"\n"
+  "material: \"/materials/infra.material\"\n"
   "textures {\n"
   "  sampler: \"texture_sampler\"\n"
   "  texture: \"/main/entities/infra/helipad/helipad.atlas\"\n"
