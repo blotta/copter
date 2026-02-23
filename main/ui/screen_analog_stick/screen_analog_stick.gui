@@ -1,0 +1,135 @@
+script: "/main/ui/screen_analog_stick/screen_analog_stick.gui_script"
+textures {
+  name: "druid"
+  texture: "/druid/druid.atlas"
+}
+nodes {
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  id: "root"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  id: "SW_Anchor"
+  parent: "root"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  color {
+    x: 0.5019608
+    y: 0.5019608
+    z: 0.5019608
+  }
+  type: TYPE_BOX
+  texture: "druid/ui_circle_64"
+  id: "stick_bg"
+  parent: "SW_Anchor"
+  inherit_alpha: true
+  alpha: 0.5
+  size_mode: SIZE_MODE_AUTO
+  enabled: false
+}
+nodes {
+  type: TYPE_BOX
+  texture: "druid/ui_circle_32"
+  id: "stick"
+  parent: "stick_bg"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+material: "/builtins/materials/gui.material"
+layouts {
+  name: "Landscape"
+  nodes {
+    position {
+      x: 640.0
+      y: 360.0
+    }
+    size {
+      x: 1280.0
+      y: 720.0
+    }
+    type: TYPE_BOX
+    id: "root"
+    adjust_mode: ADJUST_MODE_STRETCH
+    overridden_fields: 1
+    overridden_fields: 4
+    overridden_fields: 17
+    overridden_fields: 46
+    visible: false
+  }
+  nodes {
+    position {
+      x: -640.0
+      y: -360.0
+    }
+    size {
+      x: 1.0
+      y: 1.0
+    }
+    type: TYPE_BOX
+    id: "SW_Anchor"
+    adjust_mode: ADJUST_MODE_STRETCH
+    parent: "root"
+    overridden_fields: 1
+    overridden_fields: 4
+    overridden_fields: 17
+    overridden_fields: 46
+    visible: false
+  }
+  nodes {
+    position {
+      x: 640.0
+      y: 360.0
+    }
+    scale {
+      x: 2.0
+      y: 2.0
+    }
+    size {
+      x: 32.0
+      y: 32.0
+    }
+    color {
+      x: 0.5019608
+      y: 0.5019608
+      z: 0.5019608
+    }
+    type: TYPE_BOX
+    texture: "druid/ui_circle_64"
+    id: "stick_bg"
+    parent: "SW_Anchor"
+    alpha: 0.5
+    overridden_fields: 1
+    overridden_fields: 3
+    overridden_fields: 4
+    overridden_fields: 5
+    overridden_fields: 9
+    overridden_fields: 30
+    overridden_fields: 38
+    overridden_fields: 45
+    size_mode: SIZE_MODE_AUTO
+    enabled: false
+  }
+  nodes {
+    type: TYPE_BOX
+    texture: "druid/ui_circle_32"
+    id: "stick"
+    parent: "stick_bg"
+    inherit_alpha: true
+    overridden_fields: 9
+    overridden_fields: 21
+    overridden_fields: 46
+  }
+}
+adjust_reference: ADJUST_REFERENCE_PARENT

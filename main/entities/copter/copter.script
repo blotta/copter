@@ -29,7 +29,9 @@ function init(self)
     self.torque_power = 400
 
     self.input_throttle = 0
+    self.input_throttle_active = false
     self.input_pitch = 0
+    self.input_pitch_active = false
 
     self.throttle = 0
 
@@ -40,20 +42,20 @@ function fixed_update(self, dt)
     local helice_pos = go.get_position() + vmath.rotate(go.get_rotation(), HELICE_LOCAL_OFFSET)
     local up_dir = vmath.normalize(helice_pos - go.get_position())
 
-    local throttle_target = 0
-    local pd_controlled = false
-    if self.input_throttle ~= 0 then
-        throttle_target = self.input_throttle > 0 and 1 or 0
-    else
-        -- PD controller
-        pd_controlled = true
-        local mass = go.get("#co", "mass") + self.extra_weight
-        local hover_force = mass * -physics.get_gravity().y
-        throttle_target = hover_force / self.engine_power
-    end
+    local pd_controlled = true
+    local mass = go.get("#co", "mass") + self.extra_weight
+    local hover_force = mass * -physics.get_gravity().y
+    local throttle_target = hover_force / self.engine_power
 
-    if throttle_target > 1 then throttle_target = 1 end
-    if throttle_target < 0 then throttle_target = 0 end
+    if self.input_throttle_active then
+        pd_controlled = false
+        if self.input_throttle > 0 then
+            throttle_target = throttle_target + (1 - throttle_target) * self.input_throttle
+        elseif self.input_throttle < 0 then
+            throttle_target = throttle_target + throttle_target * self.input_throttle
+        end
+    end
+    throttle_target = vmath.clamp(throttle_target, 0, 1)
 
     local throttle_diff = math.abs(throttle_target - self.throttle)
     if throttle_diff < 0.01 then
@@ -68,31 +70,17 @@ function fixed_update(self, dt)
         self.throttle = self.throttle + throttle_dir * throttle_step
     end
 
-    --print(self.throttle)
     if (self.throttle > 0) then
         local force_vec = up_dir * self.throttle * self.engine_power
-
-        -- msg.post("@render:", "draw_line", {
-        -- 	start_point = helice_pos,
-        -- 	end_point = helice_pos + (up_dir * 50),
-        -- 	color = vmath.vector4(1,1,1,1)
-        -- })
-        -- msg.post("@render:", "draw_line", {
-        -- 	start_point = helice_pos,
-        -- 	end_point = helice_pos + (up_dir * 50 * self.throttle),
-        -- 	color = vmath.vector4(0,1,0,1)
-        -- })
-
         msg.post("#co", "apply_force", { force = force_vec, position = helice_pos })
     end
 
     local center = go.get_position() + vmath.rotate(go.get_rotation(), vmath.vector3(0, height / 2, 0))
-    if self.input_pitch ~= 0 then
+    if self.input_pitch_active then
         apply_torque("#co", center, self.input_pitch * self.torque_power, height)
     else
         -- angle controller
         local angle = go.get(".", "euler.z") --[[@as number]]
-        --print(angle)
         if math.abs(angle) < 1 then angle = 0 end
         if angle ~= 0 then
             local angle_correction_dir = 0
@@ -116,24 +104,27 @@ end
 
 function on_message(self, message_id, message, sender)
     --print(message_id)
-    if message_id == hash('throttle_up') then
-        self.input_throttle = self.input_throttle + 1
+    if message_id == hash('throttle-active') then
+        self.input_throttle = message.value
+        self.input_throttle_active = true
     end
-    if message_id == hash('throttle_down') then
-        self.input_throttle = self.input_throttle - 1
+    if message_id == hash('throttle-inactive') then
+        self.input_throttle_active = false
     end
-    if self.input_throttle > 1 then self.input_throttle = 1 end
-    if self.input_throttle < -1 then self.input_throttle = -1 end
-    --print(self.input_throttle)
+    self.input_throttle = vmath.clamp(self.input_throttle, -1, 1)
 
-    if message_id == hash('pitch_right') then
-        self.input_pitch = self.input_pitch + 1
+    if message_id == hash('pitch-active') then
+        -- self.input_pitch = self.input_pitch + 1
+        self.input_pitch = message.value
+        self.input_pitch_active = true
     end
-    if message_id == hash('pitch_left') then
+    if message_id == hash('pitch-inactive') then
+        self.input_pitch_active = false
+    end
+    if message_id == hash('pitch-left') then
         self.input_pitch = self.input_pitch - 1
     end
-    if self.input_pitch > 1 then self.input_pitch = 1 end
-    if self.input_pitch < -1 then self.input_pitch = -1 end
+    self.input_pitch = vmath.clamp(self.input_pitch, -1, 1)
 
     if message_id == hash('box_attached') then
         -- pprint('box attached!', message)
@@ -160,15 +151,6 @@ function on_message(self, message_id, message, sender)
     if message_id == hash('contact_point_response') and message.other_group == hash('floor') then
         return true
     end
-
-    -- if message_id == hash("collision_response") then
-    -- 	-- take action
-    -- 	--print("I collided with", message.other_id)
-    -- 	print("collision_response", message.other_group, go.get_position().x)
-    -- end
-    -- if message_id == hash("contact_point_response") then
-    -- 	print("contact_point_response", message.other_group, go.get_position().x)
-    -- end
 end
 
 function on_reload(self)

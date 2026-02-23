@@ -1,36 +1,37 @@
 function init(self)
     msg.post("#", "acquire_input_focus")
+    self.dragging = false
 end
 
 function on_input(self, action_id, action)
     if action_id == hash('up') then
         if action.pressed then
-            msg.post("#copter", "throttle_up")
+            msg.post("#copter", "throttle-active", { value = 1 })
         elseif action.released then
-            msg.post("#copter", "throttle_down")
+            msg.post("#copter", "throttle-inactive")
         end
     end
     if action_id == hash('down') then
         if action.pressed then
-            msg.post("#copter", "throttle_down")
+            msg.post("#copter", "throttle-active", { value = -1 })
         elseif action.released then
-            msg.post("#copter", "throttle_up")
+            msg.post("#copter", "throttle-inactive")
         end
     end
 
     if action_id == hash('right') then
         if action.pressed then
-            msg.post("#copter", "pitch_right")
+            msg.post("#copter", "pitch-active", { value = 1 })
         elseif action.released then
-            msg.post("#copter", "pitch_left")
+            msg.post("#copter", "pitch-inactive")
         end
     end
 
     if action_id == hash('left') then
         if action.pressed then
-            msg.post("#copter", "pitch_left")
+            msg.post("#copter", "pitch-active", { value = -1 })
         elseif action.released then
-            msg.post("#copter", "pitch_right")
+            msg.post("#copter", "pitch-inactive")
         end
     end
 
