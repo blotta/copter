@@ -14,3 +14,7 @@ components {
   id: "screen_analog_stick"
   component: "/main/ui/screen_analog_stick/screen_analog_stick.gui"
 }
+components {
+  id: "player_stats"
+  component: "/main/ui/player_stats/player_stats.gui"
+}

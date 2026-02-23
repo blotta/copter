@@ -1,5 +1,6 @@
 local BuildingRegistry = require 'main.systems.buildings.registry'
 local JobFactory = require 'main.systems.job.job_factory'
+local economy = require 'main.systems.economy.Economy'
 
 local function try_create_job(self)
     local buildings = BuildingRegistry.get_with_trait("job")
@@ -13,6 +14,8 @@ local function try_create_job(self)
                 event_key = 'job-available',
                 job = new_job,
             })
+            self.job_create_timer = 2
+            return
         end
     end
 end
@@ -70,6 +73,13 @@ function update(self, dt)
                 job = job
             })
             -- todo: reward player
+            if job.reward ~= nil then
+                pprint('reward!', job.reward)
+                economy.add(job.def.reward.money)
+                pprint(economy.get_money())
+            end
+
+            self.job_create_timer = 0
             self.buildings_with_active_jobs[b] = nil
         end
     end

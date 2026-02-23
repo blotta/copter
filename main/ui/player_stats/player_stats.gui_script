@@ -1,0 +1,46 @@
+local economy = require 'main.systems.economy.Economy'
+
+function init(self)
+	self.money_text = gui.get_node("money-text")
+	msg.post("/systems#event_manager", "subscribe", {
+		event_key = "money_changed"
+	})
+
+	gui.set_text(self.money_text, "$ " .. math.floor(economy.get_money()))
+end
+
+function final(self)
+	msg.post("/systems#event_manager", "unsubscribe", {
+		event_key = "money_changed"
+	})
+end
+
+function update(self, dt)
+	-- Add update code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash('money_changed') then
+		gui.set_text(self.money_text, "$ " .. math.floor(message.amount))
+	end
+end
+
+function on_input(self, action_id, action)
+	-- Add input-handling code here. The game object this script is attached to
+	-- must have acquired input focus:
+	--
+	--    msg.post(".", "acquire_input_focus")
+	--
+	-- All mapped input bindings will be received. Mouse and touch input will
+	-- be received regardless of where on the screen it happened.
+	-- Learn more: https://defold.com/manuals/input/
+	-- Remove this function if not needed
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Learn more: https://defold.com/manuals/hot-reload/
+	-- Remove this function if not needed
+end
