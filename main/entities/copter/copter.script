@@ -137,9 +137,9 @@ function on_message(self, message_id, message, sender)
 
     if message_id == hash('tilt') then
         local rand_vel = vmath.normalize(vmath.vector3(-1 + 2 * math.random(), -1 + 2 * math.random(), 0))
-        local rand_rot
-        if math.random() > 0.5 then rand_rot = 1 else rand_rot = -1 end
+        local rand_rot = math.random() > 0.5 and 1 or -1
         local center = go.get_position() + vmath.rotate(go.get_rotation(), vmath.vector3(0, height / 2, 0))
+        self.throttle = 0
         apply_torque("#co", center, rand_rot * 50000, height)
         msg.post("#co", "apply_force",
             {

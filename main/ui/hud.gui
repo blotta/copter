@@ -316,6 +316,25 @@ nodes {
   parent: "altitude"
   inherit_alpha: true
 }
+nodes {
+  type: TYPE_TEMPLATE
+  id: "tilt_button"
+  parent: "cockpit"
+  inherit_alpha: true
+  template: "/main/ui/widgets/cockpit_button.gui"
+}
+nodes {
+  type: TYPE_BOX
+  id: "tilt_button/root"
+  parent: "tilt_button"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "tilt_button/text"
+  parent: "tilt_button/root"
+  template_node_child: true
+}
 material: "/builtins/materials/gui.material"
 layouts {
   name: "Landscape"
@@ -385,7 +404,7 @@ layouts {
       y: 1.2
     }
     size {
-      x: 300.0
+      x: 400.0
       y: 200.0
     }
     type: TYPE_BOX
@@ -407,8 +426,8 @@ layouts {
   }
   nodes {
     position {
-      x: -95.0
-      y: 11.0
+      x: -148.33333
+      y: 10.166667
     }
     size {
       x: 39.0
@@ -453,8 +472,8 @@ layouts {
   }
   nodes {
     position {
-      x: -52.0
-      y: 25.0
+      x: -105.33333
+      y: 24.166668
     }
     size {
       x: 42.0
@@ -537,8 +556,8 @@ layouts {
   }
   nodes {
     position {
-      x: -5.0
-      y: 25.0
+      x: -58.333332
+      y: 24.166668
     }
     size {
       x: 39.0
@@ -602,6 +621,21 @@ layouts {
     overridden_fields: 10
     overridden_fields: 14
     overridden_fields: 37
+  }
+  nodes {
+    position {
+      x: -2.500001
+      y: 5.833333
+    }
+    scale {
+      x: 1.5
+      y: 1.5
+    }
+    type: TYPE_TEMPLATE
+    id: "tilt_button"
+    parent: "cockpit"
+    overridden_fields: 1
+    overridden_fields: 3
   }
 }
 adjust_reference: ADJUST_REFERENCE_PARENT

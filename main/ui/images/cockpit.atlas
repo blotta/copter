@@ -1,4 +1,7 @@
 images {
   image: "/assets/copter-cockpit.png"
 }
+images {
+  image: "/assets/cockpit-button.png"
+}
 extrude_borders: 2

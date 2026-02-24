@@ -24,6 +24,9 @@ function init(self)
 	self.copter_velocity = vmath.vector3()
 	self.copter_position = vmath.vector3()
 
+	self.tilt_button = self.druid:new_button("tilt_button/root", function(self)
+		msg.post("/copter#copter", "tilt")
+	end)
 end
 
 function final(self)
@@ -65,4 +68,8 @@ function on_message(self, message_id, message, sender)
 		self.copter_position = message.position
 	end
 	self.druid:on_message(message_id, message, sender)
+end
+
+function on_input(self, action_id, action)
+	return self.druid:on_input(action_id, action)
 end
