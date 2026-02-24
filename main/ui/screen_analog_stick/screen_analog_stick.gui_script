@@ -7,6 +7,7 @@ function init(self)
 	self.max_stick_vec = vmath.vector3(self.max_stick_drag_radius, 0, 0)
 	self.stick_drag = vmath.vector3()
 	self.stick_value = vmath.vector3()
+	self.stick_hide_timer = nil
 	msg.post(".", "acquire_input_focus")
 end
 
@@ -28,12 +29,19 @@ function on_input(self, action_id, action)
 				return true
 			end
 		else
+			if action.pressed and self.stick_hide_timer ~= nil then
+				timer.cancel(self.stick_hide_timer)
+			end
+
 			if action.released then
-				self.dragging = false
-				gui.set_enabled(self.stick_parent, false)
 				gui.set_screen_position(self.stick, gui.get_screen_position(self.stick_parent))
 				msg.post("/copter#copter", "throttle-inactive")
 				msg.post("/copter#copter", "pitch-inactive")
+				self.stick_hide_timer = timer.delay(2, false, function()
+					self.dragging = false
+					gui.set_enabled(self.stick_parent, false)
+					self.stick_hide_timer = nil
+				end)
 				return true
 			end
 
