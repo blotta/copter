@@ -624,8 +624,7 @@ layouts {
   }
   nodes {
     position {
-      x: -2.500001
-      y: 5.833333
+      y: 6.0
     }
     scale {
       x: 1.5

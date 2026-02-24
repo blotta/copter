@@ -43,7 +43,7 @@ function fixed_update(self, dt)
     local up_dir = vmath.normalize(helice_pos - go.get_position())
 
     local pd_controlled = true
-    local mass = go.get("#co", "mass") + self.extra_weight
+    local mass = go.get("#co", "mass") + (go.get("#cargo", "weight") or 0)
     local hover_force = mass * -physics.get_gravity().y
     local throttle_target = hover_force / self.engine_power
 
@@ -126,14 +126,14 @@ function on_message(self, message_id, message, sender)
     end
     self.input_pitch = vmath.clamp(self.input_pitch, -1, 1)
 
-    if message_id == hash('box_attached') then
-        -- pprint('box attached!', message)
-        self.extra_weight = go.get(msg.url(nil, message.box_id, "co"), "mass")
-    end
-    if message_id == hash('box_detached') then
-        -- pprint('box detached!', message)
-        self.extra_weight = 0
-    end
+    -- if message_id == hash('box_attached') then
+    --     -- pprint('box attached!', message)
+    --     self.extra_weight = go.get(msg.url(nil, message.box_id, "co"), "mass")
+    -- end
+    -- if message_id == hash('box_detached') then
+    --     -- pprint('box detached!', message)
+    --     self.extra_weight = 0
+    -- end
 
     if message_id == hash('tilt') then
         local rand_vel = vmath.normalize(vmath.vector3(-1 + 2 * math.random(), -1 + 2 * math.random(), 0))

@@ -1,0 +1,5 @@
+images {
+  image: "/assets/rope.png"
+}
+max_page_width: 0
+max_page_height: 0

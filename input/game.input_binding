@@ -16,7 +16,7 @@ key_trigger {
 }
 key_trigger {
   input: KEY_SPACE
-  action: "action"
+  action: "hook_action"
 }
 key_trigger {
   input: KEY_UP
@@ -29,6 +29,10 @@ key_trigger {
 key_trigger {
   input: KEY_E
   action: "tilt"
+}
+key_trigger {
+  input: KEY_H
+  action: "hook"
 }
 mouse_trigger {
   input: MOUSE_BUTTON_1

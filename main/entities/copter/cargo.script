@@ -1,8 +1,15 @@
+go.property("weight", 0)
+
 function init(self)
 	self.passenger = nil -- hash("normal1")
+	self.weight = 0
 end
 
 function on_message(self, message_id, message, sender)
+	if message_id == hash('add_weight') then
+		self.weight = self.weight + message.amount
+	end
+
 	if message_id == hash('request_person_board') then
 		if self.passenger == nil then
 			local passenger_variant = go.get(msg.url(nil, message.person_id, 'person'), "variant")

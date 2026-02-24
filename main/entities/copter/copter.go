@@ -61,3 +61,9 @@ embedded_components {
   "angular_damping: 0.9\n"
   ""
 }
+embedded_components {
+  id: "hook_collectionfactory"
+  type: "collectionfactory"
+  data: "prototype: \"/main/entities/copter/hook/hook.collection\"\n"
+  ""
+}

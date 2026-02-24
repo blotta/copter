@@ -39,8 +39,12 @@ function on_input(self, action_id, action)
         msg.post("#copter", "tilt")
     end
 
-    if action_id == hash('action') and action.pressed then
-        msg.post("#hook", 'hook_trigger')
+    if action_id == hash('hook') and action.pressed then
+        msg.post("#hook", 'toggle')
+    end
+
+    if action_id == hash('hook_action') and action.pressed then
+        msg.post("#hook", 'hook_action')
     end
 
     if action_id == hash('touch') and action.pressed then

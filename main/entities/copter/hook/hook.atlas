@@ -1,0 +1,5 @@
+images {
+  image: "/assets/hook.png"
+  pivot_y: 0.22
+}
+extrude_borders: 2
