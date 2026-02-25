@@ -74,9 +74,9 @@ function update(self, dt)
             })
             -- todo: reward player
             if job.reward ~= nil then
-                pprint('reward!', job.reward)
+                -- pprint('reward!', job.reward)
                 economy.add(job.def.reward.money)
-                pprint(economy.get_money())
+                -- pprint(economy.get_money())
             end
 
             self.job_create_timer = 0
@@ -84,7 +84,7 @@ function update(self, dt)
         end
     end
 
-    show_debug_jobs(self)
+    -- show_debug_jobs(self)
 end
 
 function final(self)

@@ -32,7 +32,7 @@ embedded_components {
   id: "co"
   type: "collisionobject"
   data: "type: COLLISION_OBJECT_TYPE_DYNAMIC\n"
-  "mass: 7.0\n"
+  "mass: 10.0\n"
   "friction: 1.0\n"
   "restitution: 0.0\n"
   "group: \"copter\"\n"
@@ -41,6 +41,7 @@ embedded_components {
   "mask: \"building\"\n"
   "mask: \"helipad\"\n"
   "mask: \"trigger-area\"\n"
+  "mask: \"hook\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
   "    shape_type: TYPE_BOX\n"
@@ -59,6 +60,7 @@ embedded_components {
   "}\n"
   "linear_damping: 0.5\n"
   "angular_damping: 0.9\n"
+  "bullet: true\n"
   ""
 }
 embedded_components {

@@ -53,7 +53,6 @@ function on_message(self, message_id, message, sender)
             local hook_collection = collectionfactory.create("#hook_collectionfactory", go.get_position(), nil, {
                 [hash('/hook')] = { base_id = go.get_id() }
             })
-            pprint(hook_collection)
             self.hook = hook_collection[hash('/hook')]
             physics.create_joint(
                 physics.JOINT_TYPE_FIXED
@@ -62,19 +61,18 @@ function on_message(self, message_id, message, sender)
                 , vmath.vector3(0, 5, 0)
                 , msg.url(nil, self.hook, "collisionobject")
                 , vmath.vector3()
-                , { max_length = 32 }
+                , { collide_connected = true, max_length = 32 }
             )
             msg.post("#cargo", 'add_weight', { amount = go.get(msg.url(nil, self.hook, "collisionobject"), "mass") })
         else
             physics.destroy_joint(msg.url("#co"), "hook_joint")
             msg.post("#cargo", 'add_weight', { amount = -go.get(msg.url(nil, self.hook, "collisionobject"), "mass") })
-            go.delete(self.hook, false)
+            go.delete(self.hook, true)
             self.hook = nil
         end
     end
 
     if message_id == hash('hook_action') and self.hook ~= nil then
-        pprint('hook action')
         msg.post(msg.url(nil, self.hook, "hook"), "toggle_hook_open")
     end
 

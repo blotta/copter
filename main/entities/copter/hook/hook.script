@@ -3,9 +3,10 @@ go.property("base_id", hash(""))
 function init(self)
 	pprint('base_id', self.base_id)
 	self.open = false
-end
+	self.grab_area = {}
+	self.grabbed_object = nil
 
-function final(self)
+	msg.post("#", 'toggle_hook_open')
 end
 
 function update(self, dt)
@@ -19,18 +20,88 @@ function update(self, dt)
 	go.set_rotation(vmath.quat_rotation_z(angle))
 
 	go.set_position(vmath.vector3(0, length / 2, -0.01), "rope")
-	-- go.set_position(-rope_vec, "rope")
 
 	local rope_scale = length / 32
 
 	go.set_scale(vmath.vector3(1, rope_scale, 1), "rope")
 	go.set("rope#sprite", "repeat_factor", vmath.vector4(rope_scale, 0, 0, 0))
+
+	go.set("#collisionobject", "linear_velocity", go.get("#collisionobject", "linear_velocity") * 0.99)
 end
 
 function late_update(self, dt)
+	if self.grabbed_object ~= nil then
+		-- pprint(physics.get_group(msg.url(nil, self.grabbed_object, "collisionobject")))
+		-- pprint(physics.get_joint_properties(msg.url("grab_point#collisionobject"), "hook_grab"))
+	else
+		for k, obj in pairs(self.grab_area) do
+			if obj ~= nil then
+				local world_grab_point = go.get_world_position('grab_point')
+				local local_object_grab_point = go.world_to_local_position(world_grab_point, obj) - go.get_position(obj)
+
+				msg.post("@render:", "draw_line", {
+					start_point = go.get_world_position(obj),
+					end_point = local_object_grab_point - go.get_position(obj),
+					color = vmath.vector4(1)
+				})
+			end
+		end
+	end
 end
 
-function fixed_update(self, dt)
+local function try_grab(self)
+	pprint(self.grab_area)
+	for k, obj_id in pairs(self.grab_area) do
+		if obj_id ~= nil then
+			local obj_co = msg.url(nil, obj_id, "collisionobject")
+			local obj_group = physics.get_group(obj_co)
+			local obj_shape = physics.get_shape(obj_co, "shape")
+			pprint(obj_group, obj_shape)
+
+			if obj_group == hash('box') then
+				-- dynamic
+				physics.create_joint(
+					physics.JOINT_TYPE_WELD,
+					"#collisionobject",
+					"hook_grab",
+					go.get_position('grab_point'),
+					obj_co,
+					vmath.vector3(0, obj_shape.dimensions.y - 10, 0)
+					, { collide_connected = false, frequency = 0, damping = 1 }
+				)
+			elseif obj_group == hash('person') then
+				-- kinematic
+				-- msg.post(obj_id, "set_parent", { parent_id = go.get_id(), keep_world_transform = true })
+				go.set_parent(obj_id, go.get_id('grab_point'), false)
+				go.set_position(
+					vmath.vector3(0, -obj_shape.dimensions.y + 10, 0),
+					obj_id)
+			end
+			msg.post(obj_id, 'hook_grabbed')
+			self.grabbed_object = obj_id
+			return true
+		end
+	end
+	return false
+end
+
+local function try_release(self)
+	if self.grabbed_object ~= nil then
+		local obj_co = msg.url(nil, self.grabbed_object, "collisionobject")
+		local obj_group = physics.get_group(obj_co)
+		local obj_shape = physics.get_shape(obj_co, "shape")
+		if obj_group == hash('box') then
+			-- dynamic
+			physics.destroy_joint("#collisionobject", "hook_grab")
+		elseif obj_group == hash('person') then
+			-- kinematic
+			go.set_parent(self.grabbed_object, nil, true)
+			msg.post(self.grabbed_object, 'hook_ungrabbed', {
+				linear_velocity = go.get("#collisionobject", "linear_velocity")
+			})
+		end
+		self.grabbed_object = nil
+	end
 end
 
 function on_message(self, message_id, message, sender)
@@ -39,30 +110,43 @@ function on_message(self, message_id, message, sender)
 			go.animate("hook_left", "euler.z", go.PLAYBACK_ONCE_FORWARD,
 				0,
 				go.EASING_INBACK,
-				0.5,
-				0,
-				function() print('ended') end)
+				0.3)
 			go.animate("hook_right", "euler.z", go.PLAYBACK_ONCE_FORWARD,
 				0,
 				go.EASING_INBACK,
-				0.5,
+				0.3,
 				0,
-				function() print('ended') end)
-			self.open = false
+				function()
+					self.open = false
+					try_grab(self)
+				end)
 		else
+			try_release(self)
 			go.animate("hook_left", "euler.z", go.PLAYBACK_ONCE_FORWARD,
 				-45,
-				go.EASING_INBACK,
-				0.5,
-				0,
-				function() print('ended') end)
+				go.EASING_OUTBACK,
+				0.5)
 			go.animate("hook_right", "euler.z", go.PLAYBACK_ONCE_FORWARD,
 				45,
-				go.EASING_INBACK,
+				go.EASING_OUTBACK,
 				0.5,
 				0,
-				function() print('ended') end)
-			self.open = true
+				function()
+					self.open = true
+				end)
 		end
 	end
+
+	if message_id == hash('trigger_response') then
+		pprint(message)
+		if message.enter then
+			self.grab_area[message.other_id] = message.other_id
+		elseif message.enter == false then
+			self.grab_area[message.other_id] = nil
+		end
+	end
+end
+
+function final(self)
+	try_release(self)
 end

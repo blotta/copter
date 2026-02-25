@@ -34,6 +34,14 @@ key_trigger {
   input: KEY_H
   action: "hook"
 }
+key_trigger {
+  input: KEY_F3
+  action: "box_spawn"
+}
+key_trigger {
+  input: KEY_F4
+  action: "person_spawn"
+}
 mouse_trigger {
   input: MOUSE_BUTTON_1
   action: "touch"

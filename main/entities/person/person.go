@@ -12,6 +12,7 @@ embedded_components {
   "group: \"person\"\n"
   "mask: \"floor\"\n"
   "mask: \"helipad\"\n"
+  "mask: \"hook_trigger\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
   "    shape_type: TYPE_BOX\n"

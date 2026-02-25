@@ -15,10 +15,16 @@ components {
   component: "/main/common/trigger-area/trigger-area-factory.factory"
 }
 components {
-  id: "person-factory"
-  component: "/main/entities/person/person-factory.factory"
+  id: "person_factory"
+  component: "/main/entities/person/person_factory.factory"
 }
 components {
   id: "indicator-factory"
   component: "/main/common/indicator/indicator-factory.factory"
+}
+embedded_components {
+  id: "box_factory"
+  type: "factory"
+  data: "prototype: \"/main/entities/box/box.go\"\n"
+  ""
 }

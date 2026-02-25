@@ -13,7 +13,7 @@ embedded_components {
   }
 }
 embedded_components {
-  id: "co"
+  id: "collisionobject"
   type: "collisionobject"
   data: "type: COLLISION_OBJECT_TYPE_DYNAMIC\n"
   "mass: 1.0\n"
@@ -23,6 +23,8 @@ embedded_components {
   "mask: \"floor\"\n"
   "mask: \"copter\"\n"
   "mask: \"box\"\n"
+  "mask: \"hook_trigger\"\n"
+  "mask: \"hook\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
   "    shape_type: TYPE_BOX\n"
@@ -33,11 +35,12 @@ embedded_components {
   "    }\n"
   "    index: 0\n"
   "    count: 3\n"
-  "    id: \"box_shape\"\n"
+  "    id: \"shape\"\n"
   "  }\n"
   "  data: 16.0\n"
   "  data: 16.0\n"
   "  data: 10.0\n"
   "}\n"
+  "bullet: true\n"
   ""
 }

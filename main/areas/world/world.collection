@@ -1,4 +1,12 @@
 name: "world"
+instances {
+  id: "person"
+  prototype: "/main/entities/person/person.go"
+  position {
+    x: 338.0
+    y: 543.0
+  }
+}
 collection_instances {
   id: "taxi_building"
   collection: "/main/entities/buildings/taxi/taxi_building.collection"
@@ -38,6 +46,7 @@ embedded_instances {
   "mask: \\\"copter\\\"\\n"
   "mask: \\\"box\\\"\\n"
   "mask: \\\"person\\\"\\n"
+  "mask: \\\"hook\\\"\\n"
   "locked_rotation: true\\n"
   "\"\n"
   "}\n"

@@ -70,7 +70,7 @@ local function board_passenger(self)
 
     if self._passenger == nil or not go.exists(self._passenger) then
         local possible_variants = { hash("normal1"), hash("normal2") }
-        self._passenger = factory.create("/systems#person-factory", position, nil,
+        self._passenger = factory.create("/systems#person_factory", position, nil,
             {
                 variant = possible_variants[math.random(2)]
             })
