@@ -23,3 +23,5 @@ manifest.public.der
 /socket.lua
 /hxmain.lua
 *.keystore*
+
+.vscode/
