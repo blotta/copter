@@ -1,5 +1,21 @@
 go.property("owner_url", msg.url())
 
+function init(self)
+	local shape = physics.get_shape("#collisionobject", "area")
+
+	local sprite_size_x = go.get("#sprite", "size.x")
+
+	local new_x_scale = shape.dimensions.x / sprite_size_x
+
+	go.set("#sprite", "scale.x", new_x_scale)
+	self.time = 0
+end
+
+function update(self, dt)
+	self.time = self.time +  dt
+	go.set("#sprite", "time", vmath.vector4(self.time, 0, 0, 0))
+end
+
 function on_message(self, message_id, message, sender)
 	if message_id == hash("trigger_response") then
 		msg.post(self.owner_url, message_id, message)

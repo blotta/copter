@@ -1,0 +1,4 @@
+images {
+  image: "/assets/images/trigger-area.png"
+  pivot_y: 1.0
+}
