@@ -33,11 +33,11 @@ function PersonMoveGoal:fixed_update(person, dt)
         local eye = go.get_position() + vmath.vector3(0, 13, 0)
         local eye_range_vec = vmath.vector3(person.facing * 16, 0, 0)
         self.ray_eye_facing = physics.raycast(eye, eye + eye_range_vec, { hash('floor'), hash('helipad') })
-        msg.post("@render:", "draw_line", {
-            start_point = eye,
-            end_point = eye + eye_range_vec,
-            color = self.ray_eye_facing ~= nil and vmath.vector4(0, 1, 0, 1) or vmath.vector4(1, 1, 1, 1)
-        })
+        -- msg.post("@render:", "draw_line", {
+        --     start_point = eye,
+        --     end_point = eye + eye_range_vec,
+        --     color = self.ray_eye_facing ~= nil and vmath.vector4(0, 1, 0, 1) or vmath.vector4(1, 1, 1, 1)
+        -- })
         return
     else
         person.controller.velocity.x = 0
@@ -45,17 +45,16 @@ function PersonMoveGoal:fixed_update(person, dt)
 end
 
 function PersonMoveGoal:update(person, dt)
-    msg.post("@render:", "draw_line", {
-        start_point = go.get_position(),
-        end_point = self.target,
-        color = vmath.vector4(1, 1, 1, 1)
-    })
-
+    -- msg.post("@render:", "draw_line", {
+    --     start_point = go.get_position(),
+    --     end_point = self.target,
+    --     color = vmath.vector4(1, 1, 1, 1)
+    -- })
 
     if self.status == 'doing' then
         -- check completed
         local diff = self.target - go.get_position()
-        if math.abs(diff.x) <= self.tolerance_x and math.abs(diff.y) <= self.tolerance_y then -- vmath.length_sqr(diff) < self.tolerance * self.tolerance then
+        if math.abs(diff.x) <= self.tolerance_x and math.abs(diff.y) <= self.tolerance_y then
             self.status = 'completed'
             return
         end

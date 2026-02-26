@@ -1,5 +1,4 @@
-local TraitProcessors = require 'main.systems.buildings.traits'
-local InfraDefs = require 'main.systems.buildings.infra_defs'
+require 'main.systems.defs'
 
 ---@class Building
 ---@field id number
@@ -7,6 +6,7 @@ local InfraDefs = require 'main.systems.buildings.infra_defs'
 ---@field traits table<TRAIT_NAME, Trait>
 ---@field infras Infra[]
 ---@field landing_point_offset vector3
+---@field job_type? JOB_TYPE
 local Building = {}
 Building.__index = Building
 
@@ -20,8 +20,8 @@ function Building.new(id, go_id)
         infras = {},
 
         traits = {},
-        job_type = nil,
-        landing_point_offset = vmath.vector3()
+        landing_point_offset = vmath.vector3(),
+        job_type = nil
     }
     setmetatable(self, Building)
     return self
@@ -47,19 +47,20 @@ function Building:reapply_traits()
     local new_traits = {}
 
     for _, infra in ipairs(self.infras) do
-        local infra_def = InfraDefs[infra.infra_type]
+        local infra_def = DEFS.building.infra[infra.infra_type]
         for k, v in pairs(infra_def.traits) do
             local trait_name = type(k) == "string" and k or v --[[@as TRAIT_NAME]]
             local trait_args = type(k) == "string" and v or {} --[[@as any]]
+
+            local trait_def = DEFS.building.trait[trait_name]
 
             local trait_value = {
                 infra = infra,
                 args = trait_args
             }
 
-            local trait_processor = TraitProcessors[trait_name]
-            if trait_processor.apply ~= nil then
-                trait_processor.apply(self, trait_value)
+            if trait_def.processors.apply ~= nil then
+                trait_def.processors.apply(self, trait_value)
             end
             new_traits[trait_name] = trait_value
         end

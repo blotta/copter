@@ -75,7 +75,7 @@ function update(self, dt)
             -- todo: reward player
             if job.reward ~= nil then
                 -- pprint('reward!', job.reward)
-                economy.add(job.def.reward.money)
+                economy.add(job.reward.money)
                 -- pprint(economy.get_money())
             end
 

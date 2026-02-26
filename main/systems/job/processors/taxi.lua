@@ -1,4 +1,4 @@
-local JobDefs = require 'main.systems.job.job_defs'
+require 'main.systems.job.job'
 local BuildingRegistry = require 'main.systems.buildings.registry'
 
 ---@enum TAXI_JOB_STATUS
@@ -30,11 +30,6 @@ setmetatable(TaxiJob, { __index = Job })
 function TaxiJob.new(building)
     local o = Job.new(building) --[[@as TaxiJob]]
     setmetatable(o, TaxiJob)
-
-    local def = JobDefs[o.job_type]
-    for k, v in pairs(def) do
-        o[k] = v
-    end
 
     -- assumes there are at least 2 buildings in the game
     local from_building = building
@@ -140,7 +135,6 @@ function TaxiJob.update(self, dt)
             self.inner_status = 'completed'
             self.status = 'completed'
         end
-        -- reward player
     end
 end
 
