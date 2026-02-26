@@ -49,8 +49,6 @@ function Job.new(building)
     o.status = JOB_STATUS.available
     o.def = JobDefs[o.job_type]
 
-    pprint(o)
-
     return o
 end
 

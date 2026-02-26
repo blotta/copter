@@ -5,7 +5,7 @@ embedded_components {
   "material: \"/main/common/rope/rope.material\"\n"
   "textures {\n"
   "  sampler: \"texture_sampler\"\n"
-  "  texture: \"/main/common/rope/rope.atlas\"\n"
+  "  texture: \"/assets/rope.atlas\"\n"
   "}\n"
   ""
 }

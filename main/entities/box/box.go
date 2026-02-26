@@ -5,7 +5,7 @@ embedded_components {
   "material: \"/builtins/materials/sprite.material\"\n"
   "textures {\n"
   "  sampler: \"texture_sampler\"\n"
-  "  texture: \"/main/entities/box/box.atlas\"\n"
+  "  texture: \"/assets/static.atlas\"\n"
   "}\n"
   ""
   position {

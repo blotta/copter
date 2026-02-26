@@ -17,11 +17,10 @@ function init(self)
 end
 
 function on_message(self, message_id, message, sender)
-	pprint(message_id)
 	if message_id == hash("job-available") then
 		if (self.jobs[message.job.job_id] == nil) then
 			local data = { job = message.job }
-			data.indicator_id = factory.create("/systems#indicator-factory",
+			data.indicator_id = factory.create("/systems#indicator_factory",
 				message.job.pickup_position + INDICATOR_OFFSET)
 			msg.post(data.indicator_id, "flash", {
 				animation = "exclamation"

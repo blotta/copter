@@ -10,11 +10,11 @@ components {
 embedded_components {
   id: "sprite"
   type: "sprite"
-  data: "default_animation: \"building-house\"\n"
+  data: "default_animation: \"infra-house\"\n"
   "material: \"/materials/infra.material\"\n"
   "textures {\n"
   "  sampler: \"texture_sampler\"\n"
-  "  texture: \"/main/entities/infra/house/house.atlas\"\n"
+  "  texture: \"/assets/static.atlas\"\n"
   "}\n"
   ""
   position {

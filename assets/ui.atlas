@@ -1,0 +1,22 @@
+images {
+  image: "/assets/images/copter-cockpit.png"
+}
+images {
+  image: "/assets/images/cockpit-button.png"
+}
+images {
+  image: "/assets/images/dial-instrument-panel.png"
+}
+images {
+  image: "/assets/images/dial-instrument-pointer.png"
+}
+images {
+  image: "/assets/images/metal-panel-bg.png"
+}
+images {
+  image: "/assets/images/metal-panel-fill.png"
+}
+images {
+  image: "/assets/images/metal-panel-border.png"
+}
+extrude_borders: 2

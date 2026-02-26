@@ -1,7 +1,7 @@
-image: "/assets/tileset.png"
+image: "/assets/images/tileset.png"
 tile_width: 32
 tile_height: 32
-collision: "/assets/tileset-collision.png"
+collision: "/assets/images/tileset-collision.png"
 convex_hulls {
   index: 0
   count: 4

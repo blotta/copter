@@ -1,0 +1,28 @@
+images {
+  image: "/assets/images/infra-taxi.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_4
+  pivot_y: 1.0
+}
+images {
+  image: "/assets/images/infra-house.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_4
+  pivot_y: 1.0
+}
+images {
+  image: "/assets/images/infra-helipad.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_4
+  pivot_y: 1.0
+}
+images {
+  image: "/assets/images/copter.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_4
+  pivot_y: 0.925
+}
+images {
+  image: "/assets/images/box.png"
+}
+images {
+  image: "/assets/images/hook.png"
+  pivot_y: 0.22
+}
+extrude_borders: 2

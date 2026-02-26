@@ -1,6 +1,6 @@
 components {
-  id: "trigger-area"
-  component: "/main/common/trigger-area/trigger-area.script"
+  id: "trigger_area"
+  component: "/main/common/trigger_area/trigger_area.script"
 }
 embedded_components {
   id: "collisionobject"
@@ -9,7 +9,7 @@ embedded_components {
   "mass: 0.0\n"
   "friction: 0.1\n"
   "restitution: 0.5\n"
-  "group: \"trigger-area\"\n"
+  "group: \"trigger_area\"\n"
   "mask: \"copter\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"

@@ -9,7 +9,7 @@ embedded_components {
   "material: \"/builtins/materials/sprite.material\"\n"
   "textures {\n"
   "  sampler: \"texture_sampler\"\n"
-  "  texture: \"/main/common/indicator/indicators.tilesource\"\n"
+  "  texture: \"/assets/indicators.tilesource\"\n"
   "}\n"
   ""
 }

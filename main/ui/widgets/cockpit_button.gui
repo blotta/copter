@@ -1,14 +1,14 @@
 fonts {
   name: "ui-font"
-  font: "/main/ui/ui-font.font"
+  font: "/assets/ui-font.font"
 }
 textures {
-  name: "cockpit_button"
-  texture: "/main/ui/images/cockpit.atlas"
+  name: "ui"
+  texture: "/assets/ui.atlas"
 }
 nodes {
   type: TYPE_BOX
-  texture: "cockpit_button/cockpit-button"
+  texture: "ui/cockpit-button"
   id: "root"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO

@@ -1,5 +1,0 @@
-images {
-  image: "/assets/copter.png"
-  pivot_y: 0.925
-}
-extrude_borders: 2

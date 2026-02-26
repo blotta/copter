@@ -40,7 +40,7 @@ embedded_components {
   "material: \"/materials/person.material\"\n"
   "textures {\n"
   "  sampler: \"texture_sampler\"\n"
-  "  texture: \"/main/entities/person/images/person.tilesource\"\n"
+  "  texture: \"/assets/person.tilesource\"\n"
   "}\n"
   ""
   position {

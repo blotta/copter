@@ -1,6 +1,6 @@
 textures {
-  name: "dial-instrument"
-  texture: "/main/ui/images/dial-instrument.tilesource"
+  name: "ui"
+  texture: "/assets/ui.atlas"
 }
 nodes {
   size {
@@ -15,7 +15,7 @@ nodes {
 }
 nodes {
   type: TYPE_BOX
-  texture: "dial-instrument/panel"
+  texture: "ui/dial-instrument-panel"
   id: "panel"
   parent: "root"
   inherit_alpha: true
@@ -38,7 +38,7 @@ nodes {
 }
 nodes {
   type: TYPE_BOX
-  texture: "dial-instrument/dial"
+  texture: "ui/dial-instrument-pointer"
   id: "dial"
   parent: "box"
   inherit_alpha: true

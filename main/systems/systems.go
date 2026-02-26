@@ -11,16 +11,16 @@ components {
   component: "/main/systems/rand_init.script"
 }
 components {
-  id: "trigger-area-factory"
-  component: "/main/common/trigger-area/trigger-area-factory.factory"
+  id: "trigger_area_factory"
+  component: "/main/common/trigger_area/trigger_area_factory.factory"
 }
 components {
   id: "person_factory"
   component: "/main/entities/person/person_factory.factory"
 }
 components {
-  id: "indicator-factory"
-  component: "/main/common/indicator/indicator-factory.factory"
+  id: "indicator_factory"
+  component: "/main/common/indicator/indicator_factory.factory"
 }
 embedded_components {
   id: "box_factory"

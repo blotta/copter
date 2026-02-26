@@ -1,7 +1,6 @@
 go.property("base_id", hash(""))
 
 function init(self)
-	pprint('base_id', self.base_id)
 	self.open = false
 	self.grab_area = {}
 	self.grabbed_object = nil

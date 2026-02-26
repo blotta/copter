@@ -90,7 +90,7 @@ end
 
 function TaxiJob.start(self)
     self._trigger = factory.create(
-        "/systems#trigger-area-factory",
+        "/systems#trigger_area_factory",
         self.pickup_position,
         nil,
         { owner_url = msg.url(go.get_id()) })

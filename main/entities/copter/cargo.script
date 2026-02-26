@@ -19,15 +19,12 @@ function on_message(self, message_id, message, sender)
 	end
 
 	if message_id == hash('request_person_unboard') then
-		print('request_person_unboard')
 		if self.passenger ~= nil then
 			local person = factory.create('/systems#person_factory', go.get_position(), nil,
 				{ variant = self.passenger })
-			pprint('spawned person', person)
 			if message.goal then
 				msg.post(person, 'add_goal', message.goal)
 			end
-			pprint('goal', message.goal)
 			self.passenger = nil
 			msg.post(sender, 'unboarded_person', { person_id = person })
 		end

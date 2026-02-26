@@ -67,7 +67,9 @@ function on_message(self, message_id, message, sender)
         else
             physics.destroy_joint(msg.url("#co"), "hook_joint")
             msg.post("#cargo", 'add_weight', { amount = -go.get(msg.url(nil, self.hook, "collisionobject"), "mass") })
-            go.delete(self.hook, true)
+            msg.post(msg.url(nil, self.hook, "hook"), "toggle_hook_open")
+            local hook_id = self.hook
+            timer.delay(0.1, false, function() go.delete(hook_id, true) end)
             self.hook = nil
         end
     end

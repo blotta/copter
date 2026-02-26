@@ -21,7 +21,7 @@ embedded_components {
   "material: \"/materials/copter.material\"\n"
   "textures {\n"
   "  sampler: \"texture_sampler\"\n"
-  "  texture: \"/main/entities/copter/copter.atlas\"\n"
+  "  texture: \"/assets/static.atlas\"\n"
   "}\n"
   ""
   position {
@@ -40,7 +40,7 @@ embedded_components {
   "mask: \"floor\"\n"
   "mask: \"building\"\n"
   "mask: \"helipad\"\n"
-  "mask: \"trigger-area\"\n"
+  "mask: \"trigger_area\"\n"
   "mask: \"hook\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"

@@ -62,7 +62,7 @@ local function print_debug(self)
 end
 
 function spawn_indicator(self, data)
-    local ind = factory.create("/systems#indicator-factory", vmath.vector3(11, 23, 0), nil)
+    local ind = factory.create("/systems#indicator_factory", vmath.vector3(11, 23, 0), nil)
     go.set_parent(ind, go.get_id(), false)
     msg.post(ind, 'flash', data)
 end
@@ -152,7 +152,6 @@ function on_message(self, message_id, message, sender)
     if message_id == hash('hook_ungrabbed') then
         self.state = hash('fall')
         go.set_rotation(vmath.quat())
-        pprint(message)
         self.controller.velocity = message.linear_velocity
     end
 end
