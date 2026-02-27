@@ -3,32 +3,12 @@ textures {
   texture: "/assets/ui.atlas"
 }
 nodes {
-  position {
-    x: 512.0
-    y: 288.0
-  }
-  size {
-    x: 1024.0
-    y: 576.0
-  }
-  type: TYPE_BOX
-  id: "root"
-  inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-  visible: false
-}
-nodes {
-  position {
-    x: 512.0
-    y: -288.0
-  }
   size {
     x: 1.0
     y: 1.0
   }
   type: TYPE_BOX
-  id: "SE_Anchor"
-  parent: "root"
+  id: "root"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
   visible: false
@@ -45,16 +25,12 @@ nodes {
   type: TYPE_BOX
   id: "minimap"
   pivot: PIVOT_SE
-  parent: "SE_Anchor"
+  parent: "root"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
-  material: "minimap"
+  material: "minimap_output"
 }
 nodes {
-  position {
-    x: 8.0
-    y: -8.0
-  }
   size {
     x: 336.0
     y: 196.0
@@ -63,7 +39,7 @@ nodes {
   texture: "ui/metal-panel-border"
   id: "border"
   pivot: PIVOT_SE
-  parent: "minimap"
+  parent: "root"
   inherit_alpha: true
   slice9 {
     x: 10.0
@@ -73,48 +49,8 @@ nodes {
   }
 }
 material: "/builtins/materials/gui.material"
-layouts {
-  name: "Landscape"
-  nodes {
-    position {
-      x: 640.0
-      y: 360.0
-    }
-    size {
-      x: 1280.0
-      y: 720.0
-    }
-    type: TYPE_BOX
-    id: "root"
-    adjust_mode: ADJUST_MODE_STRETCH
-    overridden_fields: 1
-    overridden_fields: 4
-    overridden_fields: 17
-    overridden_fields: 46
-    visible: false
-  }
-  nodes {
-    position {
-      x: 640.0
-      y: -360.0
-    }
-    size {
-      x: 1.0
-      y: 1.0
-    }
-    type: TYPE_BOX
-    id: "SE_Anchor"
-    adjust_mode: ADJUST_MODE_STRETCH
-    parent: "root"
-    overridden_fields: 1
-    overridden_fields: 4
-    overridden_fields: 17
-    overridden_fields: 46
-    visible: false
-  }
-}
 adjust_reference: ADJUST_REFERENCE_PARENT
 materials {
-  name: "minimap"
+  name: "minimap_output"
   material: "/main/camera/minimap_output.material"
 }

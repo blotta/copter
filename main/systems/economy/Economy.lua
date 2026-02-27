@@ -1,6 +1,6 @@
 local Economy = {}
 
-local money = 0
+local money = 200
 
 function Economy.get_money()
     return money

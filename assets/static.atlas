@@ -25,4 +25,9 @@ images {
   image: "/assets/images/hook.png"
   pivot_y: 0.22
 }
+images {
+  image: "/assets/images/infra-lumbermill.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_4
+  pivot_y: 1.0
+}
 extrude_borders: 2

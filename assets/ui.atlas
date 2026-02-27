@@ -19,4 +19,13 @@ images {
 images {
   image: "/assets/images/metal-panel-border.png"
 }
+images {
+  image: "/assets/images/hud-button.png"
+}
+images {
+  image: "/assets/images/icon-hammer.png"
+}
+images {
+  image: "/assets/images/metal-panel-bg-and-border.png"
+}
 extrude_borders: 2

@@ -1,4 +1,5 @@
 require 'main.systems.types'
+local helpers = require "helpers.helpers"
 
 DEFS = {}
 
@@ -34,7 +35,10 @@ DEFS.person = {
 ---@field processors ({apply?: fun(b:Building, val: TraitProcessorParams)})
 
 ---@class InfraDef
----@field traits (TRAIT_NAME|{[TRAIT_NAME]: any})[]
+---@field name string
+---@field description string
+---@field image string
+---@field traits table<TRAIT_NAME, any>)
 
 DEFS.building = {
     ---@type table<TRAIT_NAME,TraitDef>
@@ -47,16 +51,22 @@ DEFS.building = {
                 end
             }
         },
-        [TRAIT_NAME.commercial] = {
+        [TRAIT_NAME.segment] = {
             processors = {}
         },
-        [TRAIT_NAME.residential] = {
-            processors = {}
-        },
-        [TRAIT_NAME.industrial] = {
-            processors = {}
-        },
+        -- [TRAIT_NAME.residential] = {
+        --     processors = {}
+        -- },
+        -- [TRAIT_NAME.commercial] = {
+        --     processors = {}
+        -- },
+        -- [TRAIT_NAME.industrial] = {
+        --     processors = {}
+        -- },
         [TRAIT_NAME.utility] = {
+            processors = {}
+        },
+        [TRAIT_NAME.build] = {
             processors = {}
         },
         [TRAIT_NAME.job] = {
@@ -70,29 +80,59 @@ DEFS.building = {
     ---@type table<INFRA_TYPE,InfraDef>
     infra = {
         [INFRA_TYPE.helipad] = {
+            name = "Helipad",
+            description = "A cozy landing spot",
+            image = "infra-helipad",
             traits = {
-                TRAIT_NAME.utility,
+                [TRAIT_NAME.utility] = {},
+                [TRAIT_NAME.build] = {
+                    cost = 200
+                },
                 [TRAIT_NAME.landing_spot] = {
                     landing_point_offset = vmath.vector3(0, 48, 0),
                 }
             }
         },
         [INFRA_TYPE.house] = {
+            name = "House",
+            description = "People need somewhere to live",
+            image = "infra-house",
             traits = {
-                TRAIT_NAME.residential
+                [TRAIT_NAME.segment] = {
+                    segment = SEGMENT_NAME.residential
+                },
+                [TRAIT_NAME.build] = {
+                    cost = 200
+                }
             },
         },
         [INFRA_TYPE.taxi] = {
+            name = "Taxi",
+            description = 'Think "flying cabs"',
+            image = "infra-taxi",
             traits = {
-                TRAIT_NAME.commercial,
+                [TRAIT_NAME.segment] = {
+                    segment = SEGMENT_NAME.commercial
+                },
+                [TRAIT_NAME.build] = {
+                    cost = 500
+                },
                 [TRAIT_NAME.job] = {
                     job_type = JOB_TYPE.taxi
                 }
             },
         },
         [INFRA_TYPE.lumbermill] = {
+            name = "Lumbermill",
+            description = "Refining wood since forever",
+            image = "infra-lumbermill",
             traits = {
-                TRAIT_NAME.industrial
+                [TRAIT_NAME.build] = {
+                    cost = 1000
+                },
+                [TRAIT_NAME.segment] = {
+                    segment = SEGMENT_NAME.industrial
+                }
             },
         }
     }
@@ -117,3 +157,61 @@ DEFS.job = {
         }
     }
 }
+
+
+
+------------------------------
+---------- HELPERS -----------
+------------------------------
+
+local M = {}
+
+---@param trait_name TRAIT_NAME
+---@return bool
+function M.infra_has_trait(infra_type, trait_name)
+    return DEFS.building.infra[infra_type].traits[trait_name] ~= nil
+end
+
+---@param trait_name TRAIT_NAME
+---@param infras? table<INFRA_TYPE,InfraDef>
+---@return table<INFRA_TYPE,InfraDef>
+function M.infra_with_trait(trait_name, infras)
+    infras = infras or DEFS.building.infra
+
+    ---@type table<INFRA_TYPE,InfraDef>
+    local ret = {}
+
+    for infra_type, infra_def in pairs(infras) do
+        if M.infra_has_trait(infra_type, trait_name) then
+            ret[infra_type] = helpers.deepcopy(infra_def)
+        end
+    end
+
+    return ret
+end
+
+---@param trait_names TRAIT_NAME[]
+---@param infras? table<INFRA_TYPE,InfraDef>
+---@return table<INFRA_TYPE,InfraDef>
+function M.infra_with_traits(trait_names, infras)
+    infras = infras or DEFS.building.infra
+
+    ---@type table<INFRA_TYPE,InfraDef>
+    local ret = {}
+
+    for infra_type, infra_def in pairs(infras) do
+        local include = true
+        for _, trait_name in ipairs(trait_names) do
+            if not M.infra_has_trait(infra_type, trait_name) then
+                include = false
+            end
+        end
+        if include then
+            ret[infra_type] = helpers.deepcopy(infra_def)
+        end
+    end
+
+    return ret
+end
+
+return M

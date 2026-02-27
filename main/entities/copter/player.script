@@ -1,5 +1,5 @@
 function init(self)
-    msg.post("#", "acquire_input_focus")
+    msg.post(".", "acquire_input_focus")
     self.dragging = false
 end
 
@@ -69,5 +69,4 @@ function on_input(self, action_id, action)
         msg.post('/world/person#person', 'add_goal', { type = "move", position = vmath.vector3(300, 32, 0) })
     end
 
-    return true
 end

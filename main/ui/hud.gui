@@ -40,6 +40,25 @@ nodes {
   visible: false
 }
 nodes {
+  type: TYPE_TEMPLATE
+  id: "player_stats"
+  parent: "NE_Anchor"
+  inherit_alpha: true
+  template: "/main/ui/player_stats/player_stats.gui"
+}
+nodes {
+  type: TYPE_BOX
+  id: "player_stats/root"
+  parent: "player_stats"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "player_stats/money-text"
+  parent: "player_stats/root"
+  template_node_child: true
+}
+nodes {
   position {
     y: -288.0
   }
@@ -49,6 +68,7 @@ nodes {
   }
   type: TYPE_BOX
   id: "S_Anchor"
+  adjust_mode: ADJUST_MODE_STRETCH
   parent: "root"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
@@ -347,6 +367,114 @@ nodes {
   parent: "tilt_button/root"
   template_node_child: true
 }
+nodes {
+  position {
+    x: 512.0
+    y: -288.0
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  type: TYPE_BOX
+  id: "SE_Anchor"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "root"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "minimap"
+  parent: "SE_Anchor"
+  inherit_alpha: true
+  template: "/main/ui/minimap/minimap.gui"
+}
+nodes {
+  type: TYPE_BOX
+  id: "minimap/root"
+  parent: "minimap"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "minimap/minimap"
+  parent: "minimap/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "minimap/border"
+  parent: "minimap/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "screen_analog_stick"
+  parent: "root"
+  inherit_alpha: true
+  template: "/main/ui/screen_analog_stick/screen_analog_stick.gui"
+}
+nodes {
+  type: TYPE_BOX
+  id: "screen_analog_stick/root"
+  parent: "screen_analog_stick"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "screen_analog_stick/stick"
+  parent: "screen_analog_stick/root"
+  template_node_child: true
+}
+nodes {
+  position {
+    x: 512.0
+  }
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  type: TYPE_BOX
+  id: "E_Anchor"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "root"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "tools"
+  parent: "E_Anchor"
+  inherit_alpha: true
+  template: "/main/ui/widgets/tools/tools.gui"
+}
+nodes {
+  type: TYPE_TEMPLATE
+  id: "tools/tools_button"
+  parent: "tools"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "tools/tools_button/root"
+  parent: "tools/tools_button"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "tools/tools_button/text"
+  parent: "tools/tools_button/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "tools/tools_button/icon"
+  parent: "tools/tools_button/root"
+  template_node_child: true
+}
 material: "/builtins/materials/gui.material"
 layouts {
   name: "Landscape"
@@ -378,21 +506,10 @@ layouts {
     position {
       y: -360.0
     }
-    size {
-      x: 1.0
-      y: 1.0
-    }
     type: TYPE_BOX
     id: "S_Anchor"
-    adjust_mode: ADJUST_MODE_STRETCH
     parent: "root"
     overridden_fields: 1
-    overridden_fields: 4
-    overridden_fields: 13
-    overridden_fields: 14
-    overridden_fields: 17
-    overridden_fields: 46
-    visible: false
   }
   nodes {
     type: TYPE_TEMPLATE
@@ -541,5 +658,35 @@ layouts {
     overridden_fields: 14
     overridden_fields: 37
   }
+  nodes {
+    position {
+      x: 640.0
+      y: -360.0
+    }
+    type: TYPE_BOX
+    id: "SE_Anchor"
+    parent: "root"
+    overridden_fields: 1
+  }
+  nodes {
+    type: TYPE_BOX
+    id: "minimap/root"
+    parent: "minimap"
+    overridden_fields: 45
+    template_node_child: true
+  }
+  nodes {
+    position {
+      x: 640.0
+    }
+    type: TYPE_BOX
+    id: "E_Anchor"
+    parent: "root"
+    overridden_fields: 1
+  }
 }
 adjust_reference: ADJUST_REFERENCE_PARENT
+materials {
+  name: "minimap_output"
+  material: "/main/camera/minimap_output.material"
+}

@@ -1,5 +1,4 @@
 font: "/assets/fonts/Roboto-Regular.ttf"
 material: "/builtins/fonts/font.material"
-size: 24
-outline_width: 2.0
+size: 15
 characters: " !\"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"

@@ -1,0 +1,45 @@
+fonts {
+  name: "ui-font"
+  font: "/assets/ui-font.font"
+}
+textures {
+  name: "ui"
+  texture: "/assets/ui.atlas"
+}
+nodes {
+  type: TYPE_BOX
+  texture: "ui/hud-button"
+  id: "root"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  scale {
+    x: 0.8
+    y: 0.8
+  }
+  size {
+    x: 64.0
+    y: 64.0
+  }
+  type: TYPE_TEXT
+  text: "TEXT"
+  font: "ui-font"
+  id: "text"
+  parent: "root"
+  inherit_alpha: true
+}
+nodes {
+  scale {
+    x: 1.5
+    y: 1.5
+  }
+  type: TYPE_BOX
+  texture: "ui/icon-hammer"
+  id: "icon"
+  parent: "root"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

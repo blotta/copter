@@ -1,12 +1,25 @@
+---@enum SEGMENT_NAME
+SEGMENT_NAME = {
+    residential = "residential",
+    commercial = "commercial",
+    industrial = "industrial"
+}
+SEGMENT_NAMES = {
+    SEGMENT_NAME.residential,
+    SEGMENT_NAME.commercial,
+    SEGMENT_NAME.industrial
+}
 
 ---@enum TRAIT_NAME
 TRAIT_NAME = {
     utility = "utility",
-    residential = "residential",
-    commercial = "commercial",
-    industrial = "industrial",
+    -- residential = "residential",
+    -- commercial = "commercial",
+    -- industrial = "industrial",
+    segment = "segment",
     landing_spot = "landing-spot",
     job = "job",
+    build = "build",
 }
 
 ---@enum INFRA_TYPE

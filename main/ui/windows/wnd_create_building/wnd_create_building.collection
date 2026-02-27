@@ -1,0 +1,10 @@
+name: "wnd_create_building"
+scale_along_z: 0
+embedded_instances {
+  id: "go"
+  data: "components {\n"
+  "  id: \"wnd_create_building\"\n"
+  "  component: \"/main/ui/windows/wnd_create_building/wnd_create_building.gui\"\n"
+  "}\n"
+  ""
+}
