@@ -1,12 +1,39 @@
 go.property("weight", 0)
 
-function init(self)
-	self.passenger = nil -- hash("normal1")
-	self.weight = 0
+local function reset_weigth(self)
+	physics.update_mass("#co", self._base_copter_weigth + self.passenger_weight)
+	self.weight = self._base_copter_weigth + self.passenger_weight + self.hook_weight + self.hook_attachment_weight
 end
 
+function init(self)
+	self.passenger = nil -- hash("normal1")
+	self.passenger_weight = 0
+	self._base_copter_weigth = go.get("#co", "mass")
+	self.hook_weight = 0
+	self.hook_attachment_weight = 0
+	self.weight = 0
+
+	msg.post("/systems#event_manager", "subscribe", {
+		event_key = "hook_event"
+	})
+	reset_weigth(self)
+end
+
+
 function on_message(self, message_id, message, sender)
+	if message_id == hash('hook_event') then
+		if message.deployed then
+			self.hook_weight = message.hook_weight
+			self.hook_attachment_weight = message.attachment_weight
+		else
+			self.hook_weight = 0
+			self.hook_attachment_weight = 0
+		end
+		-- update weight
+		reset_weigth(self)
+	end
 	if message_id == hash('add_weight') then
+		self.hook_weight = self.hook_weight + message.amount
 		self.weight = self.weight + message.amount
 	end
 
@@ -15,6 +42,8 @@ function on_message(self, message_id, message, sender)
 			local passenger_variant = go.get(msg.url(nil, message.person_id, 'person'), "variant")
 			self.passenger = passenger_variant
 			go.delete(message.person_id)
+			self.passenger_weight = 1
+			reset_weigth(self)
 		end
 	end
 
@@ -27,6 +56,9 @@ function on_message(self, message_id, message, sender)
 			end
 			self.passenger = nil
 			msg.post(sender, 'unboarded_person', { person_id = person })
+
+			self.passenger_weight = 0
+			reset_weigth(self)
 		end
 	end
 end

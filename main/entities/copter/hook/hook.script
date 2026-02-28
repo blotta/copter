@@ -68,6 +68,13 @@ local function try_grab(self)
 					vmath.vector3(0, obj_shape.dimensions.y - 10, 0)
 					, { collide_connected = false, frequency = 0, damping = 1 }
 				)
+				msg.post("/systems#event_manager", "trigger-event", {
+					event_key = 'hook_event',
+					deployed = true,
+					hook_weight = go.get("#collisionobject", "mass"),
+					attachment_id = obj_id,
+					attachment_weight = go.get(obj_co, "mass")
+				})
 			elseif obj_group == hash('person') then
 				-- kinematic
 				-- msg.post(obj_id, "set_parent", { parent_id = go.get_id(), keep_world_transform = true })
@@ -75,6 +82,14 @@ local function try_grab(self)
 				go.set_position(
 					vmath.vector3(0, -obj_shape.dimensions.y + 10, 0),
 					obj_id)
+				physics.update_mass("#collisionobject", go.get("#collisionobject", "mass") + 1) ---@diagnostic disable-line
+				msg.post("/systems#event_manager", "trigger-event", {
+					event_key = 'hook_event',
+					deployed = true,
+					hook_weight = go.get("#collisionobject", "mass") - 1,
+					attachment_id = obj_id,
+					attachment_weight = 1
+				})
 			end
 			msg.post(obj_id, 'hook_grabbed')
 			self.grabbed_object = obj_id
@@ -94,13 +109,22 @@ local function try_release(self)
 			physics.destroy_joint("#collisionobject", "hook_grab")
 		elseif obj_group == hash('person') then
 			-- kinematic
+			physics.update_mass("#collisionobject", go.get("#collisionobject", "mass") - 1) ---@diagnostic disable-line
 			go.set_parent(self.grabbed_object, nil, true)
 			msg.post(self.grabbed_object, 'hook_ungrabbed', {
 				linear_velocity = go.get("#collisionobject", "linear_velocity")
 			})
+			print('got here')
 		end
 		self.grabbed_object = nil
 	end
+	msg.post("/systems#event_manager", "trigger-event", {
+		event_key = 'hook_event',
+		deployed = true,
+		hook_weight = go.get("#collisionobject", "mass"),
+		attachment_id = nil,
+		attachment_weight = 0
+	})
 end
 
 function on_message(self, message_id, message, sender)
@@ -148,4 +172,11 @@ end
 
 function final(self)
 	try_release(self)
+	msg.post("/systems#event_manager", "trigger-event", {
+		event_key = 'hook_event',
+		deployed = false,
+		hook_weight = go.get("#collisionobject", "mass"),
+		attachment_id = nil,
+		attachment_weight = 0
+	})
 end

@@ -22,6 +22,14 @@ components {
   id: "indicator_factory"
   component: "/main/common/indicator/indicator_factory.factory"
 }
+components {
+  id: "building_box_factory"
+  component: "/main/entities/building_box/building_box_factory.factory"
+}
+components {
+  id: "infra_builder"
+  component: "/main/systems/buildings/infra_builder.script"
+}
 embedded_components {
   id: "box_factory"
   type: "factory"

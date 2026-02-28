@@ -1,5 +1,6 @@
 local economy = require('main.systems.economy.Economy')
 local druid = require('druid.druid')
+local monarch = require('monarch.monarch')
 
 local screen_analog_stick = require 'main.ui.screen_analog_stick.screen_analog_stick'
 local tools = require 'main.ui.widgets.tools.tools'
@@ -7,7 +8,6 @@ local tools = require 'main.ui.widgets.tools.tools'
 local METER_SIZE = 32
 
 function init(self)
-
 	self.hide_minimap = function()
 		gui.set_enabled(gui.get_node('minimap/root'), false)
 	end
@@ -39,10 +39,33 @@ function init(self)
 	self.copter_throttle = 0
 	self.copter_velocity = vmath.vector3()
 	self.copter_position = vmath.vector3()
+	self.copter_cargo_weight = 0
 
 	self.tilt_button = self.druid:new_button("tilt_button/root", function(self)
 		msg.post("/copter#copter", "tilt")
 	end)
+
+	self.weight_text = gui.get_node("weight_text")
+
+	self.button_hook = self.druid:new_button("hook_button", function(self)
+		msg.post("/copter#hook", "hook_action")
+	end)
+	self.button_hook.on_long_click:subscribe(function()
+		msg.post("/copter#hook", "toggle")
+	end)
+
+	self.button_hook.on_double_click:subscribe(function()
+		msg.post("/copter#hook", "toggle")
+	end)
+
+	self.button_hook_up = self.druid:new_button("hook_up_button", function()
+		msg.post("/copter#hook", "add_hook_length", { amount = -10 })
+	end)
+
+	self.button_hook_down = self.druid:new_button("hook_down_button", function()
+		msg.post("/copter#hook", "add_hook_length", { amount = 10 })
+	end)
+
 
 	-----------
 	-- money --
@@ -96,6 +119,9 @@ function update(self, dt)
 	gui.set_euler(self.altitude_dial, vmath.vector3(0, 0, alt_angle))
 	gui.set_text(self.altitude_number_label, string.format("%d m", math.floor(self.copter_position.y / METER_SIZE)))
 
+	-- cargo weight text
+	gui.set_text(self.weight_text, self.copter_cargo_weight .. " Kg")
+
 	self.druid:update(dt)
 end
 
@@ -107,14 +133,17 @@ function on_message(self, message_id, message, sender)
 		self.copter_throttle = message.throttle
 		self.copter_velocity = message.velocity
 		self.copter_position = message.position
+		self.copter_cargo_weight = message.cargo_weight
 	end
 
+	-----------
 	-- money --
 	-----------
 	if message_id == hash('money_changed') then
 		gui.set_text(self.money_text, "$ " .. math.floor(message.amount))
 	end
 
+	monarch.on_message(message_id, message, sender)
 	self.druid:on_message(message_id, message, sender)
 end
 

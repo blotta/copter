@@ -1,0 +1,28 @@
+function init(self)
+	-- Add initialization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function update(self, dt)
+	-- Add update code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash('create_building_box') then
+		factory.create(
+			"#building_box_factory",
+			go.get_position("/copter") + vmath.vector3(0, -40, 0),
+			nil,
+			message
+		)
+	end
+end

@@ -1,0 +1,13 @@
+require("main.systems.defs")
+
+go.property("infra_type", hash(""))
+function init(self)
+	pprint('building box created for type', self.infra_type)
+	sprite.play_flipbook("#building_sprite", DEFS.building.infra[self.infra_type].image)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash('cursor_click') then
+		print('clicked pohaa')
+	end
+end

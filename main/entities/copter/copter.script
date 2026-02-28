@@ -34,8 +34,6 @@ function init(self)
     self.input_pitch_active = false
 
     self.throttle = 0
-
-    self.extra_weight = 0
 end
 
 function fixed_update(self, dt)
@@ -43,7 +41,7 @@ function fixed_update(self, dt)
     local up_dir = vmath.normalize(helice_pos - go.get_position())
 
     local pd_controlled = true
-    local mass = go.get("#co", "mass") + (go.get("#cargo", "weight") or 0)
+    local mass = go.get("#cargo", "weight")
     local hover_force = mass * -physics.get_gravity().y
     local throttle_target = hover_force / self.engine_power
 
@@ -98,7 +96,8 @@ function update(self, dt)
         position = go.get_world_position(),
         throttle = self.throttle,
         pitch = go.get_rotation(),
-        velocity = go.get("#co", "linear_velocity")
+        velocity = go.get("#co", "linear_velocity"),
+        cargo_weight = go.get("#cargo", "weight")
     })
 end
 
@@ -127,20 +126,24 @@ function on_message(self, message_id, message, sender)
     self.input_pitch = vmath.clamp(self.input_pitch, -1, 1)
 
     if message_id == hash('tilt') then
-        local rand_vel = vmath.normalize(vmath.vector3(-1 + 2 * math.random(), -1 + 2 * math.random(), 0))
-        local rand_rot = math.random() > 0.5 and 1 or -1
+        local dir = vmath.vector3(0, 0, 0)
+        if self.input_pitch_active or self.input_throttle_active then
+            dir = dir + vmath.vector3(self.input_pitch, math.abs(self.input_throttle), 0)
+        else
+            dir = vmath.vector3(-1 + 2 * math.random(), -1 + 2 * math.random(), 0)
+        end
+        dir = vmath.normalize(dir)
         local center = go.get_position() + vmath.rotate(go.get_rotation(), vmath.vector3(0, height / 2, 0))
         self.throttle = 0
-        apply_torque("#co", center, rand_rot * 50000, height)
+        -- go.animate("#", "throttle", go.PLAYBACK_ONCE_FORWARD, 0, go.EASING_LINEAR, 0.3)
         msg.post("#co", "apply_force",
             {
-                force = rand_vel * 60000,
-                position = go.get_position()
+                force = dir * 90000,
+                position = center
             })
-    end
 
-    if message_id == hash('contact_point_response') and message.other_group == hash('floor') then
-        return true
+        local rot = self.input_pitch_active and self.input_pitch or (math.random() > 0.5 and 1 or -1)
+        apply_torque("#co", center, rot * 70000, height)
     end
 end
 

@@ -7,9 +7,21 @@ local economy = require 'main.systems.economy.Economy'
 
 local function on_close(self)
 	print('on_close')
-	local data = monarch.data("wnd_create_building")
-	pprint(data)
-	data.on_back()
+	-- local data = monarch.data("wnd_create_building")
+	-- pprint(data)
+	-- data.on_back()
+	monarch.back()
+end
+
+local function on_build(self)
+	print('on_build')
+
+	local infra_type = self.building_list[self.scroll_index]
+	local infra = DEFS.building.infra[infra_type]
+
+	msg.post("/systems", "create_building_box", { infra_type = infra_type })
+	economy.spend(infra.traits.build.cost) ---@diagnostic disable-line
+
 	monarch.back()
 end
 
@@ -19,7 +31,7 @@ function init(self)
 
 	self.druid:new_button("shadow", on_close)
 	self.druid:new_blocker("window")
-	self.button_build = self.druid:new_button("button_build", on_close)
+	self.button_build = self.druid:new_button("button_build", on_build)
 
 	self.scroll = self.druid:new_scroll("scroll", "content")
 
@@ -57,7 +69,7 @@ function init(self)
 		self.scroll_index = index
 	end)
 
-	local infras = D.infra_with_traits({TRAIT_NAME.build, TRAIT_NAME.segment })
+	local infras = D.infra_with_traits({ TRAIT_NAME.build, TRAIT_NAME.segment })
 	local infras_grouped_by_segment = helpers.group_by(infras, function(item)
 		return item.traits.segment.segment
 	end)

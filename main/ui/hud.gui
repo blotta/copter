@@ -3,9 +3,21 @@ fonts {
   name: "ui-font"
   font: "/assets/ui-font.font"
 }
+fonts {
+  name: "ui_normal"
+  font: "/assets/ui_normal.font"
+}
 textures {
   name: "ui"
   texture: "/assets/ui.atlas"
+}
+textures {
+  name: "static"
+  texture: "/assets/static.atlas"
+}
+textures {
+  name: "druid"
+  texture: "/druid/druid.atlas"
 }
 nodes {
   position {
@@ -366,6 +378,143 @@ nodes {
   id: "tilt_button/text"
   parent: "tilt_button/root"
   template_node_child: true
+}
+nodes {
+  position {
+    x: -70.83333
+    y: 130.83333
+  }
+  size {
+    x: 70.0
+    y: 25.0
+  }
+  type: TYPE_TEXT
+  text: "25 kg"
+  font: "ui_normal"
+  id: "weight_text"
+  parent: "cockpit"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: -75.666664
+    y: 92.0
+  }
+  size {
+    x: 80.0
+    y: 40.0
+  }
+  type: TYPE_BOX
+  texture: "ui/cockpit-button"
+  id: "hook_button"
+  parent: "cockpit"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: 5.833333
+  }
+  size {
+    x: 80.0
+    y: 40.0
+  }
+  type: TYPE_BOX
+  id: "box"
+  parent: "hook_button"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  rotation {
+    z: -45.0
+  }
+  type: TYPE_BOX
+  texture: "static/hook"
+  id: "box1"
+  parent: "box"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  rotation {
+    z: 45.0
+  }
+  scale {
+    x: -1.0
+  }
+  type: TYPE_BOX
+  texture: "static/hook"
+  id: "box2"
+  parent: "box"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: -140.83331
+    y: 99.166664
+  }
+  size {
+    x: 40.0
+    y: 60.0
+  }
+  type: TYPE_BOX
+  id: "hook_length"
+  parent: "cockpit"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    y: 14.999999
+  }
+  size {
+    x: 40.0
+    y: 27.0
+  }
+  type: TYPE_BOX
+  texture: "ui/cockpit-button"
+  id: "hook_up_button"
+  parent: "hook_length"
+  inherit_alpha: true
+}
+nodes {
+  rotation {
+    z: 90.0
+  }
+  type: TYPE_BOX
+  texture: "druid/icon_arrow"
+  id: "box4"
+  parent: "hook_up_button"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    y: -15.833333
+  }
+  size {
+    x: 40.0
+    y: 27.0
+  }
+  type: TYPE_BOX
+  texture: "ui/cockpit-button"
+  id: "hook_down_button"
+  parent: "hook_length"
+  inherit_alpha: true
+}
+nodes {
+  rotation {
+    z: -90.0
+  }
+  type: TYPE_BOX
+  texture: "druid/icon_arrow"
+  id: "box6"
+  parent: "hook_down_button"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
 }
 nodes {
   position {
