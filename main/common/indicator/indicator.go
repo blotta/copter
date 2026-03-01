@@ -12,4 +12,7 @@ embedded_components {
   "  texture: \"/assets/indicators.tilesource\"\n"
   "}\n"
   ""
+  position {
+    z: 5.0
+  }
 }

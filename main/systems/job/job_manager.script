@@ -8,6 +8,7 @@ local function try_create_job(self)
     for _, b in ipairs(buildings) do
         if self.buildings_with_active_jobs[b.id] == nil then
             local new_job = JobFactory.create(b)
+            if new_job == nil then return end
             self.buildings_with_active_jobs[b.id] = new_job
             new_job:start()
             msg.post("/systems#event_manager", "trigger-event", {

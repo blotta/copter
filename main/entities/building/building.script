@@ -30,4 +30,8 @@ function on_message(self, message_id, message, sender)
 		local infra = message
 		BuildingRegistry.add_infra(self.building_id, infra)
 	end
+
+	if message_id == hash('request_person_enter') then
+        go.delete(message.person_id)
+	end
 end

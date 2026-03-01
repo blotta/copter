@@ -8,7 +8,8 @@ go.property("infra_type", hash(""))
 local function replace_with_building(self)
 	print('building')
 	local props = { [hash("/building")] = { main_infra_type = self.infra_type } }
-	collectionfactory.create("#building_collectionfactory", go.get_position(), vmath.quat(), props)
+	local pos = vmath.vector3(go.get_position().x, go.get_position().y, 0)
+	collectionfactory.create("#building_collectionfactory", pos, vmath.quat(), props)
 	timer.cancel(self.check_timer)
 	go.delete(go.get_id(), true)
 end
@@ -55,6 +56,10 @@ function init(self)
 	self.last_contact_group = nil
 	self.check_timer = nil
 	msg.post("/systems#event_manager", "subscribe", { event_key = "hook_event" })
+end
+
+function final(self)
+	msg.post("/systems#event_manager", "unsubscribe", { event_key = "hook_event" })
 end
 
 function on_message(self, message_id, message, sender)

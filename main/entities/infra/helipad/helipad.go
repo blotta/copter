@@ -17,6 +17,9 @@ embedded_components {
   "  texture: \"/assets/static.atlas\"\n"
   "}\n"
   ""
+  position {
+    z: -0.1
+  }
 }
 embedded_components {
   id: "collisionobject"

@@ -43,4 +43,7 @@ embedded_components {
   "  texture: \"/assets/trigger_area.atlas\"\n"
   "}\n"
   ""
+  position {
+    z: 5.0
+  }
 }
