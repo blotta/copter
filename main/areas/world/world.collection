@@ -1,28 +1,4 @@
 name: "world"
-instances {
-  id: "person"
-  prototype: "/main/entities/person/person.go"
-  position {
-    x: 338.0
-    y: 543.0
-  }
-}
-collection_instances {
-  id: "taxi_building"
-  collection: "/main/entities/buildings/taxi/taxi_building.collection"
-  position {
-    x: 1677.0
-    y: 32.0
-  }
-}
-collection_instances {
-  id: "house_building"
-  collection: "/main/entities/buildings/house/house_building.collection"
-  position {
-    x: 2760.0
-    y: 32.0
-  }
-}
 scale_along_z: 0
 embedded_instances {
   id: "map"

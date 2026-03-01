@@ -15,6 +15,10 @@ instances {
   id: "cursor"
   prototype: "/main/systems/cursor/cursor.go"
 }
+instances {
+  id: "infra_factory_obj"
+  prototype: "/main/systems/infra_factory_obj/infra_factory_obj.go"
+}
 collection_instances {
   id: "world"
   collection: "/main/areas/world/world.collection"

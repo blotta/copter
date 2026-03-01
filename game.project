@@ -6,8 +6,8 @@ render = /render/copter.renderc
 shared_state = 1
 
 [display]
-width = 1024
-height = 576
+width = 1280
+height = 720
 high_dpi = 1
 vsync = 1
 update_frequency = 60

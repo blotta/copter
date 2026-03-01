@@ -8,12 +8,13 @@ BuildingRegistry._buildings = {}
 BuildingRegistry._next_id = 1
 
 ---@param go_id hash
+---@param main_infra_type INFRA_TYPE
 ---@return number
-function BuildingRegistry.register(go_id)
+function BuildingRegistry.register(go_id, main_infra_type)
     local id = BuildingRegistry._next_id
     BuildingRegistry._next_id = id + 1
 
-    local building = Building.new(id, go_id)
+    local building = Building.new(id, go_id, main_infra_type)
 
     BuildingRegistry._buildings[id] = building
 

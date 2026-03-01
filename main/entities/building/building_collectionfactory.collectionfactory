@@ -1,0 +1,2 @@
+prototype: "/main/entities/building/building.collection"
+load_dynamically: true

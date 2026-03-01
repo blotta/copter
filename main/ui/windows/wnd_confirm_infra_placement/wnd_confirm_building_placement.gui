@@ -1,0 +1,183 @@
+script: "/main/ui/windows/wnd_confirm_infra_placement/wnd_confirm_building_placement.gui_script"
+fonts {
+  name: "ui-font"
+  font: "/assets/ui-font.font"
+}
+textures {
+  name: "ui"
+  texture: "/assets/ui.atlas"
+}
+textures {
+  name: "static"
+  texture: "/assets/static.atlas"
+}
+nodes {
+  position {
+    x: 512.0
+    y: 288.0
+  }
+  size {
+    x: 1024.0
+    y: 576.0
+  }
+  type: TYPE_BOX
+  id: "root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  size {
+    x: 1024.0
+    y: 576.0
+  }
+  color {
+    x: 0.5019608
+    y: 0.5019608
+    z: 0.5019608
+  }
+  type: TYPE_BOX
+  id: "shadow"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "root"
+  inherit_alpha: true
+  alpha: 0.2
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  size {
+    x: 400.0
+    y: 400.0
+  }
+  type: TYPE_BOX
+  texture: "ui/metal-panel-bg-and-border"
+  id: "window"
+  parent: "root"
+  inherit_alpha: true
+  slice9 {
+    x: 10.0
+    y: 10.0
+    z: 10.0
+    w: 10.0
+  }
+}
+nodes {
+  position {
+    y: 14.0
+  }
+  type: TYPE_BOX
+  texture: "static/infra-house"
+  id: "building_image"
+  parent: "window"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    y: -47.0
+  }
+  size {
+    x: 180.0
+    y: 50.0
+  }
+  type: TYPE_TEXT
+  text: "Build \"Lumbermill\" here?"
+  font: "ui-font"
+  id: "title"
+  parent: "window"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 90.0
+    y: -150.0
+  }
+  size {
+    x: 150.0
+    y: 50.0
+  }
+  color {
+    x: 0.3372549
+    y: 0.48235294
+    z: 0.4745098
+  }
+  type: TYPE_BOX
+  id: "button_build"
+  parent: "window"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  size {
+    x: 150.0
+    y: 50.0
+  }
+  type: TYPE_TEXT
+  text: "BUILD"
+  font: "ui-font"
+  id: "text_button_build"
+  parent: "button_build"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: -90.0
+    y: -150.0
+  }
+  size {
+    x: 150.0
+    y: 50.0
+  }
+  color {
+    x: 0.7058824
+    y: 0.32156864
+    z: 0.32156864
+  }
+  type: TYPE_BOX
+  id: "button_cancel"
+  parent: "window"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  size {
+    x: 150.0
+    y: 50.0
+  }
+  type: TYPE_TEXT
+  text: "CANCEL"
+  font: "ui-font"
+  id: "text_button_cancel"
+  parent: "button_cancel"
+  inherit_alpha: true
+}
+material: "/builtins/materials/gui.material"
+layouts {
+  name: "Landscape"
+  nodes {
+    position {
+      x: 640.0
+      y: 360.0
+    }
+    size {
+      x: 1280.0
+      y: 720.0
+    }
+    type: TYPE_BOX
+    id: "root"
+    overridden_fields: 1
+    overridden_fields: 4
+  }
+  nodes {
+    size {
+      x: 1280.0
+      y: 720.0
+    }
+    type: TYPE_BOX
+    id: "shadow"
+    parent: "root"
+    overridden_fields: 4
+  }
+}
+adjust_reference: ADJUST_REFERENCE_PARENT

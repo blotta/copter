@@ -1,0 +1,33 @@
+local D = require("main.systems.defs")
+local BuildingRegistry = require('main.systems.buildings.registry')
+local InfraFactory = require("main.systems.infra_factory_obj.infra_factory")
+
+go.property("main_infra_type", hash("")) ---@type INFRA_TYPE
+
+local function instantiate_infra(self, infra_type, pos)
+	local infra = InfraFactory.create(infra_type, pos)
+	go.set_parent(infra, go.get_id(), false)
+end
+
+function init(self)
+	if self.main_infra_type == hash("") then
+		error('no main infra type specified')
+	end
+
+	self.building_id = BuildingRegistry.register(go.get_id(), self.main_infra_type)
+
+	instantiate_infra(self, self.main_infra_type, vmath.vector3())
+end
+
+function final(self)
+	BuildingRegistry.remove(self.building_id)
+end
+
+function on_message(self, message_id, message, sender)
+	-- when instantiated, infra of this building will send this message
+	if message_id == hash("infra_added") then
+		---@type Infra
+		local infra = message
+		BuildingRegistry.add_infra(self.building_id, infra)
+	end
+end

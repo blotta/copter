@@ -2,6 +2,10 @@ components {
   id: "building_box"
   component: "/main/entities/building_box/building_box.script"
 }
+components {
+  id: "building_collectionfactory"
+  component: "/main/entities/building/building_collectionfactory.collectionfactory"
+}
 embedded_components {
   id: "sprite"
   type: "sprite"

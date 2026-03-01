@@ -1,8 +1,9 @@
-require 'main.systems.defs'
+local D = require 'main.systems.defs'
 
 ---@class Building
 ---@field id number
 ---@field go_id hash
+---@field main_infra_type INFRA_TYPE
 ---@field traits table<TRAIT_NAME, Trait>
 ---@field infras Infra[]
 ---@field landing_point_offset vector3
@@ -12,11 +13,16 @@ Building.__index = Building
 
 ---@param id number
 ---@param go_id hash
+---@param main_infra_type INFRA_TYPE
 ---@return Building
-function Building.new(id, go_id)
+function Building.new(id, go_id, main_infra_type)
+    if not D.infra_has_trait(main_infra_type, TRAIT_NAME.segment) then
+        error('Building must have a main infra with segment trait')
+    end
     local self = {
         id = id,
         go_id = go_id,
+        main_infra_type = main_infra_type,
         infras = {},
 
         traits = {},
@@ -36,6 +42,9 @@ end
 
 ---@param infra Infra
 function Building:add_infra(infra)
+    if #self.infras == 0 and infra.infra_type ~= self.main_infra_type then
+        error('first infra added must be of building main infra type')
+    end
     table.insert(self.infras, infra)
     self:reapply_traits()
 end
