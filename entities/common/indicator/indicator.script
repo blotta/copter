@@ -1,0 +1,20 @@
+go.property("animation", hash(""))
+go.property("duration", 0)
+
+function init(self)
+    sprite.play_flipbook("#sprite", self.animation)
+    if self.duration > 0 then
+        timer.delay(self.duration, false, function() go.delete() end)
+    end
+end
+
+-- function on_message(self, message_id, message, sender)
+--     if message_id == hash('flash') then
+--         sprite.play_flipbook("#sprite", message.animation)
+--         if message.duration ~= nil then
+--             timer.delay(message.duration or 3, false, function(obj)
+--                 sprite.play_flipbook('#sprite', 'none')
+--             end)
+--         end
+--     end
+-- end

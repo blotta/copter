@@ -1,5 +1,5 @@
 [bootstrap]
-main_collection = /main/scene-game.collectionc
+main_collection = /scenes/scene-game.collectionc
 render = /render/copter.renderc
 
 [script]
@@ -11,7 +11,7 @@ height = 720
 high_dpi = 1
 vsync = 1
 update_frequency = 60
-display_profiles = /main/camera/copter.display_profilesc
+display_profiles = /camera/copter.display_profilesc
 
 [android]
 input_method = HiddenInputField

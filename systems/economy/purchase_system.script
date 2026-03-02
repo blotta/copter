@@ -1,0 +1,27 @@
+require('data.defs')
+local economy = require('systems.economy.Economy')
+
+---@param infra_type INFRA_TYPE
+local function purchase_infra(self, infra_type)
+	factory.create(
+		"/instantiator#building_box_factory",
+		go.get_position("/copter") + vmath.vector3(0, -40, 0),
+		nil,
+		{ infra_type = infra_type }
+	)
+	economy.spend(DEFS.building.infra[infra_type].traits.build.cost) ---@diagnostic disable-line
+end
+
+function init(self)
+end
+
+function final(self)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash('purchase') then
+		if message.type == 'infra' then
+			purchase_infra(self, message.infra_type)
+		end
+	end
+end

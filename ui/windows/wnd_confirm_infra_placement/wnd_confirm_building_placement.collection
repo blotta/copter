@@ -1,0 +1,10 @@
+name: "wnd_confirm_infra_placement"
+scale_along_z: 0
+embedded_instances {
+  id: "go"
+  data: "components {\n"
+  "  id: \"wnd_confirm_building_placement\"\n"
+  "  component: \"/ui/windows/wnd_confirm_infra_placement/wnd_confirm_building_placement.gui\"\n"
+  "}\n"
+  ""
+}

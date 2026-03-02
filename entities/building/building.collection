@@ -1,0 +1,10 @@
+name: "building"
+scale_along_z: 0
+embedded_instances {
+  id: "building"
+  data: "components {\n"
+  "  id: \"building\"\n"
+  "  component: \"/entities/building/building.script\"\n"
+  "}\n"
+  ""
+}

@@ -1,0 +1,152 @@
+local width = 40
+local height = 40
+
+---@class copter.script
+---@field engine_power number
+---@field torque_power number
+---@field input_throttle number
+---@field input_pitch number
+---@field throttle number
+---@field extra_weight number
+
+local HELICE_LOCAL_OFFSET = vmath.vector3(0, height, 0)
+
+local YVECT = vmath.vector3(0, 1, 0)
+local NEG_YVECT = vmath.vector3(0, -1, 0)
+local XVECT = vmath.vector3(1, 0, 0)
+local NEG_XVECT = vmath.vector3(-1, 0, 0)
+
+-- Apply torque to a dynamic collision object component
+function apply_torque(url, worldpos, f, size)
+    local halfp = f / 2
+    local half_size = size / 2
+    msg.post(url, "apply_force", { force = NEG_XVECT * halfp, position = worldpos + NEG_YVECT * half_size })
+    msg.post(url, "apply_force", { force = XVECT * halfp, position = worldpos + YVECT * half_size })
+end
+
+function init(self)
+    self.engine_power = 7000
+    self.torque_power = 400
+
+    self.input_throttle = 0
+    self.input_throttle_active = false
+    self.input_pitch = 0
+    self.input_pitch_active = false
+
+    self.throttle = 0
+end
+
+function fixed_update(self, dt)
+    local helice_pos = go.get_position() + vmath.rotate(go.get_rotation(), HELICE_LOCAL_OFFSET)
+    local up_dir = vmath.normalize(helice_pos - go.get_position())
+
+    local pd_controlled = true
+    local mass = go.get("#cargo", "weight")
+    local hover_force = mass * -physics.get_gravity().y
+    local throttle_target = hover_force / self.engine_power
+
+    if self.input_throttle_active then
+        pd_controlled = false
+        if self.input_throttle > 0 then
+            throttle_target = throttle_target + (1 - throttle_target) * self.input_throttle
+        elseif self.input_throttle < 0 then
+            throttle_target = throttle_target + throttle_target * self.input_throttle
+        end
+    end
+    throttle_target = vmath.clamp(throttle_target, 0, 1)
+
+    local throttle_diff = math.abs(throttle_target - self.throttle)
+    if throttle_diff < 0.01 then
+        self.throttle = throttle_target
+    else
+        local throttle_dir = throttle_target > self.throttle and 1 or -1
+        local multiplier = pd_controlled and 2 or 0.8
+        local throttle_step = dt * multiplier
+        if throttle_diff < throttle_step then
+            throttle_step = throttle_diff
+        end
+        self.throttle = self.throttle + throttle_dir * throttle_step
+    end
+
+    if (self.throttle > 0) then
+        local force_vec = up_dir * self.throttle * self.engine_power
+        msg.post("#co", "apply_force", { force = force_vec, position = helice_pos })
+    end
+
+    local center = go.get_position() + vmath.rotate(go.get_rotation(), vmath.vector3(0, height / 2, 0))
+    if self.input_pitch_active then
+        apply_torque("#co", center, self.input_pitch * self.torque_power, height)
+    else
+        -- angle controller
+        local angle = go.get(".", "euler.z") --[[@as number]]
+        if math.abs(angle) < 1 then angle = 0 end
+        if angle ~= 0 then
+            local angle_correction_dir = 0
+            if angle > 0 then angle_correction_dir = 1 elseif angle < 0 then angle_correction_dir = -1 end
+            apply_torque("#co", center, angle_correction_dir * 0.3 * self.torque_power, height)
+        end
+    end
+end
+
+---@param self copter.script
+---@param dt number
+function update(self, dt)
+    msg.post("/systems#event_manager", "trigger-event", {
+        event_key = "copter_stats",
+        position = go.get_world_position(),
+        rotation = go.get_world_rotation(),
+        throttle = self.throttle,
+        pitch = go.get_rotation(),
+        velocity = go.get("#co", "linear_velocity"),
+        cargo_weight = go.get("#cargo", "weight")
+    })
+end
+
+function on_message(self, message_id, message, sender)
+    --print(message_id)
+    if message_id == hash('throttle-active') then
+        self.input_throttle = message.value
+        self.input_throttle_active = true
+    end
+    if message_id == hash('throttle-inactive') then
+        self.input_throttle_active = false
+    end
+    self.input_throttle = vmath.clamp(self.input_throttle, -1, 1)
+
+    if message_id == hash('pitch-active') then
+        -- self.input_pitch = self.input_pitch + 1
+        self.input_pitch = message.value
+        self.input_pitch_active = true
+    end
+    if message_id == hash('pitch-inactive') then
+        self.input_pitch_active = false
+    end
+    if message_id == hash('pitch-left') then
+        self.input_pitch = self.input_pitch - 1
+    end
+    self.input_pitch = vmath.clamp(self.input_pitch, -1, 1)
+
+    if message_id == hash('tilt') then
+        local dir = vmath.vector3(0, 0, 0)
+        if self.input_pitch_active or self.input_throttle_active then
+            dir = dir + vmath.vector3(self.input_pitch, math.abs(self.input_throttle), 0)
+        else
+            dir = vmath.vector3(-1 + 2 * math.random(), -1 + 2 * math.random(), 0)
+        end
+        dir = vmath.normalize(dir)
+        local center = go.get_position() + vmath.rotate(go.get_rotation(), vmath.vector3(0, height / 2, 0))
+        self.throttle = 0
+        -- go.animate("#", "throttle", go.PLAYBACK_ONCE_FORWARD, 0, go.EASING_LINEAR, 0.3)
+        msg.post("#co", "apply_force",
+            {
+                force = dir * 90000,
+                position = center
+            })
+
+        local rot = self.input_pitch_active and self.input_pitch or (math.random() > 0.5 and 1 or -1)
+        apply_torque("#co", center, rot * 70000, height)
+    end
+end
+
+function on_reload(self)
+end

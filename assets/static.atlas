@@ -33,4 +33,63 @@ images {
 images {
   image: "/assets/images/building-box.png"
 }
+images {
+  image: "/assets/images/indicator-ok.png"
+}
+images {
+  image: "/assets/images/indicator-none.png"
+}
+images {
+  image: "/assets/images/indicator-denied.png"
+}
+images {
+  image: "/assets/images/indicator-question.png"
+}
+images {
+  image: "/assets/images/indicator-exclamation.png"
+}
+animations {
+  id: "indicator-ok-flash"
+  images {
+    image: "/assets/images/indicator-ok.png"
+  }
+  images {
+    image: "/assets/images/indicator-none.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 4
+}
+animations {
+  id: "indicator-question-flash"
+  images {
+    image: "/assets/images/indicator-question.png"
+  }
+  images {
+    image: "/assets/images/indicator-none.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 4
+}
+animations {
+  id: "indicator-exclamation-flash"
+  images {
+    image: "/assets/images/indicator-exclamation.png"
+  }
+  images {
+    image: "/assets/images/indicator-none.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 4
+}
+animations {
+  id: "indicator-denied-flash"
+  images {
+    image: "/assets/images/indicator-denied.png"
+  }
+  images {
+    image: "/assets/images/indicator-none.png"
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 4
+}
 extrude_borders: 2

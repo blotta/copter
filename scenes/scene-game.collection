@@ -1,0 +1,34 @@
+name: "main"
+instances {
+  id: "copter"
+  prototype: "/entities/copter/copter.go"
+  position {
+    x: 248.0
+    y: 120.0
+  }
+}
+instances {
+  id: "systems"
+  prototype: "/systems/systems.go"
+}
+instances {
+  id: "cursor"
+  prototype: "/input/cursor/cursor.go"
+}
+instances {
+  id: "instantiator"
+  prototype: "/systems/instantiator.go"
+}
+collection_instances {
+  id: "world"
+  collection: "/areas/world/world.collection"
+}
+collection_instances {
+  id: "camera"
+  collection: "/camera/camera.collection"
+}
+collection_instances {
+  id: "ui"
+  collection: "/ui/ui.collection"
+}
+scale_along_z: 0

@@ -1,0 +1,26 @@
+name: "taxi_building"
+instances {
+  id: "helipad"
+  prototype: "/entities/infra/helipad/helipad.go"
+  position {
+    x: 199.0
+  }
+}
+instances {
+  id: "taxi"
+  prototype: "/entities/infra/taxi/taxi.go"
+}
+scale_along_z: 0
+embedded_instances {
+  id: "building_set"
+  children: "helipad"
+  children: "taxi"
+  data: "components {\n"
+  "  id: \"building_set\"\n"
+  "  component: \"/entities/buildings/building_set.script\"\n"
+  "}\n"
+  ""
+  position {
+    z: -0.1
+  }
+}

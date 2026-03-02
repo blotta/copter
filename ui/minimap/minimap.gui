@@ -1,0 +1,56 @@
+textures {
+  name: "ui"
+  texture: "/assets/ui.atlas"
+}
+nodes {
+  size {
+    x: 1.0
+    y: 1.0
+  }
+  type: TYPE_BOX
+  id: "root"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    x: -8.0
+    y: 8.0
+  }
+  size {
+    x: 320.0
+    y: 180.0
+  }
+  type: TYPE_BOX
+  id: "minimap"
+  pivot: PIVOT_SE
+  parent: "root"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  material: "minimap_output"
+}
+nodes {
+  size {
+    x: 336.0
+    y: 196.0
+  }
+  type: TYPE_BOX
+  texture: "ui/metal-panel-border"
+  id: "border"
+  pivot: PIVOT_SE
+  parent: "root"
+  inherit_alpha: true
+  slice9 {
+    x: 10.0
+    y: 10.0
+    z: 10.0
+    w: 10.0
+  }
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT
+materials {
+  name: "minimap_output"
+  material: "/camera/minimap_output.material"
+}

@@ -1,0 +1,394 @@
+script: "/ui/windows/wnd_purchase_building/wnd_purchase_building.gui_script"
+fonts {
+  name: "ui-font"
+  font: "/assets/ui-font.font"
+}
+fonts {
+  name: "ui_normal"
+  font: "/assets/ui_normal.font"
+}
+textures {
+  name: "druid"
+  texture: "/druid/druid.atlas"
+}
+textures {
+  name: "ui"
+  texture: "/assets/ui.atlas"
+}
+textures {
+  name: "static"
+  texture: "/assets/static.atlas"
+}
+nodes {
+  position {
+    x: 512.0
+    y: 288.0
+  }
+  size {
+    x: 1024.0
+    y: 576.0
+  }
+  type: TYPE_BOX
+  id: "root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  size {
+    x: 1024.0
+    y: 576.0
+  }
+  color {
+    x: 0.5019608
+    y: 0.5019608
+    z: 0.5019608
+  }
+  type: TYPE_BOX
+  id: "shadow"
+  adjust_mode: ADJUST_MODE_STRETCH
+  parent: "root"
+  inherit_alpha: true
+  alpha: 0.2
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  size {
+    x: 616.0
+    y: 400.0
+  }
+  type: TYPE_BOX
+  texture: "ui/metal-panel-bg-and-border"
+  id: "window"
+  parent: "root"
+  inherit_alpha: true
+  slice9 {
+    x: 10.0
+    y: 10.0
+    z: 10.0
+    w: 10.0
+  }
+}
+nodes {
+  position {
+    y: 194.0
+  }
+  size {
+    x: 600.0
+    y: 60.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "header"
+  pivot: PIVOT_N
+  parent: "window"
+  inherit_alpha: true
+  slice9 {
+    x: 32.0
+    y: 32.0
+    z: 32.0
+    w: 32.0
+  }
+  alpha: 0.35
+}
+nodes {
+  position {
+    y: -30.0
+  }
+  size {
+    x: 250.0
+    y: 60.0
+  }
+  type: TYPE_TEXT
+  text: "Create Building"
+  font: "ui-font"
+  id: "window_title"
+  parent: "header"
+}
+nodes {
+  position {
+    x: -300.0
+    y: 20.0
+  }
+  size {
+    x: 300.0
+    y: 200.0
+  }
+  type: TYPE_BOX
+  id: "scroll"
+  pivot: PIVOT_W
+  parent: "window"
+  inherit_alpha: true
+  clipping_mode: CLIPPING_MODE_STENCIL
+  alpha: 0.0
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  size {
+    x: 300.0
+    y: 200.0
+  }
+  color {
+    x: 0.2
+    y: 0.2
+    z: 0.2
+  }
+  type: TYPE_BOX
+  id: "content"
+  pivot: PIVOT_W
+  parent: "scroll"
+  visible: false
+}
+nodes {
+  position {
+    x: 150.0
+  }
+  size {
+    x: 300.0
+    y: 200.0
+  }
+  type: TYPE_BOX
+  id: "prefab"
+  parent: "content"
+  inherit_alpha: true
+  visible: false
+}
+nodes {
+  size {
+    x: 128.0
+    y: 64.0
+  }
+  color {
+    x: 0.3019608
+    y: 0.5019608
+    z: 0.3019608
+  }
+  type: TYPE_BOX
+  texture: "druid/rect_round2_width1"
+  id: "prefab_root"
+  parent: "prefab"
+  inherit_alpha: true
+  visible: false
+}
+nodes {
+  position {
+    y: -60.0
+  }
+  type: TYPE_BOX
+  texture: "static/infra-house"
+  id: "building_image"
+  parent: "prefab_root"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 150.0
+    y: -150.0
+  }
+  size {
+    x: 200.0
+    y: 50.0
+  }
+  color {
+    x: 0.3372549
+    y: 0.48235294
+    z: 0.4745098
+  }
+  type: TYPE_BOX
+  id: "button_build"
+  parent: "window"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  size {
+    x: 200.0
+    y: 50.0
+  }
+  type: TYPE_TEXT
+  text: "BUILD"
+  font: "ui-font"
+  id: "text"
+  parent: "button_build"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 150.0
+    y: 120.0
+  }
+  size {
+    x: 300.0
+    y: 240.0
+  }
+  type: TYPE_BOX
+  id: "info"
+  pivot: PIVOT_N
+  parent: "window"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    x: -140.0
+    y: -29.0
+  }
+  size {
+    x: 180.0
+    y: 50.0
+  }
+  type: TYPE_TEXT
+  text: "Lumbermill"
+  font: "ui-font"
+  id: "title"
+  pivot: PIVOT_W
+  parent: "info"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 280.0
+  }
+  size {
+    x: 100.0
+    y: 30.0
+  }
+  color {
+    x: 0.5411765
+    y: 0.6901961
+    z: 0.3764706
+  }
+  type: TYPE_BOX
+  id: "segment"
+  pivot: PIVOT_E
+  parent: "title"
+  inherit_alpha: true
+  alpha: 0.75
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: -50.0
+  }
+  size {
+    x: 92.0
+    y: 30.0
+  }
+  type: TYPE_TEXT
+  text: "residential"
+  font: "ui_normal"
+  id: "segment_text"
+  parent: "segment"
+}
+nodes {
+  position {
+    x: -140.0
+    y: -63.0
+  }
+  size {
+    x: 280.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "This is the description for the building selected"
+  font: "ui_normal"
+  id: "description"
+  pivot: PIVOT_NW
+  line_break: true
+  parent: "info"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 140.0
+    y: -209.0
+  }
+  size {
+    x: 150.0
+    y: 30.0
+  }
+  type: TYPE_TEXT
+  text: "$ 100"
+  font: "ui-font"
+  id: "cost_text"
+  pivot: PIVOT_E
+  parent: "info"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: -150.0
+    y: -101.0
+  }
+  size {
+    x: 200.0
+    y: 30.0
+  }
+  type: TYPE_BOX
+  id: "nav"
+  parent: "window"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    x: 75.0
+  }
+  type: TYPE_BOX
+  texture: "druid/icon_arrow"
+  id: "button_nav_right"
+  parent: "nav"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: -75.0
+  }
+  scale {
+    x: -1.0
+  }
+  type: TYPE_BOX
+  texture: "druid/icon_arrow"
+  id: "button_nav_left"
+  parent: "nav"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+material: "/builtins/materials/gui.material"
+layouts {
+  name: "Landscape"
+  nodes {
+    position {
+      x: 640.0
+      y: 360.0
+    }
+    size {
+      x: 1280.0
+      y: 720.0
+    }
+    type: TYPE_BOX
+    id: "root"
+    overridden_fields: 1
+    overridden_fields: 4
+  }
+  nodes {
+    size {
+      x: 1280.0
+      y: 720.0
+    }
+    type: TYPE_BOX
+    id: "shadow"
+    parent: "root"
+    overridden_fields: 4
+  }
+}
+adjust_reference: ADJUST_REFERENCE_PARENT

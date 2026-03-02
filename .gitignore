@@ -25,3 +25,5 @@ manifest.public.der
 *.keystore*
 
 .vscode/
+
+*_export.ps1

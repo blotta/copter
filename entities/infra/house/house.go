@@ -1,0 +1,23 @@
+components {
+  id: "infra"
+  component: "/entities/infra/infra.script"
+  properties {
+    id: "infra_type"
+    value: "house"
+    type: PROPERTY_TYPE_HASH
+  }
+}
+embedded_components {
+  id: "sprite"
+  type: "sprite"
+  data: "default_animation: \"infra-house\"\n"
+  "material: \"/materials/infra.material\"\n"
+  "textures {\n"
+  "  sampler: \"texture_sampler\"\n"
+  "  texture: \"/assets/static.atlas\"\n"
+  "}\n"
+  ""
+  position {
+    z: -0.1
+  }
+}

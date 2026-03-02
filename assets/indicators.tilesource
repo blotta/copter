@@ -4,7 +4,7 @@ tile_height: 32
 animations {
   id: "denied"
   start_tile: 5
-  end_tile: 6
+  end_tile: 5
   playback: PLAYBACK_LOOP_FORWARD
   fps: 4
 }
@@ -23,8 +23,8 @@ animations {
 }
 animations {
   id: "ok"
-  start_tile: 7
-  end_tile: 8
+  start_tile: 1
+  end_tile: 1
   playback: PLAYBACK_LOOP_FORWARD
   fps: 4
 }
