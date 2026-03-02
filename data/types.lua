@@ -20,6 +20,7 @@ TRAIT_NAME = {
     landing_spot = "landing-spot",
     job = "job",
     build = "build",
+    population = "population"
 }
 
 ---@enum INFRA_TYPE

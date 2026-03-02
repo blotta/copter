@@ -71,6 +71,18 @@ nodes {
   template_node_child: true
 }
 nodes {
+  type: TYPE_TEXT
+  id: "player_stats/population-text"
+  parent: "player_stats/root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "player_stats/population_icon"
+  parent: "player_stats/root"
+  template_node_child: true
+}
+nodes {
   position {
     y: -288.0
   }

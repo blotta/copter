@@ -28,4 +28,7 @@ images {
 images {
   image: "/assets/images/metal-panel-bg-and-border.png"
 }
+images {
+  image: "/assets/images/icon-person.png"
+}
 extrude_borders: 2

@@ -32,9 +32,7 @@ function init(self)
 	self.altitude_dial = gui.get_node("altitude-dial-instrument/dial")
 	self.altitude_number_label = gui.get_node("altitude-number")
 
-	msg.post("/event_manager", "subscribe", {
-		event_key = "copter_stats"
-	})
+	msg.post("/event_manager", "subscribe", { event_key = "copter_stats" })
 
 	self.copter_throttle = 0
 	self.copter_velocity = vmath.vector3()
@@ -68,14 +66,21 @@ function init(self)
 	end)
 
 
-	-----------
-	-- money --
-	-----------
+	------------------
+	-- player stats --
+	------------------
 	self.money_text = gui.get_node("player_stats/money-text")
 	msg.post("/event_manager", "subscribe", {
 		event_key = "money_changed"
 	})
 	gui.set_text(self.money_text, "$ " .. math.floor(economy.get_money()))
+	self.population_text = gui.get_node("player_stats/population-text")
+	msg.post("/event_manager", "subscribe", {
+		event_key = "money_changed"
+	})
+	gui.set_text(self.money_text, "$ " .. math.floor(economy.get_money()))
+
+	msg.post("/event_manager", "subscribe", { event_key = "area_stats" })
 
 	-------------------------
 	-- screen_analog_stick --
@@ -89,6 +94,8 @@ function init(self)
 end
 
 function final(self)
+	msg.post("/event_manager", "unsubscribe", { event_key = "copter_stats" })
+	msg.post("/event_manager", "unsubscribe", { event_key = "area_stats" })
 	self.druid:final()
 end
 
@@ -143,6 +150,10 @@ function on_message(self, message_id, message, sender)
 	-----------
 	if message_id == hash('money_changed') then
 		gui.set_text(self.money_text, "$ " .. math.floor(message.amount))
+	end
+
+	if message_id == hash('area_stats') then
+		gui.set_text(self.population_text, message.population)
 	end
 
 	monarch.on_message(message_id, message, sender)

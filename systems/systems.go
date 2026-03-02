@@ -14,3 +14,7 @@ components {
   id: "copter_distance"
   component: "/systems/copter/copter_distance.script"
 }
+components {
+  id: "area_simulation"
+  component: "/systems/area/area_simulation.script"
+}

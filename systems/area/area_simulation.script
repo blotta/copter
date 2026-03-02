@@ -1,0 +1,33 @@
+local BuildingRegistry = require 'systems.buildings.registry'
+
+local function calc_area(self)
+	self.population = 0
+	local buildings = BuildingRegistry.get_all()
+	for bid, b in pairs(buildings) do
+		self.population = self.population + b.population
+	end
+
+	print('population', self.population)
+end
+
+function init(self)
+	self.population = 0
+	self.update_time = 1
+	self.update_timer = 0
+end
+
+function final(self)
+end
+
+function update(self, dt)
+	self.update_timer = self.update_timer + dt
+	if self.update_timer >= self.update_time then
+		self.update_timer = self.update_timer - self.update_time
+		calc_area(self)
+		msg.post('/event_manager', 'trigger-event',
+			{ event_key = 'area_stats', population = self.population })
+	end
+end
+
+function on_message(self, message_id, message, sender)
+end

@@ -23,10 +23,10 @@ end
 
 function late_update(self, dt)
 	local cam_pos = go.get_position()
-	local copter_pos = go.get_position(self.target_go_id)
-	copter_pos.z = cam_pos.z
+	local target_pos = go.get_position(self.target_go_id)
+	target_pos.z = cam_pos.z
 
-	cam_pos = copter_pos
+	cam_pos = target_pos
 
 	-- clamp to bounds
 	local half_w = self.logical_width / 2

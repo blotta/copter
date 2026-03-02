@@ -11,6 +11,13 @@ function M.tile_to_world_position(tx, ty, normalized_offset)
     return wpos
 end
 
+---@return vector3
+function M.world_to_tile(wx, wy)
+    local tx, ty = M.world_xy_to_tile(wx, wy)
+    return vmath.vector3(tx, ty, 0)
+end
+
+---@return number, number
 function M.world_xy_to_tile(wx, wy)
     local tx = math.floor(wx / size) + 1
     local ty = math.floor(wy / size) + 1

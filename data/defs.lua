@@ -76,6 +76,13 @@ DEFS.building = {
                 end
             }
         },
+        [TRAIT_NAME.population] = {
+            processors = {
+                apply = function(b, val)
+                    b.population = b.population + val.args.amount
+                end
+            }
+        }
     },
     ---@type table<INFRA_TYPE,InfraDef>
     infra = {
@@ -100,6 +107,9 @@ DEFS.building = {
             traits = {
                 [TRAIT_NAME.segment] = {
                     segment = SEGMENT_NAME.residential
+                },
+                [TRAIT_NAME.population] = {
+                    amount = 2
                 },
                 [TRAIT_NAME.build] = {
                     cost = 200

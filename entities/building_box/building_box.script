@@ -1,3 +1,4 @@
+local tilemap_helper = require('helpers.tilemap')
 local monarch = require("monarch.monarch")
 local event = require('event.event')
 require("data.defs")
@@ -8,6 +9,7 @@ go.property("infra_type", hash(""))
 local function replace_with_building(self)
 	local props = { [hash("/building")] = { main_infra_type = self.infra_type } }
 	local pos = vmath.vector3(go.get_position().x, go.get_position().y, 0)
+	pos.y = (tilemap_helper.world_to_tile(pos.x, pos.y + 5).y - 1) * 32
 	collectionfactory.create("#building_collectionfactory", pos, vmath.quat(), props)
 	timer.cancel(self.check_timer)
 	go.delete(go.get_id(), true)
@@ -71,11 +73,11 @@ end
 function on_message(self, message_id, message, sender)
 	if message_id == hash('cursor_click') then
 		if check_valid_placement(self, false) then
-			monarch.show("wnd_confirm_building_placement", {clear = true},
-			{
-				infra_type = self.infra_type,
-				on_confirm = event.create(replace_with_building, self)
-			})
+			monarch.show("wnd_confirm_building_placement", { clear = true },
+				{
+					infra_type = self.infra_type,
+					on_confirm = event.create(replace_with_building, self)
+				})
 		end
 	end
 
