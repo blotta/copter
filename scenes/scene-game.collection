@@ -19,6 +19,10 @@ instances {
   id: "instantiator"
   prototype: "/systems/instantiator.go"
 }
+instances {
+  id: "event_manager"
+  prototype: "/event_manager/event_manager.go"
+}
 collection_instances {
   id: "world"
   collection: "/areas/world/world.collection"

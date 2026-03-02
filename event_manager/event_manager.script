@@ -1,12 +1,12 @@
 --[[
 
 example: subscribe
-msg.post("/systems#event_manager", "subscribe", {
+msg.post("/event_manager", "subscribe", {
     event_key = "job-available"
 })
 
 example: trigger
-msg.post("/systems#event_manager", "trigger-event", {
+msg.post("/event_manager", "trigger-event", {
     event_key = 'job-available',
     job = new_job,
 })

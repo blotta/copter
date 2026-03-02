@@ -11,7 +11,7 @@ local function try_create_job(self)
             if new_job == nil then return end
             self.buildings_with_active_jobs[b.id] = new_job
             new_job:start()
-            msg.post("/systems#event_manager", "trigger-event", {
+            msg.post("/event_manager", "trigger-event", {
                 event_key = 'job-available',
                 job = new_job,
             })
@@ -62,14 +62,14 @@ function update(self, dt)
         job:update(dt)
 
         if job.status == 'in-progress' and job.status ~= prev_status then
-            msg.post("/systems#event_manager", "trigger-event", {
+            msg.post("/event_manager", "trigger-event", {
                 event_key = "job-in-progress",
                 job = job
             })
         end
 
         if job.status == 'completed' and job.status ~= prev_status then
-            msg.post("/systems#event_manager", "trigger-event", {
+            msg.post("/event_manager", "trigger-event", {
                 event_key = "job-completed",
                 job = job
             })

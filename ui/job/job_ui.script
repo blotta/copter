@@ -2,13 +2,13 @@ local INDICATOR_OFFSET = vmath.vector3(0, 32 * 4, 0)
 
 function init(self)
 	timer.delay(0.1, false, function()
-		msg.post("/systems#event_manager", "subscribe", {
+		msg.post("/event_manager", "subscribe", {
 			event_key = "job-available"
 		})
-		msg.post("/systems#event_manager", "subscribe", {
+		msg.post("/event_manager", "subscribe", {
 			event_key = "job-in-progress"
 		})
-		msg.post("/systems#event_manager", "subscribe", {
+		msg.post("/event_manager", "subscribe", {
 			event_key = "job-completed"
 		})
 	end)

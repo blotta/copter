@@ -6,7 +6,6 @@ go.property("infra_type", hash(""))
 
 
 local function replace_with_building(self)
-	print('building')
 	local props = { [hash("/building")] = { main_infra_type = self.infra_type } }
 	local pos = vmath.vector3(go.get_position().x, go.get_position().y, 0)
 	collectionfactory.create("#building_collectionfactory", pos, vmath.quat(), props)
@@ -51,7 +50,6 @@ local function check_valid_placement(self, show_valid_indicator)
 		msg.post("#building_sprite", "disable")
 	end
 
-	print('valid', valid)
 	return valid
 end
 
@@ -59,14 +57,15 @@ function init(self)
 	sprite.play_flipbook("#box_building_sprite", DEFS.building.infra[self.infra_type].image)
 	sprite.play_flipbook("#building_sprite", DEFS.building.infra[self.infra_type].image)
 	go.set("#building_sprite", "tint", vmath.vector4(1, 1, 1, 0.3))
+	msg.post("#building_sprite", "disable")
 	self.is_attached = false
 	self.last_contact_group = nil
 	self.check_timer = nil
-	msg.post("/systems#event_manager", "subscribe", { event_key = "hook_event" })
+	msg.post("/event_manager", "subscribe", { event_key = "hook_event" })
 end
 
 function final(self)
-	msg.post("/systems#event_manager", "unsubscribe", { event_key = "hook_event" })
+	msg.post("/event_manager", "unsubscribe", { event_key = "hook_event" })
 end
 
 function on_message(self, message_id, message, sender)

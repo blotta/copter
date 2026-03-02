@@ -91,7 +91,7 @@ end
 ---@param self copter.script
 ---@param dt number
 function update(self, dt)
-    msg.post("/systems#event_manager", "trigger-event", {
+    msg.post("/event_manager", "trigger-event", {
         event_key = "copter_stats",
         position = go.get_world_position(),
         rotation = go.get_world_rotation(),

@@ -13,7 +13,7 @@ function init(self)
 	self.hook_attachment_weight = 0
 	self.weight = 0
 
-	msg.post("/systems#event_manager", "subscribe", {
+	msg.post("/event_manager", "subscribe", {
 		event_key = "hook_event"
 	})
 	reset_weigth(self)

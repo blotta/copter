@@ -32,7 +32,7 @@ function init(self)
 	self.altitude_dial = gui.get_node("altitude-dial-instrument/dial")
 	self.altitude_number_label = gui.get_node("altitude-number")
 
-	msg.post("/systems#event_manager", "subscribe", {
+	msg.post("/event_manager", "subscribe", {
 		event_key = "copter_stats"
 	})
 
@@ -72,7 +72,7 @@ function init(self)
 	-- money --
 	-----------
 	self.money_text = gui.get_node("player_stats/money-text")
-	msg.post("/systems#event_manager", "subscribe", {
+	msg.post("/event_manager", "subscribe", {
 		event_key = "money_changed"
 	})
 	gui.set_text(self.money_text, "$ " .. math.floor(economy.get_money()))
