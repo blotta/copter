@@ -1,0 +1,19 @@
+local economy = require("systems.economy.Economy")
+
+function init(self)
+	self.distance_to_reward = 320
+	self.distance_travelled = 0
+	self.reward_amount = 1
+	self.copter_previous_pos = go.get_world_position("/copter")
+end
+
+function late_update(self, dt)
+	local copter_pos = go.get_world_position("/copter")
+	local travelled = vmath.length(copter_pos - self.copter_previous_pos)
+	self.distance_travelled = self.distance_travelled + travelled
+	if self.distance_travelled >= self.distance_to_reward then
+		self.distance_travelled = self.distance_travelled - self.distance_to_reward
+		economy.add(self.reward_amount)
+	end
+	self.copter_previous_pos = copter_pos
+end

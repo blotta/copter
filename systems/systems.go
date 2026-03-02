@@ -1,6 +1,6 @@
 components {
   id: "event_manager"
-  component: "/systems/event/event_manager.script"
+  component: "/event_manager/event_manager.script"
 }
 components {
   id: "job_manager"
@@ -13,4 +13,8 @@ components {
 components {
   id: "purchase_system"
   component: "/systems/economy/purchase_system.script"
+}
+components {
+  id: "copter_distance"
+  component: "/systems/copter/copter_distance.script"
 }
