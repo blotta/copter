@@ -22,7 +22,7 @@ function BuildingRegistry.register(go_id, main_infra_type)
 end
 
 ---@param bid number
----@param infra Infra
+---@param infra BuildingInfra
 function BuildingRegistry.add_infra(bid, infra)
     BuildingRegistry._buildings[bid]:add_infra(infra)
 end
@@ -43,14 +43,14 @@ function BuildingRegistry.get(id)
     return BuildingRegistry._buildings[id]
 end
 
----@param trait_str TRAIT_NAME
+---@param trait_name TRAIT_NAME
 ---@return Building[]
-function BuildingRegistry.get_with_trait(trait_str)
+function BuildingRegistry.get_with_trait(trait_name)
     local list = {}
 
     for i, b in ipairs(BuildingRegistry._buildings) do
         for tk, _ in pairs(b.traits) do
-            if tk == trait_str then
+            if tk == trait_name then
                 table.insert(list, b)
             end
         end
@@ -58,16 +58,6 @@ function BuildingRegistry.get_with_trait(trait_str)
 
     return list
 end
-
--- function BuildingRegistry.get_all_with_jobs()
---     local list = {}
---     for id, data in pairs(BuildingRegistry._buildings) do
---         if data.jobs ~= nil then
---             table.insert(list, data)
---         end
---     end
---     return list
--- end
 
 ---@param options {except_ids?: number[]}
 ---@return Building | nil

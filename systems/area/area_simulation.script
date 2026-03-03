@@ -1,17 +1,29 @@
 local BuildingRegistry = require 'systems.buildings.registry'
+local AreaStats = require 'systems.area.area_stats'
+local Economy = require 'systems.economy.Economy'
+
+local function publish(stats)
+    local data = { event_key = 'area_stats' }
+    for k, v in pairs(stats) do
+        if type(v) ~= "function" then
+            data[k] = v
+        end
+    end
+    msg.post("/event_manager", 'trigger-event', data)
+end
 
 local function calc_area(self)
-	self.population = 0
 	local buildings = BuildingRegistry.get_all()
-	for bid, b in pairs(buildings) do
-		self.population = self.population + b.population
-	end
 
-	print('population', self.population)
+	local stats = AreaStats.calculate(buildings)
+	pprint(stats)
+
+	Economy.add(stats.income)
+
+	publish(stats)
 end
 
 function init(self)
-	self.population = 0
 	self.update_time = 1
 	self.update_timer = 0
 end
@@ -24,8 +36,6 @@ function update(self, dt)
 	if self.update_timer >= self.update_time then
 		self.update_timer = self.update_timer - self.update_time
 		calc_area(self)
-		msg.post('/event_manager', 'trigger-event',
-			{ event_key = 'area_stats', population = self.population })
 	end
 end
 

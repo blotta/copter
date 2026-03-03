@@ -1,4 +1,5 @@
-local economy = require('systems.economy.Economy')
+local Economy = require('systems.economy.Economy')
+local AreaStats = require('systems.area.area_stats')
 local druid = require('druid.druid')
 local monarch = require('monarch.monarch')
 
@@ -73,14 +74,13 @@ function init(self)
 	msg.post("/event_manager", "subscribe", {
 		event_key = "money_changed"
 	})
-	gui.set_text(self.money_text, "$ " .. math.floor(economy.get_money()))
+	gui.set_text(self.money_text, "$ " .. math.floor(Economy.get_money()))
+
 	self.population_text = gui.get_node("player_stats/population-text")
 	msg.post("/event_manager", "subscribe", {
-		event_key = "money_changed"
+		event_key = "area_stats"
 	})
-	gui.set_text(self.money_text, "$ " .. math.floor(economy.get_money()))
-
-	msg.post("/event_manager", "subscribe", { event_key = "area_stats" })
+	gui.set_text(self.population_text, 0)
 
 	-------------------------
 	-- screen_analog_stick --
@@ -95,7 +95,7 @@ end
 
 function final(self)
 	msg.post("/event_manager", "unsubscribe", { event_key = "copter_stats" })
-	msg.post("/event_manager", "unsubscribe", { event_key = "area_stats" })
+	msg.post("/event_manager", "unsubscribe", { event_key = "area_stats_changed" })
 	self.druid:final()
 end
 
@@ -145,9 +145,9 @@ function on_message(self, message_id, message, sender)
 		self.copter_cargo_weight = message.cargo_weight
 	end
 
-	-----------
-	-- money --
-	-----------
+	------------------
+	-- player_stats --
+	------------------
 	if message_id == hash('money_changed') then
 		gui.set_text(self.money_text, "$ " .. math.floor(message.amount))
 	end

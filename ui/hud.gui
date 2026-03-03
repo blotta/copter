@@ -46,6 +46,7 @@ nodes {
   }
   type: TYPE_BOX
   id: "NE_Anchor"
+  adjust_mode: ADJUST_MODE_STRETCH
   parent: "root"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO

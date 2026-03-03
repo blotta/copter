@@ -1,4 +1,5 @@
 require 'data.types'
+require 'systems.area.area_stats'
 local helpers = require "helpers.helpers"
 
 DEFS = {}
@@ -29,7 +30,7 @@ DEFS.person = {
 ---------- BUILDING ----------
 ------------------------------
 
----@alias TraitProcessorParams {infra: Infra, args: any}
+---@alias TraitProcessorParams {infra: BuildingInfra, spec: TraitSpec}
 
 ---@class TraitDef
 ---@field processors ({apply?: fun(b:Building, val: TraitProcessorParams)})
@@ -47,22 +48,13 @@ DEFS.building = {
             processors = {
                 apply = function(b, val)
                     local infra_pos_offset = go.get_position(val.infra.go_id)
-                    b.landing_point_offset = infra_pos_offset + val.args.landing_point_offset
+                    b.landing_point_offset = infra_pos_offset + val.spec.landing_point_offset
                 end
             }
         },
         [TRAIT_NAME.segment] = {
             processors = {}
         },
-        -- [TRAIT_NAME.residential] = {
-        --     processors = {}
-        -- },
-        -- [TRAIT_NAME.commercial] = {
-        --     processors = {}
-        -- },
-        -- [TRAIT_NAME.industrial] = {
-        --     processors = {}
-        -- },
         [TRAIT_NAME.utility] = {
             processors = {}
         },
@@ -72,16 +64,15 @@ DEFS.building = {
         [TRAIT_NAME.job] = {
             processors = {
                 apply = function(b, val)
-                    b.job_type = val.args.job_type
+                    b.job_type = val.spec.job_type
                 end
             }
         },
         [TRAIT_NAME.population] = {
-            processors = {
-                apply = function(b, val)
-                    b.population = b.population + val.args.amount
-                end
-            }
+            processors = {}
+        },
+        [TRAIT_NAME.income] = {
+            processors = {}
         }
     },
     ---@type table<INFRA_TYPE,InfraDef>
@@ -126,6 +117,11 @@ DEFS.building = {
                 },
                 [TRAIT_NAME.build] = {
                     cost = 500
+                },
+                [TRAIT_NAME.income] = {
+                    type = "per_stat",
+                    stat = AREA_STAT_NAME.population,
+                    rate = 0.2
                 },
                 [TRAIT_NAME.job] = {
                     job_type = JOB_TYPE.taxi

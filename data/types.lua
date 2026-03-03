@@ -1,3 +1,14 @@
+---@alias BuildingId number
+
+---@class Building
+---@field id BuildingId
+---@field go_id hash
+---@field main_infra_type INFRA_TYPE
+---@field traits table<TRAIT_NAME, BuildingTrait>
+---@field infras BuildingInfra[]
+---@field landing_point_offset vector3
+---@field job_type? JOB_TYPE
+
 ---@enum SEGMENT_NAME
 SEGMENT_NAME = {
     residential = "residential",
@@ -13,14 +24,12 @@ SEGMENT_NAMES = {
 ---@enum TRAIT_NAME
 TRAIT_NAME = {
     utility = "utility",
-    -- residential = "residential",
-    -- commercial = "commercial",
-    -- industrial = "industrial",
     segment = "segment",
     landing_spot = "landing-spot",
     job = "job",
     build = "build",
-    population = "population"
+    population = "population",
+    income = "income"
 }
 
 ---@enum INFRA_TYPE
@@ -31,15 +40,31 @@ INFRA_TYPE = {
     lumbermill = hash('lumbermill'),
 }
 
----@class Trait
----@field infra Infra
----@field args any
+---@alias TraitSpec table
+---@alias SegmentTraitSpec {segment: SEGMENT_NAME}
+---@alias PopulationTraitSpec {amount: number}
+---@alias IncomeTraitSpec {type: 'flat', amount: number} | {type: 'per_stat', stat: AREA_STAT_NAME, rate: number} | {type: 'per_segment', segment: SEGMENT_NAME} | {type: 'per_stat_scaled', stat: AREA_STAT_NAME, rate: number, exponent: number}
 
----@class Infra
+---@class BuildingTrait
+---@field infra BuildingInfra
+---@field spec TraitSpec
+
+---@class BuildingInfra
 ---@field go_id hash
 ---@field infra_type INFRA_TYPE
 
 
+---@class AreaStat
+---@field population number
+---@field segment_counts table<SEGMENT_NAME,number>
+---@field income number
+---@field income_breakdown table<number,number>
+
+---@enum AREA_STAT_NAME
+AREA_STAT_NAME = {
+    population = "population",
+    population_income_rate = "population_income_rate"
+}
 
 ---@enum JOB_TYPE
 JOB_TYPE = {

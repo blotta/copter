@@ -8,24 +8,17 @@ end
 
 function Economy.add(amount)
     money = money + amount
-    msg.post("/event_manager", "trigger-event", {
-        event_key = "money_changed",
-        amount = money,
-        change = amount
-    })
-end
-
-function Economy.spend(amount)
-    if money >= amount then
-        money = money - amount
+    if amount ~= 0 then
         msg.post("/event_manager", "trigger-event", {
             event_key = "money_changed",
             amount = money,
             change = amount
         })
-        return true
     end
-    return false
+end
+
+function Economy.spend(amount)
+    Economy.add(-amount)
 end
 
 return Economy
