@@ -18,4 +18,9 @@ function final(self)
 end
 
 function on_message(self, message_id, message, sender)
+	if message_id == hash('cursor_click') then
+        pprint(message)
+        local parent = go.get_parent() --[[@as userdata]]
+        msg.post(parent, message_id, message)
+	end
 end

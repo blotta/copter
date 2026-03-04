@@ -10,7 +10,7 @@ function late_update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash('trigger_response') then
+	if message_id == hash('trigger_response') and message.other_group == hash('touch_area') then
 		if message.enter then
 			self.hovering_gos[message.other_id] = message.other_id
 		else

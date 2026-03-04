@@ -16,7 +16,7 @@ local function calc_area(self)
 	local buildings = BuildingRegistry.get_all()
 
 	local stats = AreaStats.calculate(buildings)
-	pprint(stats)
+	-- pprint(stats)
 
 	Economy.add(stats.income)
 

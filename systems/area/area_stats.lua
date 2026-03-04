@@ -90,38 +90,4 @@ function AreaStat.calculate(buildings)
     return stats
 end
 
----@param spec IncomeTraitSpec
-function AreaStat.describe_income_spec(spec)
-    if spec.type == "flat" then
-        return string.format("$%.2f / second", spec.amount)
-    end
-
-    if spec.type == "per_stat" then
-        return string.format(
-            "$%.2f per %s per second",
-            spec.rate,
-            spec.stat
-        )
-    end
-
-    if spec.type == "per_segment" then
-        return string.format(
-            "$%.2f per %s building per second",
-            spec.rate,
-            spec.segment
-        )
-    end
-
-    if spec.type == "per_stat_scaled" then
-        return string.format(
-            "$%.2f × %s^%.2f per second",
-            spec.rate,
-            spec.stat,
-            spec.exponent
-        )
-    end
-
-    return ""
-end
-
 return AreaStat

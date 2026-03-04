@@ -9,11 +9,8 @@ local function on_cancel(self)
 end
 
 local function on_build(self)
-	print('on_build')
-
 	local data = monarch.data("wnd_confirm_building_placement")
 	data.on_confirm()
-
 	monarch.back()
 end
 

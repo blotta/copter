@@ -28,7 +28,6 @@ embedded_components {
   "friction: 1.0\n"
   "restitution: 0.0\n"
   "group: \"box\"\n"
-  "mask: \"cursor\"\n"
   "mask: \"floor\"\n"
   "mask: \"copter\"\n"
   "mask: \"box\"\n"
@@ -84,4 +83,33 @@ embedded_components {
   position {
     z: 0.1
   }
+}
+embedded_components {
+  id: "touch_area"
+  type: "collisionobject"
+  data: "type: COLLISION_OBJECT_TYPE_TRIGGER\n"
+  "mass: 0.0\n"
+  "friction: 1.0\n"
+  "restitution: 0.0\n"
+  "group: \"touch_area\"\n"
+  "mask: \"cursor\"\n"
+  "embedded_collision_shape {\n"
+  "  shapes {\n"
+  "    shape_type: TYPE_BOX\n"
+  "    position {\n"
+  "      y: 32.0\n"
+  "    }\n"
+  "    rotation {\n"
+  "    }\n"
+  "    index: 0\n"
+  "    count: 3\n"
+  "    id: \"shape\"\n"
+  "  }\n"
+  "  data: 32.0\n"
+  "  data: 32.0\n"
+  "  data: 10.0\n"
+  "}\n"
+  "event_collision: false\n"
+  "event_contact: false\n"
+  ""
 }

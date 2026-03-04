@@ -61,8 +61,8 @@ function Building:reapply_traits()
                 spec = trait_spec
             }
 
-            if trait_def.processors.apply ~= nil then
-                trait_def.processors.apply(self, trait_value)
+            if trait_def.building_apply ~= nil then
+                trait_def.building_apply(self, trait_value)
             end
             new_traits[trait_name] = trait_value
         end

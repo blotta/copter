@@ -1,6 +1,8 @@
 local D = require("data.defs")
 local BuildingRegistry = require('systems.buildings.registry')
 local InfraFactory = require("entities.infra.infra_factory")
+local monarch = require('monarch.monarch')
+local event = require('event.event')
 
 go.property("main_infra_type", hash("")) ---@type INFRA_TYPE
 
@@ -26,12 +28,19 @@ end
 function on_message(self, message_id, message, sender)
 	-- when instantiated, infra of this building will send this message
 	if message_id == hash("infra_added") then
-		---@type Infra
+		---@type BuildingInfra
 		local infra = message
 		BuildingRegistry.add_infra(self.building_id, infra)
 	end
 
 	if message_id == hash('request_person_enter') then
-        go.delete(message.person_id)
+		go.delete(message.person_id)
+	end
+
+	if message_id == hash('cursor_click') then
+		monarch.show("wnd_building_details", { clear = true },
+			{
+				building_id = self.building_id
+			})
 	end
 end

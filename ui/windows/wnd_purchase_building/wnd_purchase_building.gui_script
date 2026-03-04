@@ -1,4 +1,5 @@
 local druid = require 'druid.druid'
+local layout = require 'druid.extended.layout'
 local monarch = require 'monarch.monarch'
 local D = require 'data.defs'
 local colors = require 'helpers.colors'
@@ -6,21 +7,16 @@ local helpers = require 'helpers.helpers'
 local economy = require 'systems.economy.Economy'
 
 local function on_close(self)
-	print('on_close')
 	monarch.back()
 end
 
 local function on_build(self)
-	print('on_build')
-
 	local infra_type = self.building_list[self.scroll_index]
 	msg.post("/systems", "purchase", { type = "infra", infra_type = infra_type })
-
 	monarch.back()
 end
 
 function init(self)
-	self.c = 0
 	self.druid = druid.new(self)
 
 	self.druid:new_button("shadow", on_close)
@@ -33,6 +29,12 @@ function init(self)
 
 	self.prefab = gui.get_node("prefab")
 	gui.set_enabled(self.prefab, false)
+
+
+	self.trait_item_prefab = gui.get_node("trait_item_prefab")
+	gui.set_enabled(self.trait_item_prefab, false)
+	self.traits_layout = self.druid:new(layout, "traits", "vertical")
+	self.trait_item_nodes = {}
 
 	self.scroll:bind_grid(self.grid)
 	self.scroll.on_point_scroll:subscribe(function(self, index)
@@ -60,6 +62,25 @@ function init(self)
 			self.button_build:set_enabled(false)
 		end
 
+		-- other traits
+		self.traits_layout:clear_layout()
+		for _, node in ipairs(self.trait_item_nodes) do
+			gui.delete_node(node)
+		end
+		self.trait_item_nodes = {}
+
+		for trait_name, description in pairs(D.trait_descriptions(infra)) do
+			local item_tree = gui.clone_tree(self.trait_item_prefab)
+			local item = item_tree['trait_item_root']
+
+			gui.set_text(item_tree["text_trait_name"], trait_name)
+			gui.set_text(item_tree["text_trait_desc"], description)
+
+			gui.set_enabled(item, true)
+			self.traits_layout:add(item)
+			table.insert(self.trait_item_nodes, item)
+		end
+
 		self.scroll_index = index
 	end)
 
@@ -84,7 +105,6 @@ function init(self)
 	for i, point in ipairs(points) do
 		point.x = point.x - self.scroll.view_size.x / 2
 	end
-	for i, point in ipairs(points) do print(i, point.x) end
 	self.scroll:set_points(points)
 
 	self.druid:new_button("button_nav_right", function(self)
@@ -100,7 +120,6 @@ function final(self)
 end
 
 function update(self, dt)
-	self.c = self.c + 1
 	self.druid:update(dt)
 end
 

@@ -1,5 +1,6 @@
 require 'data.types'
 require 'systems.area.area_stats'
+local colors = require 'helpers.colors'
 local helpers = require "helpers.helpers"
 
 DEFS = {}
@@ -33,7 +34,8 @@ DEFS.person = {
 ---@alias TraitProcessorParams {infra: BuildingInfra, spec: TraitSpec}
 
 ---@class TraitDef
----@field processors ({apply?: fun(b:Building, val: TraitProcessorParams)})
+---@field building_apply? fun(b:Building, val: TraitProcessorParams)
+---@field description_generator? fun(spec: TraitSpec):string
 
 ---@class InfraDef
 ---@field name string
@@ -42,15 +44,23 @@ DEFS.person = {
 ---@field traits table<TRAIT_NAME, any>)
 
 DEFS.building = {
+    segment = {
+        colors = {
+            [SEGMENT_NAME.residential] = colors.hex_to_color(PALETTE.green, 0.75),
+            [SEGMENT_NAME.commercial] = colors.hex_to_color(PALETTE.blue, 0.75),
+            [SEGMENT_NAME.industrial] = colors.hex_to_color(PALETTE.yellow, 0.75),
+        }
+    },
     ---@type table<TRAIT_NAME,TraitDef>
     trait = {
         [TRAIT_NAME.landing_spot] = {
-            processors = {
-                apply = function(b, val)
-                    local infra_pos_offset = go.get_position(val.infra.go_id)
-                    b.landing_point_offset = infra_pos_offset + val.spec.landing_point_offset
-                end
-            }
+            building_apply = function(b, val)
+                local infra_pos_offset = go.get_position(val.infra.go_id)
+                b.landing_point_offset = infra_pos_offset + val.spec.landing_point_offset
+            end,
+            description_generator = function(spec)
+                return ''
+            end,
         },
         [TRAIT_NAME.segment] = {
             processors = {}
@@ -62,17 +72,52 @@ DEFS.building = {
             processors = {}
         },
         [TRAIT_NAME.job] = {
-            processors = {
-                apply = function(b, val)
-                    b.job_type = val.spec.job_type
-                end
-            }
+            description_generator = function(spec)
+                local job_def = DEFS.job[spec.job_type]
+                return string.format("%s - $ %d", job_def.name, job_def.reward.money)
+            end,
+            building_apply = function(b, val)
+                b.job_type = val.spec.job_type
+            end
         },
         [TRAIT_NAME.population] = {
-            processors = {}
+            description_generator = function(spec)
+                return tostring(spec.amount)
+            end,
         },
         [TRAIT_NAME.income] = {
-            processors = {}
+            description_generator = function(spec)
+                if spec.type == "flat" then
+                    return string.format("$%.2f/s", spec.amount)
+                end
+
+                if spec.type == "per_stat" then
+                    return string.format(
+                        "$%.2f/%s/s",
+                        spec.rate,
+                        spec.stat
+                    )
+                end
+
+                if spec.type == "per_segment" then
+                    return string.format(
+                        "$%.2f/%s building/second",
+                        spec.rate,
+                        spec.segment
+                    )
+                end
+
+                if spec.type == "per_stat_scaled" then
+                    return string.format(
+                        "$%.2f × %s^%.2f/second",
+                        spec.rate,
+                        spec.stat,
+                        spec.exponent
+                    )
+                end
+
+                return ""
+            end,
         }
     },
     ---@type table<INFRA_TYPE,InfraDef>
@@ -214,6 +259,21 @@ function M.infra_with_traits(trait_names, infras)
         end
         if include then
             ret[infra_type] = helpers.deepcopy(infra_def)
+        end
+    end
+
+    return ret
+end
+
+---@param infra InfraDef
+---@return table<TRAIT_NAME, string>
+function M.trait_descriptions(infra)
+    local ret = {}
+
+    for trait_name, spec in pairs(infra.traits) do
+        local desc_fn = DEFS.building.trait[trait_name].description_generator
+        if desc_fn ~= nil then
+            ret[trait_name] = desc_fn(spec)
         end
     end
 

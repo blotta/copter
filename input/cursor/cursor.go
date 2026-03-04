@@ -10,7 +10,7 @@ embedded_components {
   "friction: 0.1\n"
   "restitution: 0.5\n"
   "group: \"cursor\"\n"
-  "mask: \"box\"\n"
+  "mask: \"touch_area\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
   "    shape_type: TYPE_BOX\n"
@@ -26,5 +26,8 @@ embedded_components {
   "  data: 0.5\n"
   "  data: 10.0\n"
   "}\n"
+  "locked_rotation: true\n"
+  "event_collision: false\n"
+  "event_contact: false\n"
   ""
 }
