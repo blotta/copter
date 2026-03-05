@@ -7,7 +7,8 @@
 ---@field traits table<TRAIT_NAME, BuildingTrait>
 ---@field infras BuildingInfra[]
 ---@field landing_point_offset vector3
----@field job_type? JOB_TYPE
+---@field job {type: JOB_TYPE|nil, current: Job | nil, completed: number}
+---@field earnings { income: number, job: number}
 
 ---@enum SEGMENT_NAME
 SEGMENT_NAME = {

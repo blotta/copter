@@ -59,6 +59,22 @@ function TaxiJob.new(building)
     return o
 end
 
+---@param self TaxiJob
+---@return table
+function TaxiJob.to_msg(self)
+    return {
+        job_id = self.job_id,
+        job_type = self.job_type,
+        building_id = self.building_id,
+        to_id = self.to.id,
+        from_id = self.from.id,
+        status = self.status,
+        inner_status = self.inner_status,
+        pickup_position = self.pickup_position,
+        deliver_position = self.deliver_position,
+    }
+end
+
 local function board_passenger(self)
     local position = go.get_position(self.from.go_id)
     local goal = { type = "board_helicopter", helicopter_id = self._helicopter_id }

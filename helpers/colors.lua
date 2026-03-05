@@ -25,4 +25,14 @@ function M.hex_to_color(hex, alpha)
     return vmath.vector4(r, g, b, alpha)
 end
 
+---@param color vector4
+---@return string
+function M.color_to_hex(color)
+    local r = math.floor(math.max(0, math.min(1, color.x)) * 255 + 0.5)
+    local g = math.floor(math.max(0, math.min(1, color.y)) * 255 + 0.5)
+    local b = math.floor(math.max(0, math.min(1, color.z)) * 255 + 0.5)
+
+    return string.format("#%02X%02X%02X", r, g, b)
+end
+
 return M

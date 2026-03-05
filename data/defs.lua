@@ -62,22 +62,16 @@ DEFS.building = {
                 return ''
             end,
         },
-        [TRAIT_NAME.segment] = {
-            processors = {}
-        },
-        [TRAIT_NAME.utility] = {
-            processors = {}
-        },
-        [TRAIT_NAME.build] = {
-            processors = {}
-        },
+        [TRAIT_NAME.segment] = {},
+        [TRAIT_NAME.utility] = {},
+        [TRAIT_NAME.build] = {},
         [TRAIT_NAME.job] = {
             description_generator = function(spec)
                 local job_def = DEFS.job[spec.job_type]
                 return string.format("%s - $ %d", job_def.name, job_def.reward.money)
             end,
             building_apply = function(b, val)
-                b.job_type = val.spec.job_type
+                b.job.type = val.spec.job_type
             end
         },
         [TRAIT_NAME.population] = {

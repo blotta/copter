@@ -20,8 +20,16 @@ function Building.new(id, go_id, main_infra_type)
 
         traits = {},
         landing_point_offset = vmath.vector3(),
-        job_type = nil,
+        job = {
+            type = nil,
+            current = nil,
+            completed = 0
+        },
 
+        earnings = {
+            income = 0,
+            job = 0
+        }
     }
     setmetatable(self, Building)
     return self
@@ -30,7 +38,7 @@ end
 function Building:reset_traits()
     -- self.infra = {}
     self.traits = {}
-    self.job_type = nil
+    self.job.type = nil
     self.population = 0
     self.income_rate = {}
     self.landing_point_offset = vmath.vector3()

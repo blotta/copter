@@ -108,8 +108,8 @@ nodes {
 }
 nodes {
   position {
-    x: 149.0
-    y: -143.0
+    x: -166.0
+    y: -156.0
   }
   size {
     x: 150.0
@@ -121,7 +121,7 @@ nodes {
     z: 0.4745098
   }
   type: TYPE_BOX
-  id: "button_build"
+  id: "button_upgrade"
   parent: "window"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
@@ -132,10 +132,10 @@ nodes {
     y: 50.0
   }
   type: TYPE_TEXT
-  text: "BUILD"
+  text: "UPGRADE"
   font: "ui-font"
   id: "text_button_build"
-  parent: "button_build"
+  parent: "button_upgrade"
   inherit_alpha: true
 }
 nodes {
@@ -239,16 +239,129 @@ nodes {
 }
 nodes {
   position {
-    y: -264.0
+    x: 150.0
+    y: -163.0
+  }
+  size {
+    x: 1.0
+    y: 326.0
+  }
+  color {
+    x: 0.2
+    y: 0.2
+    z: 0.2
+  }
+  type: TYPE_BOX
+  id: "right_border"
+  parent: "info"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 150.0
+    y: -29.0
+  }
+  size {
+    x: 300.0
+    y: 326.0
+  }
+  type: TYPE_BOX
+  id: "tabs"
+  parent: "window"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    x: -150.0
+    y: 148.0
+  }
+  size {
+    x: 300.0
+    y: 30.0
+  }
+  type: TYPE_BOX
+  id: "tab_buttons"
+  pivot: PIVOT_W
+  parent: "tabs"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    x: 30.0
+  }
+  size {
+    x: 60.0
+    y: 30.0
+  }
+  type: TYPE_BOX
+  id: "button_tab_prefab"
+  parent: "tab_buttons"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  size {
+    x: 60.0
+    y: 30.0
+  }
+  color {
+    x: 0.3372549
+    y: 0.48235294
+    z: 0.4745098
+  }
+  type: TYPE_BOX
+  id: "button_tab"
+  parent: "button_tab_prefab"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  size {
+    x: 60.0
+    y: 30.0
+  }
+  type: TYPE_TEXT
+  text: "Traits"
+  font: "ui_normal"
+  id: "button_tab_text"
+  parent: "button_tab"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: -15.0
+  }
+  size {
+    x: 300.0
+    y: 296.0
+  }
+  type: TYPE_BOX
+  id: "tab_content_Traits"
+  parent: "tabs"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  enabled: false
+  visible: false
+}
+nodes {
+  position {
+    x: -2.0
+    y: 136.0
   }
   size {
     x: 280.0
-    y: 60.0
+    y: 200.0
   }
   type: TYPE_BOX
   id: "traits"
   pivot: PIVOT_N
-  parent: "info"
+  parent: "tab_content_Traits"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
   visible: false
@@ -310,6 +423,366 @@ nodes {
   id: "text_trait_desc"
   pivot: PIVOT_E
   parent: "trait_item_root"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: -15.0
+  }
+  size {
+    x: 300.0
+    y: 296.0
+  }
+  type: TYPE_BOX
+  id: "tab_content_Stats"
+  parent: "tabs"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  enabled: false
+  visible: false
+}
+nodes {
+  position {
+    y: 123.0
+  }
+  size {
+    x: 280.0
+    y: 20.0
+  }
+  type: TYPE_BOX
+  id: "stats_item_income_rate"
+  parent: "tab_content_Stats"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    x: -140.0
+  }
+  size {
+    x: 140.0
+    y: 20.0
+  }
+  type: TYPE_TEXT
+  text: "Income Rate"
+  font: "ui_normal"
+  id: "stats_item_income_rate_title"
+  pivot: PIVOT_W
+  parent: "stats_item_income_rate"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 140.0
+  }
+  size {
+    x: 140.0
+    y: 20.0
+  }
+  type: TYPE_TEXT
+  text: "$0/s"
+  font: "ui_normal"
+  id: "stats_item_income_rate_text"
+  pivot: PIVOT_E
+  parent: "stats_item_income_rate"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: 103.0
+  }
+  size {
+    x: 280.0
+    y: 20.0
+  }
+  type: TYPE_BOX
+  id: "stats_item_earned_income"
+  parent: "tab_content_Stats"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    x: -140.0
+  }
+  size {
+    x: 140.0
+    y: 20.0
+  }
+  type: TYPE_TEXT
+  text: "Earned Income"
+  font: "ui_normal"
+  id: "stats_item_earned_income_title"
+  pivot: PIVOT_W
+  parent: "stats_item_earned_income"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 140.0
+  }
+  size {
+    x: 140.0
+    y: 20.0
+  }
+  type: TYPE_TEXT
+  text: "$ 20"
+  font: "ui_normal"
+  id: "stats_item_earned_income_text"
+  pivot: PIVOT_E
+  parent: "stats_item_earned_income"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: 83.0
+  }
+  size {
+    x: 280.0
+    y: 20.0
+  }
+  type: TYPE_BOX
+  id: "stats_item_earned_job"
+  parent: "tab_content_Stats"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    x: -140.0
+  }
+  size {
+    x: 140.0
+    y: 20.0
+  }
+  type: TYPE_TEXT
+  text: "Earned Job"
+  font: "ui_normal"
+  id: "stats_item_earned_job_title"
+  pivot: PIVOT_W
+  parent: "stats_item_earned_job"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 140.0
+  }
+  size {
+    x: 140.0
+    y: 20.0
+  }
+  type: TYPE_TEXT
+  text: "$ 20"
+  font: "ui_normal"
+  id: "stats_item_earned_job_text"
+  pivot: PIVOT_E
+  parent: "stats_item_earned_job"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: -15.0
+  }
+  size {
+    x: 300.0
+    y: 296.0
+  }
+  type: TYPE_BOX
+  id: "tab_content_Job"
+  parent: "tabs"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    y: 123.0
+  }
+  size {
+    x: 280.0
+    y: 20.0
+  }
+  type: TYPE_BOX
+  id: "job_item_type"
+  parent: "tab_content_Job"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    x: -140.0
+  }
+  size {
+    x: 140.0
+    y: 20.0
+  }
+  type: TYPE_TEXT
+  text: "Type"
+  font: "ui_normal"
+  id: "job_item_type_title"
+  pivot: PIVOT_W
+  parent: "job_item_type"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 140.0
+  }
+  size {
+    x: 140.0
+    y: 20.0
+  }
+  type: TYPE_TEXT
+  text: "Taxi"
+  font: "ui_normal"
+  id: "job_item_type_text"
+  pivot: PIVOT_E
+  parent: "job_item_type"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: 103.0
+  }
+  size {
+    x: 280.0
+    y: 20.0
+  }
+  type: TYPE_BOX
+  id: "job_item_completed"
+  parent: "tab_content_Job"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    x: -140.0
+  }
+  size {
+    x: 140.0
+    y: 20.0
+  }
+  type: TYPE_TEXT
+  text: "Completed"
+  font: "ui_normal"
+  id: "job_item_completed_title"
+  pivot: PIVOT_W
+  parent: "job_item_completed"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 140.0
+  }
+  size {
+    x: 140.0
+    y: 20.0
+  }
+  type: TYPE_TEXT
+  text: "0"
+  font: "ui_normal"
+  id: "job_item_completed_text"
+  pivot: PIVOT_E
+  parent: "job_item_completed"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: 83.0
+  }
+  size {
+    x: 280.0
+    y: 20.0
+  }
+  type: TYPE_BOX
+  id: "job_item_reward"
+  parent: "tab_content_Job"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    x: -140.0
+  }
+  size {
+    x: 140.0
+    y: 20.0
+  }
+  type: TYPE_TEXT
+  text: "Reward"
+  font: "ui_normal"
+  id: "job_item_reward_title"
+  pivot: PIVOT_W
+  parent: "job_item_reward"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 140.0
+  }
+  size {
+    x: 140.0
+    y: 20.0
+  }
+  type: TYPE_TEXT
+  text: "$10"
+  font: "ui_normal"
+  id: "job_item_reward_text"
+  pivot: PIVOT_E
+  parent: "job_item_reward"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: 63.0
+  }
+  size {
+    x: 280.0
+    y: 20.0
+  }
+  type: TYPE_BOX
+  id: "job_item_status"
+  parent: "tab_content_Job"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    x: -140.0
+  }
+  size {
+    x: 140.0
+    y: 20.0
+  }
+  type: TYPE_TEXT
+  text: "Status"
+  font: "ui_normal"
+  id: "job_item_status_title"
+  pivot: PIVOT_W
+  parent: "job_item_status"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 140.0
+  }
+  size {
+    x: 140.0
+    y: 20.0
+  }
+  type: TYPE_TEXT
+  text: "unavailable"
+  font: "ui_normal"
+  id: "job_item_status_text"
+  pivot: PIVOT_E
+  parent: "job_item_status"
   inherit_alpha: true
 }
 material: "/builtins/materials/gui.material"

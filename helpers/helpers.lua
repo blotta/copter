@@ -34,4 +34,13 @@ function M.group_by(input, key_getter)
     return result
 end
 
+function M.remove_list_value(t, value)
+    for i, v in ipairs(t) do
+        if v == value then
+            table.remove(t, i)
+            return
+        end
+    end
+end
+
 return M

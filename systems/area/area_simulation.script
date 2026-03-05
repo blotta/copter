@@ -3,13 +3,13 @@ local AreaStats = require 'systems.area.area_stats'
 local Economy = require 'systems.economy.Economy'
 
 local function publish(stats)
-    local data = { event_key = 'area_stats' }
-    for k, v in pairs(stats) do
-        if type(v) ~= "function" then
-            data[k] = v
-        end
-    end
-    msg.post("/event_manager", 'trigger-event', data)
+	local data = { event_key = 'area_stats' }
+	for k, v in pairs(stats) do
+		if type(v) ~= "function" then
+			data[k] = v
+		end
+	end
+	msg.post("/event_manager", 'trigger-event', data)
 end
 
 local function calc_area(self)
@@ -19,6 +19,12 @@ local function calc_area(self)
 	-- pprint(stats)
 
 	Economy.add(stats.income)
+
+	for _, b in ipairs(buildings) do
+		if stats.income_breakdown[b.id] ~= nil then
+			b.earnings.income = b.earnings.income + stats.income_breakdown[b.id]
+		end
+	end
 
 	publish(stats)
 end

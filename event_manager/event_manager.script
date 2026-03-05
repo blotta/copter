@@ -24,19 +24,6 @@ function init(self)
     self.trigger_queue = {}
 end
 
--- local function print_events(self)
---     print('EVENTS')
---     for event_key, event_value in pairs(self.events) do
---         print("-----------------------")
---         print('event_key:', event_key)
---         print('subscribers:', table_key_count(event_value.subscribers))
---         for subscriber, subscribed in pairs(event_value.subscribers) do
---             print('  subscriber:', subscriber, subscribed)
---         end
---         print("-----------------------")
---     end
--- end
-
 local function url_key(url)
     return tostring(url)
 end
