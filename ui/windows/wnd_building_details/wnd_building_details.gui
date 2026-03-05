@@ -346,84 +346,53 @@ nodes {
   parent: "tabs"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
-  enabled: false
   visible: false
 }
 nodes {
   position {
-    x: -2.0
-    y: 136.0
+    y: 137.0
   }
-  size {
-    x: 280.0
-    y: 200.0
-  }
-  type: TYPE_BOX
-  id: "traits"
-  pivot: PIVOT_N
+  type: TYPE_TEMPLATE
+  id: "stat_list_widget_traits"
   parent: "tab_content_Traits"
   inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-  visible: false
+  template: "/ui/widgets/stat_list/stat_list_widget.gui"
 }
 nodes {
-  position {
-    y: -10.0
-  }
-  size {
-    x: 280.0
-    y: 20.0
-  }
   type: TYPE_BOX
-  id: "trait_item_prefab"
-  parent: "traits"
-  inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-  visible: false
+  id: "stat_list_widget_traits/root"
+  parent: "stat_list_widget_traits"
+  template_node_child: true
 }
 nodes {
-  size {
-    x: 280.0
-    y: 20.0
-  }
   type: TYPE_BOX
-  id: "trait_item_root"
-  parent: "trait_item_prefab"
-  inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-  visible: false
+  id: "stat_list_widget_traits/layout"
+  parent: "stat_list_widget_traits/root"
+  template_node_child: true
 }
 nodes {
-  position {
-    x: -140.0
-  }
-  size {
-    x: 140.0
-    y: 20.0
-  }
-  type: TYPE_TEXT
-  text: "income"
-  font: "ui_normal"
-  id: "text_trait_name"
-  pivot: PIVOT_W
-  parent: "trait_item_root"
-  inherit_alpha: true
+  type: TYPE_BOX
+  id: "stat_list_widget_traits/item_prefab"
+  parent: "stat_list_widget_traits/layout"
+  template_node_child: true
 }
 nodes {
-  position {
-    x: 140.0
-  }
-  size {
-    x: 140.0
-    y: 20.0
-  }
+  type: TYPE_BOX
+  id: "stat_list_widget_traits/item_root"
+  parent: "stat_list_widget_traits/item_prefab"
+  template_node_child: true
+}
+nodes {
   type: TYPE_TEXT
-  text: "$0.2 / population / s"
-  font: "ui_normal"
-  id: "text_trait_desc"
-  pivot: PIVOT_E
-  parent: "trait_item_root"
-  inherit_alpha: true
+  id: "stat_list_widget_traits/text_title"
+  parent: "stat_list_widget_traits/item_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "stat_list_widget_traits/text_desc"
+  parent: "stat_list_widget_traits/item_root"
+  template_node_child: true
 }
 nodes {
   position {
@@ -438,149 +407,53 @@ nodes {
   parent: "tabs"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
-  enabled: false
   visible: false
 }
 nodes {
   position {
-    y: 123.0
+    y: 137.0
   }
-  size {
-    x: 280.0
-    y: 20.0
-  }
-  type: TYPE_BOX
-  id: "stats_item_income_rate"
+  type: TYPE_TEMPLATE
+  id: "stat_list_widget_stats"
   parent: "tab_content_Stats"
   inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-  visible: false
+  template: "/ui/widgets/stat_list/stat_list_widget.gui"
 }
 nodes {
-  position {
-    x: -140.0
-  }
-  size {
-    x: 140.0
-    y: 20.0
-  }
-  type: TYPE_TEXT
-  text: "Income Rate"
-  font: "ui_normal"
-  id: "stats_item_income_rate_title"
-  pivot: PIVOT_W
-  parent: "stats_item_income_rate"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 140.0
-  }
-  size {
-    x: 140.0
-    y: 20.0
-  }
-  type: TYPE_TEXT
-  text: "$0/s"
-  font: "ui_normal"
-  id: "stats_item_income_rate_text"
-  pivot: PIVOT_E
-  parent: "stats_item_income_rate"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    y: 103.0
-  }
-  size {
-    x: 280.0
-    y: 20.0
-  }
   type: TYPE_BOX
-  id: "stats_item_earned_income"
-  parent: "tab_content_Stats"
-  inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-  visible: false
+  id: "stat_list_widget_stats/root"
+  parent: "stat_list_widget_stats"
+  template_node_child: true
 }
 nodes {
-  position {
-    x: -140.0
-  }
-  size {
-    x: 140.0
-    y: 20.0
-  }
-  type: TYPE_TEXT
-  text: "Earned Income"
-  font: "ui_normal"
-  id: "stats_item_earned_income_title"
-  pivot: PIVOT_W
-  parent: "stats_item_earned_income"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 140.0
-  }
-  size {
-    x: 140.0
-    y: 20.0
-  }
-  type: TYPE_TEXT
-  text: "$ 20"
-  font: "ui_normal"
-  id: "stats_item_earned_income_text"
-  pivot: PIVOT_E
-  parent: "stats_item_earned_income"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    y: 83.0
-  }
-  size {
-    x: 280.0
-    y: 20.0
-  }
   type: TYPE_BOX
-  id: "stats_item_earned_job"
-  parent: "tab_content_Stats"
-  inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-  visible: false
+  id: "stat_list_widget_stats/layout"
+  parent: "stat_list_widget_stats/root"
+  template_node_child: true
 }
 nodes {
-  position {
-    x: -140.0
-  }
-  size {
-    x: 140.0
-    y: 20.0
-  }
-  type: TYPE_TEXT
-  text: "Earned Job"
-  font: "ui_normal"
-  id: "stats_item_earned_job_title"
-  pivot: PIVOT_W
-  parent: "stats_item_earned_job"
-  inherit_alpha: true
+  type: TYPE_BOX
+  id: "stat_list_widget_stats/item_prefab"
+  parent: "stat_list_widget_stats/layout"
+  template_node_child: true
 }
 nodes {
-  position {
-    x: 140.0
-  }
-  size {
-    x: 140.0
-    y: 20.0
-  }
+  type: TYPE_BOX
+  id: "stat_list_widget_stats/item_root"
+  parent: "stat_list_widget_stats/item_prefab"
+  template_node_child: true
+}
+nodes {
   type: TYPE_TEXT
-  text: "$ 20"
-  font: "ui_normal"
-  id: "stats_item_earned_job_text"
-  pivot: PIVOT_E
-  parent: "stats_item_earned_job"
-  inherit_alpha: true
+  id: "stat_list_widget_stats/text_title"
+  parent: "stat_list_widget_stats/item_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "stat_list_widget_stats/text_desc"
+  parent: "stat_list_widget_stats/item_root"
+  template_node_child: true
 }
 nodes {
   position {
@@ -599,191 +472,49 @@ nodes {
 }
 nodes {
   position {
-    y: 123.0
+    y: 137.0
   }
-  size {
-    x: 280.0
-    y: 20.0
-  }
-  type: TYPE_BOX
-  id: "job_item_type"
+  type: TYPE_TEMPLATE
+  id: "stat_list_widget_job"
   parent: "tab_content_Job"
   inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-  visible: false
+  template: "/ui/widgets/stat_list/stat_list_widget.gui"
 }
 nodes {
-  position {
-    x: -140.0
-  }
-  size {
-    x: 140.0
-    y: 20.0
-  }
-  type: TYPE_TEXT
-  text: "Type"
-  font: "ui_normal"
-  id: "job_item_type_title"
-  pivot: PIVOT_W
-  parent: "job_item_type"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 140.0
-  }
-  size {
-    x: 140.0
-    y: 20.0
-  }
-  type: TYPE_TEXT
-  text: "Taxi"
-  font: "ui_normal"
-  id: "job_item_type_text"
-  pivot: PIVOT_E
-  parent: "job_item_type"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    y: 103.0
-  }
-  size {
-    x: 280.0
-    y: 20.0
-  }
   type: TYPE_BOX
-  id: "job_item_completed"
-  parent: "tab_content_Job"
-  inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-  visible: false
+  id: "stat_list_widget_job/root"
+  parent: "stat_list_widget_job"
+  template_node_child: true
 }
 nodes {
-  position {
-    x: -140.0
-  }
-  size {
-    x: 140.0
-    y: 20.0
-  }
-  type: TYPE_TEXT
-  text: "Completed"
-  font: "ui_normal"
-  id: "job_item_completed_title"
-  pivot: PIVOT_W
-  parent: "job_item_completed"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 140.0
-  }
-  size {
-    x: 140.0
-    y: 20.0
-  }
-  type: TYPE_TEXT
-  text: "0"
-  font: "ui_normal"
-  id: "job_item_completed_text"
-  pivot: PIVOT_E
-  parent: "job_item_completed"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    y: 83.0
-  }
-  size {
-    x: 280.0
-    y: 20.0
-  }
   type: TYPE_BOX
-  id: "job_item_reward"
-  parent: "tab_content_Job"
-  inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-  visible: false
+  id: "stat_list_widget_job/layout"
+  parent: "stat_list_widget_job/root"
+  template_node_child: true
 }
 nodes {
-  position {
-    x: -140.0
-  }
-  size {
-    x: 140.0
-    y: 20.0
-  }
-  type: TYPE_TEXT
-  text: "Reward"
-  font: "ui_normal"
-  id: "job_item_reward_title"
-  pivot: PIVOT_W
-  parent: "job_item_reward"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    x: 140.0
-  }
-  size {
-    x: 140.0
-    y: 20.0
-  }
-  type: TYPE_TEXT
-  text: "$10"
-  font: "ui_normal"
-  id: "job_item_reward_text"
-  pivot: PIVOT_E
-  parent: "job_item_reward"
-  inherit_alpha: true
-}
-nodes {
-  position {
-    y: 63.0
-  }
-  size {
-    x: 280.0
-    y: 20.0
-  }
   type: TYPE_BOX
-  id: "job_item_status"
-  parent: "tab_content_Job"
-  inherit_alpha: true
-  size_mode: SIZE_MODE_AUTO
-  visible: false
+  id: "stat_list_widget_job/item_prefab"
+  parent: "stat_list_widget_job/layout"
+  template_node_child: true
 }
 nodes {
-  position {
-    x: -140.0
-  }
-  size {
-    x: 140.0
-    y: 20.0
-  }
-  type: TYPE_TEXT
-  text: "Status"
-  font: "ui_normal"
-  id: "job_item_status_title"
-  pivot: PIVOT_W
-  parent: "job_item_status"
-  inherit_alpha: true
+  type: TYPE_BOX
+  id: "stat_list_widget_job/item_root"
+  parent: "stat_list_widget_job/item_prefab"
+  template_node_child: true
 }
 nodes {
-  position {
-    x: 140.0
-  }
-  size {
-    x: 140.0
-    y: 20.0
-  }
   type: TYPE_TEXT
-  text: "unavailable"
-  font: "ui_normal"
-  id: "job_item_status_text"
-  pivot: PIVOT_E
-  parent: "job_item_status"
-  inherit_alpha: true
+  id: "stat_list_widget_job/text_title"
+  parent: "stat_list_widget_job/item_root"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "stat_list_widget_job/text_desc"
+  parent: "stat_list_widget_job/item_root"
+  template_node_child: true
 }
 material: "/builtins/materials/gui.material"
 layouts {

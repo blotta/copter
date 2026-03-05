@@ -6,12 +6,13 @@ local colors = require 'helpers.colors'
 local helpers = require 'helpers.helpers'
 local BuildingRegistry = require 'systems.buildings.registry'
 local AreaStats = require 'systems.area.area_stats'
+local stat_list_widget = require 'ui.widgets.stat_list.stat_list_widget'
 
 local function on_close(self)
 	monarch.back()
 end
 
-local tab_fill_fns = {
+local tab_content_fns = {
 	["Traits"] = {
 		init = function(self)
 			local tab = self.tabs[self.selected_tab_idx]
@@ -19,61 +20,49 @@ local tab_fill_fns = {
 			for trait_name, trait_value in pairs(self.building.traits) do
 				local desc_gen_fn = DEFS.building.trait[trait_name].description_generator
 				if desc_gen_fn ~= nil then
-					local item_tree = gui.clone_tree(self.trait_item_prefab)
-					local item = item_tree['trait_item_root']
-
-					gui.set_text(item_tree["text_trait_name"], trait_name)
-					gui.set_text(item_tree["text_trait_desc"], desc_gen_fn(trait_value.spec))
-
-					gui.set_enabled(item, true)
-					self.traits_layout:add(item)
-					table.insert(tab.trait_items, item)
+					self.traits_stat_list:set_item(trait_name, desc_gen_fn(trait_value.spec))
 				end
 			end
-			self.traits_layout:refresh_layout()
 		end,
 		refresh = function(self)
-			self.traits_layout:clear_layout()
-			local tab = self.tabs[self.selected_tab_idx]
-			for _, node in ipairs(tab.trait_items) do
-				gui.delete_node(node)
-			end
-			tab.fns.init(self)
 		end
 	}
 	,
 	["Stats"] = {
 		init = function(self)
-			gui.set_text(gui.get_node("stats_item_income_rate_text"), string.format("$%.2f/s", self.building_income_rate))
-			gui.set_text(gui.get_node("stats_item_earned_income_text"),
-				string.format("$%.2f", self.building.earnings.income))
-			if self.building.job.type ~= nil then
-				gui.set_enabled(gui.get_node("stats_item_earned_job"), true)
-				gui.set_text(gui.get_node("stats_item_earned_job_text"),
-					string.format("$%.2f", self.building.earnings.job))
-			else
-				gui.set_enabled(gui.get_node("stats_item_earned_job"), false)
-			end
+			local tab = self.tabs[self.selected_tab_idx]
+			tab.content_fns.refresh(self)
 		end,
 		refresh = function(self)
-			local tab = self.tabs[self.selected_tab_idx]
-			tab.fns.init(self)
+			local items = {
+				{ title = "Income Rate",   desc = string.format("$%.2f/s", self.building_income_rate) },
+				{ title = "Earned Income", desc = string.format("$%.2f", self.building.earnings.income) },
+			}
+			if self.building.job.type ~= nil then
+				table.insert(items, { title = "Earned Job", desc = string.format("$%.2f", self.building.earnings.job) })
+			end
+
+			for _, item in ipairs(items) do
+				self.stats_stat_list:set_item(item.title, item.desc)
+			end
 		end
 	},
 	["Job"] = {
 		init = function(self)
-			gui.set_text(gui.get_node("job_item_type_text"), DEFS.job[self.building.job.type].name)
-			gui.set_text(gui.get_node("job_item_completed_text"), self.building.job.completed)
-			gui.set_text(gui.get_node("job_item_reward_text"),
-				string.format("$%.2f", DEFS.job[self.building.job.type].reward.money))
-			local job = self.building.job.current
-			local job_status = "unavailable"
-			if job then job_status = job.inner_status end
-			gui.set_text(gui.get_node("job_item_status_text"), job_status)
+			local tab = self.tabs[self.selected_tab_idx]
+			tab.content_fns.refresh(self)
 		end,
 		refresh = function(self)
-			local tab = self.tabs[self.selected_tab_idx]
-			tab.fns.init(self)
+			local items = {
+				{ title = "Type",      desc = DEFS.job[self.building.job.type].name },
+				{ title = "Reward",    desc = string.format("$%.2f", DEFS.job[self.building.job.type].reward.money) },
+				{ title = "Completed", desc = self.building.job.completed },
+				{ title = "Status",    desc = self.building.job.current and self.building.job.current.inner_status or "unavailable" },
+			}
+
+			for _, item in ipairs(items) do
+				self.job_stat_list:set_item(item.title, item.desc)
+			end
 		end
 	}
 }
@@ -116,9 +105,9 @@ function init(self)
 	gui.set_text(gui.get_node("segment_text"), infra.traits[TRAIT_NAME.segment].segment)
 	gui.set_color(gui.get_node("segment"), DEFS.building.segment.colors[infra.traits[TRAIT_NAME.segment].segment])
 
-	self.trait_item_prefab = gui.get_node("trait_item_prefab")
-	gui.set_enabled(self.trait_item_prefab, false)
-	self.traits_layout = self.druid:new(layout, "traits", "vertical")
+	self.traits_stat_list = self.druid:new_widget(stat_list_widget, "stat_list_widget_traits")
+	self.stats_stat_list = self.druid:new_widget(stat_list_widget, "stat_list_widget_stats")
+	self.job_stat_list = self.druid:new_widget(stat_list_widget, "stat_list_widget_job")
 
 	self.tab_buttons_layout = self.druid:new(layout, "tab_buttons", "horizontal")
 	self.button_tab_prefab = gui.get_node("button_tab_prefab")
@@ -138,9 +127,10 @@ function init(self)
 		tab.button = self.druid:new_button(tab.button_node, on_tab_button_click, idx)
 		tab.content = gui.get_node("tab_content_" .. tab.name)
 		gui.set_enabled(tab.button_node, true)
-		tab.fns = tab_fill_fns[tab.name]
-		tab.fns.init(self)
+		tab.content_fns = tab_content_fns[tab.name]
 		self.tab_buttons_layout:add(tab.button_node)
+		gui.set_enabled(tab.content, true)
+		tab.content_fns.init(self)
 		gui.set_enabled(tab.content, false)
 	end
 
@@ -161,7 +151,7 @@ end
 function on_message(self, message_id, message, sender)
 	if message_id == hash('area_stats') then
 		self.building_income_rate = message.income_breakdown[self.building.id] or 0
-		self.tabs[self.selected_tab_idx].fns.refresh(self)
+		self.tabs[self.selected_tab_idx].content_fns.refresh(self)
 	end
 	self.druid:on_message(message_id, message, sender)
 end

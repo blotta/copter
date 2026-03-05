@@ -1,0 +1,90 @@
+fonts {
+  name: "ui_normal"
+  font: "/assets/ui_normal.font"
+}
+nodes {
+  size {
+    x: 280.0
+    y: 200.0
+  }
+  type: TYPE_BOX
+  id: "root"
+  pivot: PIVOT_N
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  size {
+    x: 280.0
+    y: 200.0
+  }
+  type: TYPE_BOX
+  id: "layout"
+  pivot: PIVOT_N
+  parent: "root"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    y: -10.0
+  }
+  size {
+    x: 280.0
+    y: 20.0
+  }
+  type: TYPE_BOX
+  id: "item_prefab"
+  parent: "layout"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  size {
+    x: 280.0
+    y: 20.0
+  }
+  type: TYPE_BOX
+  id: "item_root"
+  parent: "item_prefab"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    x: -140.0
+  }
+  size {
+    x: 140.0
+    y: 20.0
+  }
+  type: TYPE_TEXT
+  text: "title text"
+  font: "ui_normal"
+  id: "text_title"
+  pivot: PIVOT_W
+  parent: "item_root"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 140.0
+  }
+  size {
+    x: 140.0
+    y: 20.0
+  }
+  type: TYPE_TEXT
+  text: "desc text"
+  font: "ui_normal"
+  id: "text_desc"
+  pivot: PIVOT_E
+  parent: "item_root"
+  inherit_alpha: true
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT
