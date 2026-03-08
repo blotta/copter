@@ -1,0 +1,2 @@
+prototype: "/entities/infra/lumbermill/lumbermill.go"
+load_dynamically: true

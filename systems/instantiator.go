@@ -30,3 +30,7 @@ components {
   id: "box_factory"
   component: "/entities/box/box_factory.factory"
 }
+components {
+  id: "lumbermill_factory"
+  component: "/entities/infra/lumbermill/lumbermill_factory.factory"
+}

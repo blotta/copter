@@ -5,6 +5,7 @@ local InfraFactory = {}
 local infra_factory_map = {
     [INFRA_TYPE.house] = "#house_factory",
     [INFRA_TYPE.taxi] = "#taxi_factory",
+    [INFRA_TYPE.lumbermill] = "#lumbermill_factory",
     [INFRA_TYPE.helipad] = "#helipad_factory",
 }
 
